@@ -1,0 +1,951 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>操作マニュアル | 宇多津会衆PWアプリ</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --green: #16a34a;
+  --green-light: #d1fae5;
+  --green-mid: #bbf7d0;
+  --green-dark: #14532d;
+  --danger: #ef4444;
+  --danger-dark: #dc2626;
+  --amber: #fde68a;
+  --purple: #a5b4fc;
+  --purple-dark: #6366f1;
+}
+*,*::before,*::after { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  font-family: "Noto Sans JP", sans-serif;
+  font-size: 15px;
+  background: #f8fafc;
+  color: #1e293b;
+  line-height: 1.7;
+}
+/* ---- マニュアル レイアウト ---- */
+.manual-hdr {
+  background: var(--green);
+  color: white;
+  padding: 18px 20px 14px;
+  position: sticky; top: 0; z-index: 100;
+  box-shadow: 0 2px 8px rgba(22,163,74,.3);
+}
+.manual-hdr h1 { font-size: 18px; font-weight: 700; }
+.manual-hdr p  { font-size: 12px; color: rgba(255,255,255,.8); margin-top: 2px; }
+
+.toc { background: white; border-bottom: 2px solid var(--green-light); padding: 14px 20px; }
+.toc h2 { font-size: 12px; font-weight: 700; color: #64748b; margin-bottom: 8px; letter-spacing:.05em; }
+.toc ol { list-style: none; display: grid; grid-template-columns: 1fr 1fr; gap: 4px 16px; }
+.toc a { color: var(--green); font-size: 13px; font-weight: 500; text-decoration: none; }
+.toc a:hover { text-decoration: underline; }
+
+main { max-width: 960px; margin: 0 auto; padding: 24px 16px 60px; }
+
+section { margin-bottom: 56px; scroll-margin-top: 80px; }
+section > h2 {
+  font-size: 18px; font-weight: 700; color: var(--green-dark);
+  padding: 10px 16px; background: var(--green-light);
+  border-left: 4px solid var(--green); border-radius: 0 8px 8px 0;
+  margin-bottom: 20px;
+}
+section h3 { font-size: 15px; font-weight: 700; color: #0f172a; margin: 20px 0 8px; }
+
+/* 手順 + モックアップ 2カラム */
+.step-row { display: flex; gap: 28px; align-items: flex-start; margin-bottom: 24px; }
+.step-text { flex: 1; min-width: 0; }
+.step-text ol { list-style: none; counter-reset: sc; }
+.step-text ol li {
+  counter-increment: sc;
+  display: flex; gap: 10px; margin-bottom: 12px; align-items: flex-start;
+}
+.step-text ol li::before {
+  content: counter(sc);
+  background: var(--green); color: white;
+  min-width: 22px; height: 22px; border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 11px; font-weight: 700; flex-shrink: 0; margin-top: 3px;
+}
+.note { background: #fefce8; border: 1px solid #fde68a; border-radius: 8px; padding: 10px 14px; font-size: 13px; margin-top: 12px; color: #713f12; }
+.tip  { background: var(--green-light); border: 1px solid var(--green-mid); border-radius: 8px; padding: 10px 14px; font-size: 13px; margin-top: 12px; }
+
+/* スクリーンラベル表記 */
+.lbl      { display:inline-block; background:var(--green); color:white; border-radius:5px; padding:1px 7px; font-size:12px; font-weight:700; }
+.lbl-sec  { display:inline-block; background:#f0fdf4; color:var(--green); border:1.5px solid var(--green-mid); border-radius:5px; padding:1px 7px; font-size:12px; font-weight:700; }
+.lbl-red  { display:inline-block; background:var(--danger); color:white; border-radius:5px; padding:1px 7px; font-size:12px; font-weight:700; }
+.lbl-amb  { display:inline-block; background:#fffbeb; color:#92400e; border:1.5px solid #fde68a; border-radius:5px; padding:1px 7px; font-size:12px; font-weight:700; }
+
+/* FAQ */
+.faq { border: 1px solid #e2e8f0; border-radius: 10px; margin-bottom: 10px; overflow: hidden; }
+.faq-q { background: #f8fafc; padding: 12px 14px; font-size: 13px; font-weight: 700; border-bottom: 1px solid #e2e8f0; }
+.faq-q::before { content:"Q. "; color:var(--green); }
+.faq-a { padding: 10px 14px; font-size: 13px; background: white; color: #374151; }
+.faq-a::before { content:"A. "; color:var(--green); font-weight:700; }
+
+/* ============================================================
+   スマホフレーム
+============================================================ */
+.phone-frame {
+  width: 300px; flex-shrink: 0;
+  background: #1a1a1a;
+  border-radius: 40px;
+  padding: 12px;
+  box-shadow: 0 14px 44px rgba(0,0,0,.32);
+}
+.phone-notch {
+  width: 72px; height: 7px; background: #333;
+  border-radius: 4px; margin: 0 auto 10px;
+}
+.phone-screen {
+  background: var(--green-light);
+  border-radius: 30px;
+  overflow-x: hidden;
+  overflow-y: auto;
+  height: 600px;
+  position: relative;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+.phone-screen::-webkit-scrollbar { display: none; }
+/* タップ表示 */
+.tap {
+  display: inline-flex; align-items: center; justify-content: center;
+  min-width: 42px; height: 22px; border-radius: 11px;
+  background: var(--danger); color: white; font-size: 10px; font-weight: 700;
+  padding: 0 7px; vertical-align: middle; margin-left: 4px;
+}
+.tap-abs {
+  position: absolute;
+  background: var(--danger); color: white;
+  font-size: 10px; font-weight: 700;
+  border-radius: 11px; padding: 2px 8px;
+  box-shadow: 0 0 0 3px rgba(239,68,68,.25);
+  z-index: 20; pointer-events: none; white-space: nowrap;
+}
+
+/* ============================================================
+   アプリ UI 再現
+============================================================ */
+/* ヘッダー */
+.app-hdr {
+  background: var(--green); color: white; height: 48px;
+  display: grid; grid-template-columns: 40px 1fr 40px; align-items: center; padding: 0 12px;
+}
+.app-hdr-title { font-size: 13px; font-weight: 700; text-align: center; }
+.app-hdr-icon  {
+  width: 28px; height: 28px; border-radius: 50%;
+  border: 1.5px solid rgba(255,255,255,.6);
+  background: rgba(255,255,255,.2);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 12px; color: white; font-weight: 700;
+}
+.app-hdr-avatar {
+  width: 30px; height: 30px; border-radius: 50%;
+  background: rgba(255,255,255,.25); border: 1.5px solid rgba(255,255,255,.6);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 15px; justify-self: end;
+}
+/* カード */
+.app-card {
+  background: white; border-radius: 12px; padding: 10px 10px;
+  box-shadow: 0 1px 4px rgba(0,0,0,.05); margin-bottom: 0;
+}
+.app-card-title {
+  font-size: 12px; font-weight: 700; color: var(--green);
+  padding-bottom: 7px; border-bottom: 2px solid var(--green-light); margin-bottom: 7px;
+  display: flex; align-items: center; gap: 5px;
+}
+.app-card-body { font-size: 11px; color: #374151; }
+/* 次のシフトカード */
+.app-next-shift {
+  background: linear-gradient(135deg, var(--green) 0%, #15803d 100%);
+  color: white; border-radius: 12px; padding: 12px;
+}
+.app-next-shift-label { font-size: 10px; opacity: .85; margin-bottom: 3px; }
+.app-next-shift-date  { font-size: 17px; font-weight: 700; }
+.app-next-shift-role  { font-size: 11px; opacity: .9; margin-top: 3px; }
+/* 受付状況 */
+.status-open   { display:inline-block; background:var(--green-light); color:var(--green-dark); border-radius:6px; padding:4px 8px; font-size:12px; font-weight:700; }
+.status-closed { display:inline-block; background:#fee2e2; color:var(--danger-dark); border-radius:6px; padding:4px 8px; font-size:12px; font-weight:700; }
+.status-prep   { display:inline-block; background:#f1f5f9; color:#475569; border-radius:6px; padding:4px 8px; font-size:12px; font-weight:700; }
+/* ナビボタン */
+.app-btn-nav {
+  width: 100%; padding: 13px 12px; font-size: 13px; font-weight: 700;
+  background: var(--green); color: white; border: none; border-radius: 12px;
+  display: flex; align-items: center; gap: 8px; cursor: pointer;
+}
+.app-btn-nav.sec { background: #f0fdf4; color: var(--green); border: 2px solid var(--green-mid); }
+.app-btn-nav.sec.red { background: #fff1f2; color: #b91c1c; border-color: #fca5a5; }
+.app-btn-nav.sec.amb { background: #fffbeb; color: #92400e; border-color: #fde68a; }
+.app-btn-nav .arr { opacity:.5; margin-left:auto; }
+/* ログイン */
+.login-screen {
+  min-height: 600px; background: var(--green-light);
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  gap: 10px; padding: 20px;
+}
+.login-card {
+  background: white; border-radius: 16px; padding: 20px 16px; width: 100%; text-align: center;
+  box-shadow: 0 4px 20px rgba(0,0,0,.12);
+}
+.login-logo {
+  width: 52px; height: 52px; background: var(--green); border-radius: 12px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 26px; margin: 0 auto 10px;
+}
+.login-title { font-size: 14px; font-weight: 700; margin-bottom: 4px; }
+.login-sub   { font-size: 11px; color: #374151; margin-bottom: 12px; line-height: 1.5; }
+.google-btn {
+  display: flex; align-items: center; justify-content: center; gap: 6px;
+  width: 100%; padding: 10px; background: #4285f4; color: white;
+  border: none; border-radius: 6px; font-size: 12px; font-weight: 700; cursor: pointer;
+}
+/* カレンダー */
+.app-cal { background: white; border-radius: 12px; padding: 8px; }
+.cal-nav { display: flex; align-items: center; justify-content: space-between; margin-bottom: 6px; }
+.cal-nav-btn {
+  font-size: 11px; font-weight: 700; color: var(--green);
+  background: var(--green-light); border: none; border-radius: 6px; padding: 3px 7px;
+}
+.cal-month { font-size: 12px; font-weight: 700; }
+.cal-grid  { display: grid; grid-template-columns: repeat(7,1fr); gap: 1px; }
+.cal-day   { aspect-ratio:1; display:flex; align-items:center; justify-content:center; font-size:10px; border-radius:4px; }
+.cal-day.hdr { font-weight:700; color:#64748b; font-size:9px; }
+.cal-day.shift { background:#ede9fe; border:1px solid #c4b5fd; font-weight:700; }
+.cal-day.apply { position:relative; }
+.cal-day.apply::after { content:''; display:block; position:absolute; bottom:3px; left:50%; transform:translateX(-50%); width:70%; height:3px; background:#f97316; border-radius:1.5px; }
+.cal-day.myshift { position:relative; }
+.cal-day.myshift::after { content:''; display:block; position:absolute; bottom:3px; right:3px; width:5px; height:5px; background:#f59e0b; border-radius:50%; }
+/* スロット行 */
+.app-slot-row { display:flex; align-items:center; gap:7px; padding:8px 0; border-bottom:1px solid #f1f5f9; }
+.app-checkbox { width:18px; height:18px; border-radius:4px; border:2px solid #d1d5db; flex-shrink:0; background:white; }
+.app-checkbox.on { background:var(--green); border-color:var(--green); display:flex; align-items:center; justify-content:center; color:white; font-size:11px; }
+.app-slot-time { font-size:12px; font-weight:700; }
+/* 希望一覧 */
+.wish-item { padding:6px 0; border-bottom:1px solid var(--green-light); font-size:11px; }
+.wish-date { font-weight:700; color:var(--green); }
+.wish-time { color:#374151; }
+/* 戻るバー */
+.back-bar { font-size:13px; font-weight:700; color:var(--green); padding:7px 0 3px; cursor:pointer; }
+/* シフト日ボタン */
+.sdb {
+  display:flex; align-items:center; padding:9px 10px;
+  background:white; border:1.5px solid var(--green); border-radius:10px; gap:8px; margin-bottom:5px;
+}
+.sdb.cancelled { background:#fff1f2; border-color:var(--danger); }
+.sdb-date { font-size:13px; font-weight:700; }
+.sdb-sub  { font-size:11px; color:#64748b; }
+.sdb-badge { margin-left:auto; background:#fef3c7; color:#92400e; font-size:10px; font-weight:700; padding:2px 6px; border-radius:999px; }
+.sdb-badge.cancel { background:var(--danger); color:white; }
+/* シフト表セル */
+.st-cell { border-radius:5px; padding:4px; font-size:10px; text-align:center; margin-bottom:2px; }
+.st-cell.empty  { background:#f1f5f9; color:#94a3b8; }
+.st-cell.staff  { background:#fde68a; color:#713f12; font-weight:700; }
+.st-cell.resp   { background:#fca5a5; color:#7f1d1d; font-weight:700; }
+.st-cell.cart   { background:#a5b4fc; color:#1e1b4b; font-weight:700; }
+/* プロフィールポップアップ */
+.pp-wrap { background:white; border-radius:12px; box-shadow:0 4px 18px rgba(0,0,0,.15); overflow:hidden; width:190px; margin:0 auto; }
+.pp-hdr  { background:var(--green); padding:10px 12px; display:flex; align-items:center; gap:8px; }
+.pp-av   { width:32px; height:32px; border-radius:50%; background:rgba(255,255,255,.25); border:1.5px solid rgba(255,255,255,.7); display:flex; align-items:center; justify-content:center; font-size:16px; }
+.pp-name { font-size:12px; font-weight:700; color:white; }
+.pp-email { font-size:10px; color:rgba(255,255,255,.8); }
+.pp-roles-wrap { padding:8px 10px; border-bottom:1px solid var(--green-light); display:flex; flex-wrap:wrap; gap:3px; }
+.badge { display:inline-block; border-radius:999px; font-size:10px; font-weight:700; padding:1px 6px; }
+.badge-g { background:var(--green-light); color:var(--green-dark); }
+.badge-p { background:#ede9fe; color:#6d28d9; }
+.pp-logout { display:block; width:100%; padding:10px; font-size:12px; font-weight:700; color:var(--danger); text-align:center; background:none; border:none; cursor:pointer; }
+/* 中止ポップアップ */
+.cancel-popup { background:white; border-radius:14px; padding:18px 14px; text-align:center; box-shadow:0 4px 20px rgba(0,0,0,.2); width:200px; margin:20px auto 0; }
+.ci-icon  { font-size:28px; margin-bottom:6px; }
+.ci-title { font-size:13px; font-weight:700; color:var(--danger); margin-bottom:6px; }
+.ci-msg   { font-size:11px; color:#374151; margin-bottom:10px; line-height:1.5; }
+.ci-ok    { background:var(--green); color:white; border:none; border-radius:8px; padding:7px 22px; font-size:13px; font-weight:700; }
+.app-body { padding: 8px; display: flex; flex-direction: column; gap: 7px; }
+
+/* レスポンシブ */
+@media (max-width: 760px) {
+  .step-row { flex-direction: column; align-items: stretch; }
+  .phone-frame { width: 100%; max-width: 300px; align-self: center; }
+  .toc ol { grid-template-columns: 1fr; }
+}
+
+/* ステップテキストがスマホと横並びになるとき縦スクロールしやすいよう */
+.step-row { align-items: flex-start; }
+.step-text { padding-top: 4px; }
+</style>
+</head>
+<body>
+
+<header class="manual-hdr">
+  <h1>📋 操作マニュアル</h1>
+  <p>宇多津会衆PWアプリ（シフト管理）— 奉仕者向け</p>
+</header>
+
+<nav class="toc">
+  <h2>目次</h2>
+  <ol>
+    <li><a href="#s-login">① ログイン方法</a></li>
+    <li><a href="#s-main">② メイン画面の見方</a></li>
+    <li><a href="#s-cal">③ カレンダーの見方</a></li>
+    <li><a href="#s-form">④ シフト希望の送り方</a></li>
+    <li><a href="#s-shift">⑤ シフト表の見方</a></li>
+    <li><a href="#s-others">⑥ その他の機能</a></li>
+    <li><a href="#s-profile">⑦ プロフィール・ログアウト</a></li>
+    <li><a href="#s-faq">⑧ よくある質問</a></li>
+  </ol>
+</nav>
+
+<main>
+
+<!-- ===== 1. ログイン ===== -->
+<section id="s-login">
+  <h2>① ログイン方法</h2>
+
+  <div class="step-row">
+    <div class="step-text">
+      <h3>初回ログイン</h3>
+      <ol>
+        <li>アプリを開くとログイン画面が表示されます。</li>
+        <li>青いボタン <span class="lbl" style="background:#4285f4;">G Googleアカウントでログイン</span> をタップします。</li>
+        <li>Googleアカウントを選択してください。</li>
+        <li><strong>初回のみ：</strong>「👤 初回登録」画面が開きます。ドロップダウンから自分の名前を選んで <span class="lbl">登録する</span> をタップします。</li>
+        <li>登録完了後、メイン画面に移動します。</li>
+      </ol>
+      <div class="tip">💡 2回目以降は自動でログインされます。</div>
+    </div>
+    <div class="phone-frame">
+      <div class="phone-notch"></div>
+      <div class="phone-screen">
+        <div class="login-screen">
+          <div class="login-card">
+            <div class="login-logo">📅</div>
+            <div class="login-title">宇多津会衆PWアプリ</div>
+            <div class="login-sub">Googleアカウントでログインしてください</div>
+            <div style="position:relative;">
+              <button class="google-btn">
+                <span style="font-weight:900;font-size:14px;">G</span> Googleアカウントでログイン
+              </button>
+              <span class="tap-abs" style="top:-10px;right:-6px;">タップ</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="step-row">
+    <div class="step-text">
+      <h3>初回登録画面（初回のみ）</h3>
+      <ol>
+        <li>ドロップダウン（▼）をタップして自分の名前を選択します。</li>
+        <li><span class="lbl">登録する</span> をタップします。</li>
+      </ol>
+      <div class="note">⚠️ 一覧に名前がない場合は区域係にお問い合わせください。</div>
+    </div>
+    <div class="phone-frame">
+      <div class="phone-notch"></div>
+      <div class="phone-screen">
+        <div class="app-hdr">
+          <div class="app-hdr-icon">?</div>
+          <div class="app-hdr-title">宇多津会衆PWアプリ</div>
+          <div class="app-hdr-avatar">👤</div>
+        </div>
+        <div class="app-body" style="padding:14px 12px;">
+          <div style="font-size:15px;font-weight:700;color:var(--green-dark);margin-bottom:4px;">👤 初回登録</div>
+          <div style="font-size:11px;color:#374151;margin-bottom:10px;">あなたの名前を選択してください。一度登録すると次回から自動でログインできます。</div>
+          <select style="width:100%;padding:8px;border-radius:8px;border:1.5px solid var(--green);font-size:12px;margin-bottom:10px;">
+            <option>-- 選択してください --</option>
+          </select>
+          <div style="position:relative;">
+            <button style="width:100%;padding:12px;background:var(--green);color:white;border:none;border-radius:10px;font-size:13px;font-weight:700;">登録する</button>
+            <span class="tap-abs" style="top:-10px;right:-6px;">タップ</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== 2. メイン画面 ===== -->
+<section id="s-main">
+  <h2>② メイン画面の見方</h2>
+
+  <div class="step-row">
+    <div class="step-text">
+      <p>ログイン後のメイン画面には複数のカードが並んでいます。</p>
+      <h3>カードの説明</h3>
+      <ol>
+        <li><strong>📢 お知らせ</strong>：区域係からのお知らせが表示されます。</li>
+        <li><strong>📅 次のシフト</strong>（緑のカード）：あなたの次回担当日・役割が表示されます。中止の場合は赤いカードに変わります。</li>
+        <li><strong>📬 シフト希望受付</strong>：受付状態と期間を確認できます。<br>
+          <span class="status-open">✅ 受付中</span>
+          <span class="status-prep">⏳ 受付準備中</span>
+          <span class="status-closed">🔒 受付終了</span>
+        </li>
+        <li><strong>📋 送信済みのシフト希望</strong>：送信済みの希望内容が確認できます。</li>
+        <li><strong>🗓️ カレンダー</strong>：実施日・申込期間などを色分けで確認できます。</li>
+        <li><strong>ナビゲーションボタン</strong>：各機能に移動するボタンが並んでいます。</li>
+      </ol>
+    </div>
+    <div class="phone-frame">
+      <div class="phone-notch"></div>
+      <div class="phone-screen">
+        <div class="app-hdr">
+          <div class="app-hdr-icon">?</div>
+          <div class="app-hdr-title">2025年7月</div>
+          <div class="app-hdr-avatar">👤</div>
+        </div>
+        <div class="app-body">
+          <!-- お知らせ -->
+          <div class="app-card" style="border-left:3px solid #f59e0b;">
+            <div class="app-card-title">📢 お知らせ</div>
+            <div class="app-card-body">7月のシフト表を公開しました。ご確認ください。</div>
+          </div>
+          <!-- 次のシフト -->
+          <div class="app-next-shift">
+            <div class="app-next-shift-label">📅 次のシフト</div>
+            <div class="app-next-shift-date">7月5日（土）</div>
+            <div class="app-next-shift-role">役割: 奉仕者</div>
+          </div>
+          <!-- 受付状況 -->
+          <div class="app-card">
+            <div class="app-card-title">📬 シフト希望受付</div>
+            <div class="status-open">✅ 受付中</div>
+            <div style="font-size:10px;color:#374151;margin-top:4px;">受付期間：6/1〜6/15</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ナビボタン説明 -->
+  <div class="step-row">
+    <div class="step-text">
+      <h3>ナビゲーションボタン一覧</h3>
+      <ol>
+        <li><span class="lbl">📝 シフト希望を送る</span> 受付中の場合に希望フォームへ移動します。送信済みは「編集する」と表示されます。</li>
+        <li><span class="lbl">📋 シフト表を見る</span> 確定したシフト表を確認します。</li>
+        <li><span class="lbl-sec">🗺 道路使用許可書を閲覧する</span> PDFを確認します。</li>
+        <li><span class="lbl-sec">💰 会計情報を閲覧する</span> 会計スプレッドシートを開きます。</li>
+        <li><span class="lbl-sec">💬 要望を送る</span> 要望・ご意見を区域係に送ります。</li>
+        <li><span class="lbl-red">🐛 バグを報告する</span> アプリの不具合を報告します。</li>
+      </ol>
+    </div>
+    <div class="phone-frame">
+      <div class="phone-notch"></div>
+      <div class="phone-screen">
+        <div class="app-hdr">
+          <div class="app-hdr-icon">?</div>
+          <div class="app-hdr-title">2025年7月</div>
+          <div class="app-hdr-avatar">👤</div>
+        </div>
+        <div class="app-body">
+          <button class="app-btn-nav"><span>📝</span><span>シフト希望を送る</span><span class="arr">›</span></button>
+          <button class="app-btn-nav"><span>📋</span><span>シフト表を見る</span><span class="arr">›</span></button>
+          <button class="app-btn-nav sec"><span>🗺</span><span>道路使用許可書を閲覧する</span><span class="arr">›</span></button>
+          <button class="app-btn-nav sec"><span>💰</span><span>会計情報を閲覧する</span><span class="arr">›</span></button>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:7px;">
+            <button class="app-btn-nav sec" style="font-size:11px;justify-content:center;padding:10px 6px;"><span>💬</span><span>要望を送る</span></button>
+            <button class="app-btn-nav sec red" style="font-size:11px;justify-content:center;padding:10px 6px;"><span>🐛</span><span>バグを報告する</span></button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== 3. カレンダー ===== -->
+<section id="s-cal">
+  <h2>③ カレンダーの見方</h2>
+
+  <div class="step-row">
+    <div class="step-text">
+      <h3>色分けの凡例</h3>
+      <ul style="list-style:none;display:flex;flex-direction:column;gap:10px;margin:6px 0 14px;">
+        <li style="display:flex;align-items:center;gap:10px;">
+          <span style="width:26px;height:26px;background:#ede9fe;border:1px solid #c4b5fd;border-radius:5px;flex-shrink:0;"></span>
+          <span><strong>薄紫の背景</strong>：シフト実施日</span>
+        </li>
+        <li style="display:flex;align-items:center;gap:10px;">
+          <span style="width:26px;height:8px;background:#f97316;border-radius:4px;flex-shrink:0;"></span>
+          <span><strong>オレンジの横線</strong>：申込期間の日付</span>
+        </li>
+        <li style="display:flex;align-items:center;gap:10px;">
+          <span style="width:10px;height:10px;background:#f59e0b;border-radius:50%;flex-shrink:0;"></span>
+          <span><strong>オレンジの丸</strong>：自分のシフト日</span>
+        </li>
+      </ul>
+      <h3>月の切り替え</h3>
+      <ol>
+        <li><span class="lbl-sec">前の月</span> / <span class="lbl-sec">次の月</span> ボタンをタップ</li>
+        <li>または画面を左右にスワイプ（左→次月、右→前月）</li>
+      </ol>
+      <div class="tip">💡 実施日（薄紫）をタップするとその日の時間帯が一覧表示されます。</div>
+    </div>
+    <div class="phone-frame">
+      <div class="phone-notch"></div>
+      <div class="phone-screen">
+        <div class="app-hdr">
+          <div class="app-hdr-icon">?</div>
+          <div class="app-hdr-title">2025年7月</div>
+          <div class="app-hdr-avatar">👤</div>
+        </div>
+        <div class="app-body">
+          <div class="app-cal">
+            <div class="cal-nav">
+              <button class="cal-nav-btn">前の月</button>
+              <div class="cal-month">2025年7月</div>
+              <button class="cal-nav-btn">次の月</button>
+            </div>
+            <div class="cal-grid">
+              <div class="cal-day hdr">日</div><div class="cal-day hdr">月</div><div class="cal-day hdr">火</div>
+              <div class="cal-day hdr">水</div><div class="cal-day hdr">木</div><div class="cal-day hdr">金</div><div class="cal-day hdr">土</div>
+              <div class="cal-day"></div><div class="cal-day"></div><div class="cal-day">1</div>
+              <div class="cal-day">2</div><div class="cal-day">3</div><div class="cal-day">4</div>
+              <div class="cal-day shift">5</div>
+              <div class="cal-day apply">6</div><div class="cal-day apply">7</div><div class="cal-day apply">8</div>
+              <div class="cal-day apply">9</div><div class="cal-day apply">10</div><div class="cal-day apply">11</div>
+              <div class="cal-day shift myshift">12</div>
+              <div class="cal-day">13</div><div class="cal-day">14</div><div class="cal-day">15</div>
+              <div class="cal-day">16</div><div class="cal-day">17</div><div class="cal-day">18</div>
+              <div class="cal-day shift">19</div>
+              <div class="cal-day">20</div><div class="cal-day">21</div><div class="cal-day">22</div>
+              <div class="cal-day">23</div><div class="cal-day">24</div><div class="cal-day">25</div>
+              <div class="cal-day shift">26</div>
+            </div>
+            <div style="display:flex;gap:8px;margin-top:7px;flex-wrap:wrap;">
+              <span style="display:flex;align-items:center;gap:3px;font-size:10px;"><span style="width:11px;height:11px;background:#ede9fe;border:1px solid #c4b5fd;border-radius:2px;display:inline-block;"></span>実施日</span>
+              <span style="display:flex;align-items:center;gap:3px;font-size:10px;"><span style="width:8px;height:8px;background:#f59e0b;border-radius:50%;display:inline-block;"></span>自分のシフト</span>
+              <span style="display:flex;align-items:center;gap:3px;font-size:10px;"><span style="width:10px;height:3px;background:#f97316;border-radius:2px;display:inline-block;"></span>申込期間</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== 4. シフト希望の送り方 ===== -->
+<section id="s-form">
+  <h2>④ シフト希望の送り方</h2>
+
+  <div class="step-row">
+    <div class="step-text">
+      <h3>ステップ 1：フォームを開く</h3>
+      <ol>
+        <li>メイン画面の <span class="lbl">📝 シフト希望を送る</span> をタップします。</li>
+        <li>送信済みの場合は「✏️ シフト希望を編集する」と表示されます。同様にタップしてください。</li>
+      </ol>
+      <div class="note">⚠️「🔒 受付終了」または「⏳ 受付準備中」のときはボタンがグレーになりタップできません。</div>
+    </div>
+    <div class="phone-frame">
+      <div class="phone-notch"></div>
+      <div class="phone-screen">
+        <div class="app-hdr">
+          <div class="app-hdr-icon">?</div>
+          <div class="app-hdr-title">2025年7月</div>
+          <div class="app-hdr-avatar">👤</div>
+        </div>
+        <div class="app-body">
+          <div class="app-card">
+            <div class="app-card-title">📬 シフト希望受付</div>
+            <div class="status-open">✅ 受付中</div>
+          </div>
+          <div style="position:relative;">
+            <button class="app-btn-nav"><span>📝</span><span>シフト希望を送る</span><span class="arr">›</span></button>
+            <span class="tap-abs" style="top:-10px;right:2px;">タップ</span>
+          </div>
+          <button class="app-btn-nav" style="opacity:.5;background:#9ca3af;"><span>📝</span><span style="font-size:11px;">受付終了中はグレー</span></button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="step-row">
+    <div class="step-text">
+      <h3>ステップ 2：希望時間帯を選択する</h3>
+      <ol>
+        <li>「📋 先月と同じにする」トグルをONにすると先月の回答が自動反映されます（任意）。</li>
+        <li>「📅 参加希望の時間帯」で参加したい時間帯の行をタップしてチェックを入れます。</li>
+        <li>チェックした行が展開され、追加オプションが表示されます：<br>
+          <span style="color:var(--danger);font-weight:700;font-size:13px;">🛒 この時間帯はカート担当ができません</span>（カート担当者のみ表示）<br>
+          <strong>備考</strong>テキストエリア（例：「10:00から」「14:00まで」）
+        </li>
+      </ol>
+    </div>
+    <div class="phone-frame">
+      <div class="phone-notch"></div>
+      <div class="phone-screen">
+        <div class="app-hdr">
+          <div class="app-hdr-icon">?</div>
+          <div class="app-hdr-title">宇多津会衆PWアプリ</div>
+          <div class="app-hdr-avatar">👤</div>
+        </div>
+        <div class="app-body">
+          <!-- 先月トグル -->
+          <div class="app-card">
+            <div style="display:flex;align-items:center;justify-content:space-between;gap:8px;">
+              <div>
+                <div style="font-size:12px;font-weight:700;color:#92400e;">📋 先月と同じにする</div>
+                <div style="font-size:10px;color:#78350f;">ONにすると自動で反映します</div>
+              </div>
+              <div style="width:36px;height:20px;background:#e5e7eb;border-radius:10px;position:relative;flex-shrink:0;">
+                <div style="width:16px;height:16px;background:white;border-radius:50%;position:absolute;top:2px;left:2px;box-shadow:0 1px 3px rgba(0,0,0,.2);"></div>
+              </div>
+            </div>
+          </div>
+          <!-- スロット -->
+          <div class="app-card">
+            <div class="app-card-title">📅 参加希望の時間帯</div>
+            <div style="font-size:11px;font-weight:700;color:var(--green-dark);margin-bottom:4px;">1週目　7月5日（土）</div>
+            <div class="app-slot-row">
+              <div class="app-checkbox"></div>
+              <div class="app-slot-time">10:00〜12:00</div>
+            </div>
+            <div style="background:#f0fdf4;border-radius:8px;padding:6px;margin-top:2px;position:relative;">
+              <div style="display:flex;align-items:center;gap:7px;">
+                <div class="app-checkbox on">✓</div>
+                <div class="app-slot-time">14:00〜16:00</div>
+                <span class="tap-abs" style="top:-10px;right:-4px;">タップで選択</span>
+              </div>
+              <div style="margin-top:5px;margin-left:25px;">
+                <div style="font-size:10px;color:var(--danger);font-weight:700;margin-bottom:3px;">🛒 この時間帯はカート担当ができません</div>
+                <div style="font-size:10px;color:#374151;margin-bottom:2px;">備考</div>
+                <div style="border:1px solid #d1d5db;border-radius:5px;padding:4px;font-size:10px;color:#9ca3af;min-height:28px;">例：14:00から参加</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="step-row">
+    <div class="step-text">
+      <h3>ステップ 3：送信する</h3>
+      <ol>
+        <li>すべての希望を選択したら、画面下の <span class="lbl">送信する</span> をタップします。</li>
+        <li>「送信しました」と表示されたら完了です。</li>
+        <li>メイン画面に戻ると「📋 送信済みのシフト希望」カードに内容が表示されます。</li>
+      </ol>
+      <div class="tip">💡 受付中であれば何度でも送り直せます。最後の送信内容が有効です。</div>
+    </div>
+    <div class="phone-frame">
+      <div class="phone-notch"></div>
+      <div class="phone-screen">
+        <div class="app-hdr">
+          <div class="app-hdr-icon">?</div>
+          <div class="app-hdr-title">宇多津会衆PWアプリ</div>
+          <div class="app-hdr-avatar">👤</div>
+        </div>
+        <div class="app-body">
+          <div class="app-card">
+            <div class="app-card-title">📅 参加希望の時間帯</div>
+            <div style="font-size:11px;font-weight:700;color:var(--green-dark);margin-bottom:4px;">1週目　7月5日（土）</div>
+            <div class="app-slot-row">
+              <div class="app-checkbox on">✓</div>
+              <div class="app-slot-time">10:00〜12:00</div>
+            </div>
+            <div class="app-slot-row">
+              <div class="app-checkbox on">✓</div>
+              <div class="app-slot-time">14:00〜16:00</div>
+            </div>
+          </div>
+          <div class="app-card">
+            <div style="position:relative;">
+              <button style="width:100%;padding:12px;background:var(--green);color:white;border:none;border-radius:10px;font-size:13px;font-weight:700;">送信する</button>
+              <span class="tap-abs" style="top:-10px;right:-6px;">タップ</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== 5. シフト表の見方 ===== -->
+<section id="s-shift">
+  <h2>⑤ シフト表の見方</h2>
+
+  <div class="step-row">
+    <div class="step-text">
+      <h3>ステップ 1：シフト表を開く</h3>
+      <ol>
+        <li>メイン画面の <span class="lbl">📋 シフト表を見る</span> をタップします。</li>
+        <li>実施日の一覧が表示されます。</li>
+        <li>確認したい日付ボタンをタップすると詳細が表示されます。</li>
+        <li>中止の日は<span style="color:var(--danger);font-weight:700;">赤いボタン</span>で表示されます。タップすると「⛔ このシフトは中止になっています」のポップアップが開きます。</li>
+      </ol>
+    </div>
+    <div class="phone-frame">
+      <div class="phone-notch"></div>
+      <div class="phone-screen">
+        <div class="app-hdr">
+          <div class="app-hdr-icon">?</div>
+          <div class="app-hdr-title">宇多津会衆PWアプリ</div>
+          <div class="app-hdr-avatar">👤</div>
+        </div>
+        <div class="app-body">
+          <div class="back-bar">‹ 戻る</div>
+          <div style="position:relative;">
+            <div class="sdb">
+              <div><div class="sdb-date">7月5日（土）</div><div class="sdb-sub">10:00〜16:00</div></div>
+              <div class="sdb-badge">自分のシフト</div>
+            </div>
+            <span class="tap-abs" style="top:-10px;right:60px;">タップ</span>
+          </div>
+          <div class="sdb">
+            <div><div class="sdb-date">7月12日（土）</div><div class="sdb-sub">10:00〜16:00</div></div>
+          </div>
+          <div class="sdb cancelled">
+            <div>
+              <div class="sdb-date" style="color:var(--danger);">7月19日（土）</div>
+              <div class="sdb-sub" style="color:var(--danger);">天候不良のため</div>
+            </div>
+            <div class="sdb-badge cancel">中止</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="step-row">
+    <div class="step-text">
+      <h3>ステップ 2：詳細シフト表を読む</h3>
+      <p style="margin-bottom:10px;">日付をタップすると詳細なシフト表（時間帯×場所のマトリクス）が表示されます。</p>
+      <h3>セルの色分け</h3>
+      <ul style="list-style:none;display:flex;flex-direction:column;gap:8px;margin-top:6px;">
+        <li style="display:flex;align-items:center;gap:10px;"><span style="width:38px;height:24px;background:#fde68a;border-radius:5px;flex-shrink:0;"></span><strong>黄色</strong>：自分が奉仕者として担当</li>
+        <li style="display:flex;align-items:center;gap:10px;"><span style="width:38px;height:24px;background:#fca5a5;border-radius:5px;flex-shrink:0;"></span><strong>ピンク</strong>：自分が責任者として担当</li>
+        <li style="display:flex;align-items:center;gap:10px;"><span style="width:38px;height:24px;background:#a5b4fc;border-radius:5px;flex-shrink:0;"></span><strong>紫</strong>：自分がカート担当</li>
+        <li style="display:flex;align-items:center;gap:10px;"><span style="width:38px;height:24px;background:#f1f5f9;border-radius:5px;flex-shrink:0;"></span><strong>グレー</strong>：他の奉仕者が担当</li>
+      </ul>
+    </div>
+    <div class="phone-frame">
+      <div class="phone-notch"></div>
+      <div class="phone-screen">
+        <div class="app-hdr">
+          <div class="app-hdr-icon">?</div>
+          <div class="app-hdr-title">宇多津会衆PWアプリ</div>
+          <div class="app-hdr-avatar">👤</div>
+        </div>
+        <div class="app-body" style="padding:6px;">
+          <div class="back-bar">‹ 戻る</div>
+          <div style="font-size:12px;font-weight:700;color:var(--green-dark);margin-bottom:4px;">7月5日（土）10:00〜16:00</div>
+          <div style="font-size:11px;color:#374151;margin-bottom:6px;">責任者：田中 太郎</div>
+          <div style="background:white;border-radius:8px;overflow:hidden;">
+            <table style="width:100%;border-collapse:collapse;font-size:10px;">
+              <thead>
+                <tr style="background:#f8fafc;">
+                  <th style="padding:5px;border:1px solid #e2e8f0;width:44px;text-align:center;">時間</th>
+                  <th style="padding:5px;border:1px solid #e2e8f0;background:#dbeafe;text-align:center;">第1会場</th>
+                  <th style="padding:5px;border:1px solid #e2e8f0;background:#d1fae5;text-align:center;">第2会場</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td style="padding:4px;border:1px solid #e2e8f0;text-align:center;font-size:9px;">10:00〜<br>12:00</td>
+                  <td style="padding:3px;border:1px solid #e2e8f0;">
+                    <div class="st-cell staff">山田 太郎</div>
+                    <div class="st-cell empty">田中 花子</div>
+                  </td>
+                  <td style="padding:3px;border:1px solid #e2e8f0;">
+                    <div class="st-cell empty">鈴木 一郎</div>
+                    <div class="st-cell empty">佐藤 次郎</div>
+                  </td>
+                </tr>
+                <tr>
+                  <td style="padding:4px;border:1px solid #e2e8f0;text-align:center;font-size:9px;">14:00〜<br>16:00</td>
+                  <td style="padding:3px;border:1px solid #e2e8f0;">
+                    <div class="st-cell empty">高橋 三郎</div>
+                  </td>
+                  <td style="padding:3px;border:1px solid #e2e8f0;">
+                    <div class="st-cell cart">山田 太郎</div>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <div style="display:flex;gap:6px;margin-top:6px;flex-wrap:wrap;">
+            <span style="display:flex;align-items:center;gap:2px;font-size:9px;"><span style="width:10px;height:10px;background:#fde68a;border-radius:2px;"></span>奉仕者</span>
+            <span style="display:flex;align-items:center;gap:2px;font-size:9px;"><span style="width:10px;height:10px;background:#fca5a5;border-radius:2px;"></span>責任者</span>
+            <span style="display:flex;align-items:center;gap:2px;font-size:9px;"><span style="width:10px;height:10px;background:#a5b4fc;border-radius:2px;"></span>カート</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 中止ポップアップ -->
+  <div class="step-row">
+    <div class="step-text">
+      <h3>中止日をタップしたとき</h3>
+      <ol>
+        <li>中止日（赤いボタン）をタップするとポップアップが表示されます。</li>
+        <li>「OK」をタップして閉じます。</li>
+        <li>詳細は担当の責任者に直接お問い合わせください。</li>
+      </ol>
+    </div>
+    <div class="phone-frame">
+      <div class="phone-notch"></div>
+      <div class="phone-screen" style="display:flex;align-items:center;justify-content:center;background:rgba(0,0,0,.3);">
+        <div class="cancel-popup">
+          <div class="ci-icon">⛔</div>
+          <div class="ci-title">このシフトは中止になっています</div>
+          <div class="ci-msg">詳細は責任者に直接<br>ご連絡ください。</div>
+          <button class="ci-ok">OK</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== 6. その他の機能 ===== -->
+<section id="s-others">
+  <h2>⑥ その他の機能</h2>
+
+  <div class="step-row">
+    <div class="step-text">
+      <h3>道路使用許可書の閲覧</h3>
+      <ol>
+        <li><span class="lbl-sec">🗺 道路使用許可書を閲覧する</span> をタップします。</li>
+        <li>有効期間内のPDFが一覧表示されます。タップして内容を確認できます。</li>
+      </ol>
+      <h3>要望を送る</h3>
+      <ol>
+        <li><span class="lbl-sec">💬 要望を送る</span> をタップします。</li>
+        <li>テキストエリアに内容を記入します（「ご自由にご記入ください」）。</li>
+        <li><span class="lbl">送信する</span> をタップします。</li>
+      </ol>
+      <h3>バグを報告する</h3>
+      <ol>
+        <li><span class="lbl-red">🐛 バグを報告する</span> をタップします。</li>
+        <li>「〇〇の画面で△△をしたらエラーが出た」のように詳細を記入します。</li>
+        <li>赤い送信ボタンをタップします。</li>
+      </ol>
+      <h3>アプリとしてインストール</h3>
+      <ol>
+        <li><span class="lbl-sec">📲 アプリとしてインストール</span> が表示されていればタップしてホーム画面に追加できます。</li>
+      </ol>
+    </div>
+    <div class="phone-frame">
+      <div class="phone-notch"></div>
+      <div class="phone-screen">
+        <div class="app-hdr">
+          <div class="app-hdr-icon">?</div>
+          <div class="app-hdr-title">宇多津会衆PWアプリ</div>
+          <div class="app-hdr-avatar">👤</div>
+        </div>
+        <div class="app-body">
+          <!-- 要望画面 -->
+          <div style="font-size:11px;color:var(--green-dark);font-weight:700;margin-bottom:4px;">‹ 戻る</div>
+          <div class="app-card">
+            <div class="app-card-title">💬 要望・ご意見</div>
+            <textarea style="width:100%;border:1px solid #d1d5db;border-radius:8px;padding:7px;font-size:11px;resize:none;height:60px;font-family:inherit;" placeholder="ご自由にご記入ください"></textarea>
+            <button style="width:100%;margin-top:8px;padding:10px;background:var(--green);color:white;border:none;border-radius:8px;font-size:12px;font-weight:700;">送信する</button>
+          </div>
+          <div class="app-card" style="margin-top:4px;">
+            <div class="app-card-title" style="color:#b91c1c;border-color:#fecaca;">🐛 バグ報告</div>
+            <div style="font-size:10px;color:#374151;margin-bottom:6px;">アプリの不具合・エラーについて詳しくお知らせください。</div>
+            <textarea style="width:100%;border:1px solid #d1d5db;border-radius:8px;padding:7px;font-size:10px;resize:none;height:40px;font-family:inherit;" placeholder="例：〇〇の画面で△△したらエラーが出た"></textarea>
+            <button style="width:100%;margin-top:6px;padding:9px;background:#b91c1c;color:white;border:none;border-radius:8px;font-size:12px;font-weight:700;">送信する</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== 7. プロフィール・ログアウト ===== -->
+<section id="s-profile">
+  <h2>⑦ プロフィール・ログアウト</h2>
+
+  <div class="step-row">
+    <div class="step-text">
+      <h3>プロフィールの確認</h3>
+      <ol>
+        <li>画面右上のアバターアイコン（👤）をタップします。</li>
+        <li>ポップアップに氏名・メールアドレス・役割バッジが表示されます。<br>
+          <span class="badge badge-g">奉仕者</span>&nbsp;
+          <span class="badge badge-p">カート担当</span>&nbsp;
+          <span class="badge" style="background:#ffe4e6;color:#9f1239;">責任者</span>
+        </li>
+      </ol>
+      <h3>ログアウト</h3>
+      <ol>
+        <li>ポップアップ内の <span class="lbl-red">ログアウト</span> をタップします。</li>
+        <li>ログイン画面に戻ります。</li>
+      </ol>
+    </div>
+    <div class="phone-frame">
+      <div class="phone-notch"></div>
+      <div class="phone-screen" style="padding:8px;">
+        <div class="app-hdr">
+          <div class="app-hdr-icon">?</div>
+          <div class="app-hdr-title">2025年7月</div>
+          <div class="app-hdr-avatar" style="position:relative;">
+            👤
+            <span class="tap-abs" style="top:-10px;right:-10px;">タップ</span>
+          </div>
+        </div>
+        <!-- プロフィールポップアップ -->
+        <div style="display:flex;justify-content:flex-end;padding:4px 4px 0;">
+          <div class="pp-wrap">
+            <div class="pp-hdr">
+              <div class="pp-av">👤</div>
+              <div>
+                <div class="pp-name">山田 太郎</div>
+                <div class="pp-email">yamada@gmail.com</div>
+              </div>
+            </div>
+            <div class="pp-roles-wrap">
+              <span class="badge badge-g">奉仕者</span>
+              <span class="badge badge-p">カート担当</span>
+            </div>
+            <button class="pp-logout">ログアウト</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== 8. よくある質問 ===== -->
+<section id="s-faq">
+  <h2>⑧ よくある質問</h2>
+  <div class="faq">
+    <div class="faq-q">「シフト希望を送る」ボタンが押せません</div>
+    <div class="faq-a">受付期間外です。「📬 シフト希望受付」カードで「✅ 受付中」になっているか確認してください。</div>
+  </div>
+  <div class="faq">
+    <div class="faq-q">送信した希望を変更したい</div>
+    <div class="faq-a">受付中であれば「✏️ シフト希望を編集する」から何度でも送り直せます。最後の送信内容が有効です。受付終了後は区域係にご連絡ください。</div>
+  </div>
+  <div class="faq">
+    <div class="faq-q">シフト表が表示されません</div>
+    <div class="faq-a">まだシフト表が公開されていません。カレンダーの「シフト公開」日以降に再度ご確認ください。</div>
+  </div>
+  <div class="faq">
+    <div class="faq-q">カート不可のチェックボックスが表示されない</div>
+    <div class="faq-a">カート担当として登録されているメンバーのみに表示されます。表示されない場合は問題ありません。</div>
+  </div>
+  <div class="faq">
+    <div class="faq-q">エラーが出て送信できない</div>
+    <div class="faq-a">「🐛 バグを報告する」から、どの画面で何をしたらエラーが起きたかを詳しくお知らせください。</div>
+  </div>
+  <div class="faq">
+    <div class="faq-q">初回登録画面で自分の名前が見つからない</div>
+    <div class="faq-a">区域係にお問い合わせください。メンバー登録が必要な場合があります。</div>
+  </div>
+</section>
+
+</main>
+
+<footer style="text-align:center;padding:16px;font-size:12px;color:#64748b;border-top:1px solid #e2e8f0;background:white;">
+  宇多津会衆PWアプリ 操作マニュアル（奉仕者向け）
+</footer>
+
+</body>
+</html>

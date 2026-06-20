@@ -1,0 +1,451 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>管理者向けマニュアル | 宇多津会衆PWアプリ</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --green: #16a34a;
+  --green-light: #d1fae5;
+  --green-mid: #bbf7d0;
+  --green-dark: #14532d;
+  --danger: #ef4444;
+  --danger-dark: #dc2626;
+  --amber: #fde68a;
+  --amber-bg: #fffbeb;
+  --amber-text: #92400e;
+}
+*,*::before,*::after { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  font-family: "Noto Sans JP", sans-serif;
+  font-size: 15px;
+  background: #f8fafc;
+  color: #1e293b;
+  line-height: 1.7;
+}
+/* ---- マニュアル レイアウト ---- */
+.manual-hdr {
+  background: #92400e;
+  color: white;
+  padding: 18px 20px 14px;
+  position: sticky; top: 0; z-index: 100;
+  box-shadow: 0 2px 8px rgba(120,53,15,.3);
+}
+.manual-hdr h1 { font-size: 18px; font-weight: 700; }
+.manual-hdr p  { font-size: 12px; color: rgba(255,255,255,.8); margin-top: 2px; }
+
+.toc { background: white; border-bottom: 2px solid var(--amber); padding: 14px 20px; }
+.toc h2 { font-size: 12px; font-weight: 700; color: #64748b; margin-bottom: 8px; letter-spacing:.05em; }
+.toc ol { list-style: none; display: flex; flex-direction: column; gap: 4px; }
+.toc a { color: #92400e; font-size: 13px; font-weight: 500; text-decoration: none; }
+.toc a:hover { text-decoration: underline; }
+
+main { max-width: 960px; margin: 0 auto; padding: 24px 16px 60px; }
+
+section { margin-bottom: 56px; scroll-margin-top: 80px; }
+section > h2 {
+  font-size: 18px; font-weight: 700; color: #92400e;
+  padding: 10px 16px; background: var(--amber-bg);
+  border-left: 4px solid var(--amber); border-radius: 0 8px 8px 0;
+  margin-bottom: 20px;
+}
+section h3 { font-size: 15px; font-weight: 700; color: #0f172a; margin: 20px 0 8px; }
+
+.step-row { display: flex; gap: 28px; align-items: flex-start; margin-bottom: 24px; }
+.step-text { flex: 1; min-width: 0; }
+.step-text ol { list-style: none; counter-reset: sc; }
+.step-text ol li {
+  counter-increment: sc;
+  display: flex; gap: 10px; margin-bottom: 12px; align-items: flex-start;
+}
+.step-text ol li::before {
+  content: counter(sc);
+  background: #92400e; color: white;
+  min-width: 22px; height: 22px; border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 11px; font-weight: 700; flex-shrink: 0; margin-top: 3px;
+}
+.note { background: #fefce8; border: 1px solid var(--amber); border-radius: 8px; padding: 10px 14px; font-size: 13px; margin-top: 12px; color: #713f12; }
+.tip  { background: var(--green-light); border: 1px solid var(--green-mid); border-radius: 8px; padding: 10px 14px; font-size: 13px; margin-top: 12px; }
+
+.lbl     { display:inline-block; background:#92400e; color:white; border-radius:5px; padding:1px 7px; font-size:12px; font-weight:700; }
+.lbl-amb { display:inline-block; background:var(--amber-bg); color:#92400e; border:1.5px solid var(--amber); border-radius:5px; padding:1px 7px; font-size:12px; font-weight:700; }
+.lbl-grn { display:inline-block; background:var(--green); color:white; border-radius:5px; padding:1px 7px; font-size:12px; font-weight:700; }
+.lbl-sec { display:inline-block; background:#f3f4f6; color:#374151; border:1px solid #d1d5db; border-radius:5px; padding:1px 7px; font-size:12px; font-weight:700; }
+.lbl-red { display:inline-block; background:var(--danger); color:white; border-radius:5px; padding:1px 7px; font-size:12px; font-weight:700; }
+
+/* ============================================================
+   スマホフレーム
+============================================================ */
+.phone-frame {
+  width: 300px; flex-shrink: 0;
+  background: #1a1a1a;
+  border-radius: 40px;
+  padding: 12px;
+  box-shadow: 0 14px 44px rgba(0,0,0,.32);
+}
+.phone-notch {
+  width: 72px; height: 7px; background: #333;
+  border-radius: 4px; margin: 0 auto 10px;
+}
+.phone-screen {
+  background: var(--green-light);
+  border-radius: 30px;
+  overflow-x: hidden;
+  overflow-y: auto;
+  height: 600px;
+  position: relative;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+.phone-screen::-webkit-scrollbar { display: none; }
+.tap-abs {
+  position: absolute;
+  background: var(--danger); color: white;
+  font-size: 10px; font-weight: 700;
+  border-radius: 11px; padding: 2px 8px;
+  box-shadow: 0 0 0 3px rgba(239,68,68,.25);
+  z-index: 20; pointer-events: none; white-space: nowrap;
+}
+
+/* ============================================================
+   アプリ UI 再現
+============================================================ */
+.app-hdr {
+  background: var(--green); color: white; height: 48px;
+  display: grid; grid-template-columns: 40px 1fr 40px; align-items: center; padding: 0 12px;
+}
+.app-hdr-title { font-size: 13px; font-weight: 700; text-align: center; }
+.app-hdr-icon  { width: 28px; height: 28px; border-radius: 50%; border: 1.5px solid rgba(255,255,255,.6); background: rgba(255,255,255,.2); display: flex; align-items: center; justify-content: center; font-size: 12px; color: white; font-weight: 700; }
+.app-hdr-avatar { width: 30px; height: 30px; border-radius: 50%; background: rgba(255,255,255,.25); border: 1.5px solid rgba(255,255,255,.6); display: flex; align-items: center; justify-content: center; font-size: 15px; justify-self: end; }
+.app-body { padding: 8px; display: flex; flex-direction: column; gap: 7px; }
+.app-card { background: white; border-radius: 12px; padding: 10px; box-shadow: 0 1px 4px rgba(0,0,0,.05); }
+.app-card-title { font-size: 12px; font-weight: 700; color: #92400e; padding-bottom: 7px; border-bottom: 2px solid var(--amber); margin-bottom: 8px; display: flex; align-items: center; gap: 5px; }
+/* ナビボタン */
+.app-btn-nav-amb {
+  width: 100%; padding: 13px 12px; font-size: 12px; font-weight: 700;
+  background: var(--amber-bg); color: var(--amber-text);
+  border: 2px solid var(--amber); border-radius: 12px;
+  display: flex; align-items: center; gap: 8px; cursor: pointer;
+}
+.app-btn-nav-amb .arr { opacity:.5; margin-left:auto; }
+/* フォーム要素 */
+.form-label { font-size: 11px; font-weight: 700; color: #374151; display: block; margin-bottom: 4px; }
+.form-input {
+  width: 100%; font-size: 12px; padding: 7px 9px;
+  border: 1.5px solid var(--green-mid); border-radius: 8px;
+  font-family: inherit; color: #1e293b; background: white;
+}
+.upload-btn {
+  display: inline-flex; align-items: center; gap: 6px;
+  padding: 9px 14px; background: var(--amber-bg);
+  border: 2px solid var(--amber); border-radius: 8px;
+  font-weight: 700; color: #92400e; font-size: 12px; cursor: pointer;
+}
+/* PDFリスト */
+.pdf-item {
+  display: flex; align-items: center; padding: 8px 10px;
+  background: white; border-radius: 10px; border: 1px solid #e2e8f0; margin-bottom: 5px;
+  gap: 6px;
+}
+.pdf-item-info { flex: 1; min-width: 0; }
+.pdf-item-name { font-size: 12px; font-weight: 700; color: #1e293b; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.pdf-item-date { font-size: 10px; color: #64748b; }
+.pdf-btn { border: none; border-radius: 6px; padding: 4px 7px; font-size: 10px; font-weight: 700; cursor: pointer; }
+.pdf-btn-prev { background: #d1fae5; color: var(--green-dark); }
+.pdf-btn-edit { background: #fef3c7; color: #92400e; }
+.pdf-btn-del  { background: #fee2e2; color: var(--danger-dark); }
+/* 編集モーダル */
+.modal-wrap { background: white; border-radius: 14px; padding: 14px; box-shadow: 0 4px 20px rgba(0,0,0,.2); width: 220px; margin: 10px auto 0; }
+.modal-title { font-size: 12px; font-weight: 700; color: var(--green); margin-bottom: 10px; }
+.modal-btn-row { display: flex; gap: 6px; margin-top: 10px; }
+.modal-btn-cancel { flex:1; padding:7px; background:#f3f4f6; border:none; border-radius:7px; font-size:11px; font-weight:700; color:#374151; }
+.modal-btn-save   { flex:1; padding:7px; background:var(--green); border:none; border-radius:7px; font-size:11px; font-weight:700; color:white; }
+/* バッジ */
+.badge { display:inline-block; border-radius:999px; font-size:10px; font-weight:700; padding:1px 6px; }
+.badge-amb { background:#fef3c7; color:#92400e; }
+
+@media (max-width: 760px) {
+  .step-row { flex-direction: column; align-items: stretch; }
+  .phone-frame { width: 100%; max-width: 300px; align-self: center; }
+}
+.step-row { align-items: flex-start; }
+.step-text { padding-top: 4px; }
+</style>
+</head>
+<body>
+
+<header class="manual-hdr">
+  <h1>📄 管理者向けマニュアル</h1>
+  <p>宇多津会衆PWアプリ — 会計者（道路使用許可書PDF管理）</p>
+</header>
+
+<nav class="toc">
+  <h2>目次</h2>
+  <ol>
+    <li><a href="#s-access">① 対象者と管理画面へのアクセス方法</a></li>
+    <li><a href="#s-upload">② 道路使用許可書PDFをアップロードする</a></li>
+    <li><a href="#s-list">③ 登録済みPDFの確認・編集・削除</a></li>
+  </ol>
+</nav>
+
+<main>
+
+<!-- ===== 1. 対象者とアクセス ===== -->
+<section id="s-access">
+  <h2>① 対象者と管理画面へのアクセス方法</h2>
+
+  <div class="step-row">
+    <div class="step-text">
+      <h3>このマニュアルの対象</h3>
+      <p>このマニュアルは<strong>会計者</strong>として登録されているメンバー向けです。</p>
+      <p style="margin-top:8px;">会計者としてログインすると、メイン画面に <span class="lbl-amb">📄 道路使用許可書を更新する</span> ボタンが表示されます（他のメンバーには表示されません）。</p>
+
+      <h3>管理画面へのアクセス手順</h3>
+      <ol>
+        <li>アプリにログインしてメイン画面を開きます。</li>
+        <li><span class="lbl-amb">📄 道路使用許可書を更新する</span> をタップします。</li>
+        <li>「📄 道路使用許可書PDF管理」画面が開きます。</li>
+      </ol>
+      <div class="note">⚠️ このボタンが表示されない場合は、会計者として登録されていません。区域係にご確認ください。</div>
+    </div>
+    <div class="phone-frame">
+      <div class="phone-notch"></div>
+      <div class="phone-screen">
+        <div class="app-hdr">
+          <div class="app-hdr-icon">?</div>
+          <div class="app-hdr-title">2025年7月</div>
+          <div class="app-hdr-avatar">👤</div>
+        </div>
+        <div class="app-body">
+          <!-- 通常ユーザーには表示されないボタン -->
+          <div style="font-size:10px;color:#64748b;margin-bottom:4px;background:#f8fafc;padding:4px 8px;border-radius:6px;">↓ 会計者のみ表示されるボタン</div>
+          <div style="position:relative;">
+            <button class="app-btn-nav-amb">
+              <span>📄</span><span>道路使用許可書を更新する</span><span class="arr">›</span>
+            </button>
+            <span class="tap-abs" style="top:-10px;right:2px;">タップ</span>
+          </div>
+          <div style="font-size:10px;color:#64748b;margin-top:4px;background:#f8fafc;padding:4px 8px;border-radius:6px;">↓ 全員に表示されるボタン</div>
+          <button style="width:100%;padding:12px;font-size:12px;font-weight:700;background:#f0fdf4;color:var(--green);border:2px solid var(--green-mid);border-radius:12px;display:flex;align-items:center;gap:8px;">
+            <span>🗺</span><span>道路使用許可書を閲覧する</span><span style="margin-left:auto;opacity:.5;">›</span>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== 2. PDFアップロード ===== -->
+<section id="s-upload">
+  <h2>② 道路使用許可書PDFをアップロードする</h2>
+
+  <div class="step-row">
+    <div class="step-text">
+      <h3>アップロード手順</h3>
+      <ol>
+        <li>「📝 PDF名」の入力欄に分かりやすい名前を入力します。<br><em style="color:#64748b;">（例：道路使用許可書7月）</em></li>
+        <li>「📅 表示期間」の開始日と終了日を設定します。この期間中だけ奉仕者に表示されます。</li>
+        <li><span class="lbl-amb">📂 PDFを選択してアップロード</span> をタップします。</li>
+        <li>ファイル選択画面でアップロードしたいPDFを選択します。</li>
+        <li>「アップロード中...」と表示されたのち、「📋 登録済みPDF」リストに追加されます。</li>
+      </ol>
+      <div class="note">⚠️ PDFファイル以外は選択できません（accept="application/pdf"）。</div>
+    </div>
+    <div class="phone-frame">
+      <div class="phone-notch"></div>
+      <div class="phone-screen">
+        <div class="app-hdr">
+          <div class="app-hdr-icon"></div>
+          <div class="app-hdr-title">宇多津会衆PWアプリ</div>
+          <div class="app-hdr-avatar">👤</div>
+        </div>
+        <div class="app-body">
+          <div style="font-size:11px;font-weight:700;color:#92400e;margin-bottom:2px;">‹ 戻る</div>
+          <div class="app-card">
+            <div class="app-card-title">📄 道路使用許可書PDF管理</div>
+            <!-- PDF名 -->
+            <div style="margin-bottom:9px;">
+              <label class="form-label">📝 PDF名</label>
+              <input class="form-input" type="text" placeholder="例：道路使用許可書7月" value="道路使用許可書7月">
+            </div>
+            <!-- 表示期間 -->
+            <div style="margin-bottom:10px;">
+              <label class="form-label">📅 表示期間</label>
+              <div style="display:flex;align-items:center;gap:5px;">
+                <input class="form-input" type="text" value="2025/07/01" style="flex:1;font-size:11px;">
+                <span style="color:#374151;font-size:11px;flex-shrink:0;">〜</span>
+                <input class="form-input" type="text" value="2025/07/31" style="flex:1;font-size:11px;">
+              </div>
+            </div>
+            <!-- アップロードボタン -->
+            <div style="position:relative;">
+              <button class="upload-btn">📂 PDFを選択してアップロード</button>
+              <span class="tap-abs" style="top:-10px;right:-6px;">タップ</span>
+            </div>
+            <div style="font-size:10px;color:#64748b;margin-top:8px;text-align:center;">アップロード中...</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== 3. 登録済みPDFの操作 ===== -->
+<section id="s-list">
+  <h2>③ 登録済みPDFの確認・編集・削除</h2>
+
+  <div class="step-row">
+    <div class="step-text">
+      <h3>登録済みPDFリストの見方</h3>
+      <p>アップロードされたPDFは「📋 登録済みPDF」カードに一覧表示されます。各PDFに3つのボタンがあります。</p>
+      <ul style="list-style:none;margin-top:12px;display:flex;flex-direction:column;gap:10px;">
+        <li style="display:flex;align-items:center;gap:10px;">
+          <span class="badge badge-amb" style="font-size:12px;padding:3px 9px;">🔍 プレビュー</span>
+          <span>PDFの内容をモーダル内で確認します。</span>
+        </li>
+        <li style="display:flex;align-items:center;gap:10px;">
+          <span class="badge" style="background:#fef3c7;color:#92400e;font-size:12px;padding:3px 9px;border-radius:999px;">✏️ 編集</span>
+          <span>PDF名と表示期間を変更します（→ 編集モーダルが開きます）。</span>
+        </li>
+        <li style="display:flex;align-items:center;gap:10px;">
+          <span class="badge" style="background:#fee2e2;color:#b91c1c;font-size:12px;padding:3px 9px;border-radius:999px;">🗑 削除</span>
+          <span>PDFを削除します（確認ダイアログが表示されます）。</span>
+        </li>
+      </ul>
+    </div>
+    <div class="phone-frame">
+      <div class="phone-notch"></div>
+      <div class="phone-screen">
+        <div class="app-hdr">
+          <div class="app-hdr-icon"></div>
+          <div class="app-hdr-title">宇多津会衆PWアプリ</div>
+          <div class="app-hdr-avatar">👤</div>
+        </div>
+        <div class="app-body">
+          <div class="app-card">
+            <div class="app-card-title">📋 登録済みPDF</div>
+            <!-- PDF 1 -->
+            <div class="pdf-item">
+              <div class="pdf-item-info">
+                <div class="pdf-item-name">📄 道路使用許可書7月</div>
+                <div class="pdf-item-date">📅 2025/07/01〜2025/07/31</div>
+              </div>
+              <button class="pdf-btn pdf-btn-prev">🔍</button>
+              <button class="pdf-btn pdf-btn-edit">✏️</button>
+              <button class="pdf-btn pdf-btn-del">🗑</button>
+            </div>
+            <!-- PDF 2 -->
+            <div class="pdf-item">
+              <div class="pdf-item-info">
+                <div class="pdf-item-name">📄 道路使用許可書8月</div>
+                <div class="pdf-item-date">📅 2025/08/01〜2025/08/31</div>
+              </div>
+              <button class="pdf-btn pdf-btn-prev">🔍</button>
+              <button class="pdf-btn pdf-btn-edit">✏️</button>
+              <button class="pdf-btn pdf-btn-del">🗑</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="step-row">
+    <div class="step-text">
+      <h3>PDFを編集する手順</h3>
+      <ol>
+        <li><span class="lbl-amb" style="background:#fef3c7;">✏️ 編集</span> ボタンをタップすると「📝 PDF情報を編集」モーダルが開きます。</li>
+        <li>「PDF名」と「表示期間」を変更します。</li>
+        <li><span class="lbl-grn">保存</span> をタップして確定します。変更しない場合は <span class="lbl-sec">キャンセル</span> をタップします。</li>
+      </ol>
+
+      <h3>PDFを削除する手順</h3>
+      <ol>
+        <li><span class="lbl-red">🗑 削除</span> ボタンをタップします。</li>
+        <li>確認ダイアログ「『PDF名』を削除しますか？」が表示されます。</li>
+        <li>「OK」をタップすると削除されます（この操作は取り消せません）。</li>
+      </ol>
+      <div class="note">⚠️ 削除したPDFは元に戻せません。ご注意ください。</div>
+    </div>
+    <div class="phone-frame">
+      <div class="phone-notch"></div>
+      <div class="phone-screen" style="display:flex;align-items:center;justify-content:center;background:rgba(0,0,0,.3);">
+        <!-- 編集モーダル -->
+        <div class="modal-wrap">
+          <div class="modal-title">📝 PDF情報を編集</div>
+          <div style="margin-bottom:8px;">
+            <label class="form-label" style="font-size:10px;">PDF名</label>
+            <input class="form-input" type="text" value="道路使用許可書7月" style="font-size:11px;padding:6px;">
+          </div>
+          <div style="margin-bottom:4px;">
+            <label class="form-label" style="font-size:10px;">表示期間</label>
+            <div style="display:flex;align-items:center;gap:4px;">
+              <input class="form-input" type="text" value="2025/07/01" style="flex:1;font-size:10px;padding:5px;">
+              <span style="font-size:10px;color:#374151;">〜</span>
+              <input class="form-input" type="text" value="2025/07/31" style="flex:1;font-size:10px;padding:5px;">
+            </div>
+          </div>
+          <div class="modal-btn-row">
+            <button class="modal-btn-cancel">キャンセル</button>
+            <div style="position:relative;flex:1;">
+              <button class="modal-btn-save" style="width:100%;">保存</button>
+              <span class="tap-abs" style="top:-10px;right:-6px;">タップ</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="step-row">
+    <div class="step-text">
+      <h3>奉仕者側での表示</h3>
+      <p>表示期間内のPDFは、奉仕者が <span class="lbl-sec">🗺 道路使用許可書を閲覧する</span> をタップしたときに一覧表示されます。期間外のPDFは表示されません。</p>
+      <div class="tip">💡 期間の重複があっても問題ありません。有効期間内のPDFがすべて一覧に表示されます。</div>
+    </div>
+    <div class="phone-frame">
+      <div class="phone-notch"></div>
+      <div class="phone-screen">
+        <div class="app-hdr" style="background:var(--green);">
+          <div></div>
+          <div class="app-hdr-title">宇多津会衆PWアプリ</div>
+          <div class="app-hdr-avatar">👤</div>
+        </div>
+        <div class="app-body">
+          <!-- 閲覧モーダル（奉仕者目線） -->
+          <div class="app-card">
+            <div class="app-card-title" style="color:var(--green);">🗺 道路使用許可書</div>
+            <div style="font-size:11px;color:#374151;margin-bottom:8px;">表示期間内のPDFを確認できます：</div>
+            <!-- PDF links -->
+            <div style="padding:8px;background:var(--green-light);border-radius:8px;margin-bottom:5px;display:flex;align-items:center;justify-content:space-between;">
+              <div>
+                <div style="font-size:11px;font-weight:700;">道路使用許可書7月</div>
+                <div style="font-size:10px;color:#374151;">2025/07/01〜07/31</div>
+              </div>
+              <button style="background:var(--green);color:white;border:none;border-radius:6px;padding:4px 9px;font-size:11px;font-weight:700;">開く</button>
+            </div>
+            <div style="padding:8px;background:var(--green-light);border-radius:8px;display:flex;align-items:center;justify-content:space-between;">
+              <div>
+                <div style="font-size:11px;font-weight:700;">道路使用許可書8月</div>
+                <div style="font-size:10px;color:#374151;">2025/08/01〜08/31</div>
+              </div>
+              <button style="background:var(--green);color:white;border:none;border-radius:6px;padding:4px 9px;font-size:11px;font-weight:700;">開く</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<footer style="text-align:center;padding:16px;font-size:12px;color:#64748b;border-top:1px solid #e2e8f0;background:white;">
+  宇多津会衆PWアプリ 管理者向けマニュアル（会計者向け）
+</footer>
+
+</body>
+</html>

@@ -1,0 +1,607 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>責任者向けマニュアル | 宇多津会衆PWアプリ</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --green: #16a34a;
+  --green-light: #d1fae5;
+  --green-mid: #bbf7d0;
+  --green-dark: #14532d;
+  --danger: #ef4444;
+  --danger-dark: #dc2626;
+  --amber: #fde68a;
+  --purple: #a5b4fc;
+  --purple-dark: #6366f1;
+}
+*,*::before,*::after { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  font-family: "Noto Sans JP", sans-serif;
+  font-size: 15px;
+  background: #f8fafc;
+  color: #1e293b;
+  line-height: 1.7;
+}
+/* ---- マニュアル レイアウト ---- */
+.manual-hdr {
+  background: #7c3aed;
+  color: white;
+  padding: 18px 20px 14px;
+  position: sticky; top: 0; z-index: 100;
+  box-shadow: 0 2px 8px rgba(109,40,217,.3);
+}
+.manual-hdr h1 { font-size: 18px; font-weight: 700; }
+.manual-hdr p  { font-size: 12px; color: rgba(255,255,255,.8); margin-top: 2px; }
+
+.toc { background: white; border-bottom: 2px solid #ede9fe; padding: 14px 20px; }
+.toc h2 { font-size: 12px; font-weight: 700; color: #64748b; margin-bottom: 8px; letter-spacing:.05em; }
+.toc ol { list-style: none; display: grid; grid-template-columns: 1fr 1fr; gap: 4px 16px; }
+.toc a { color: #7c3aed; font-size: 13px; font-weight: 500; text-decoration: none; }
+.toc a:hover { text-decoration: underline; }
+
+main { max-width: 960px; margin: 0 auto; padding: 24px 16px 60px; }
+section { margin-bottom: 56px; scroll-margin-top: 80px; }
+section > h2 {
+  font-size: 18px; font-weight: 700; color: #5b21b6;
+  padding: 10px 16px; background: #f5f3ff;
+  border-left: 4px solid #7c3aed; border-radius: 0 8px 8px 0;
+  margin-bottom: 20px;
+}
+section h3 { font-size: 15px; font-weight: 700; color: #0f172a; margin: 20px 0 8px; }
+
+.step-row { display: flex; gap: 28px; align-items: flex-start; margin-bottom: 24px; }
+.step-text { flex: 1; min-width: 0; }
+.step-text ol { list-style: none; counter-reset: sc; }
+.step-text ol li {
+  counter-increment: sc;
+  display: flex; gap: 10px; margin-bottom: 12px; align-items: flex-start;
+}
+.step-text ol li::before {
+  content: counter(sc);
+  background: #7c3aed; color: white;
+  min-width: 22px; height: 22px; border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 11px; font-weight: 700; flex-shrink: 0; margin-top: 3px;
+}
+.note { background: #fefce8; border: 1px solid var(--amber); border-radius: 8px; padding: 10px 14px; font-size: 13px; margin-top: 12px; color: #713f12; }
+.tip  { background: var(--green-light); border: 1px solid var(--green-mid); border-radius: 8px; padding: 10px 14px; font-size: 13px; margin-top: 12px; }
+
+/* ラベル */
+.lbl-red { display:inline-block; background:#fee2e2; color:var(--danger-dark); border-radius:5px; padding:2px 8px; font-size:12px; font-weight:700; }
+.lbl-pur { display:inline-block; background:#ede9fe; color:#7c3aed; border-radius:5px; padding:2px 8px; font-size:12px; font-weight:700; }
+.lbl-yel { display:inline-block; background:#fef9c3; color:#713f12; border-radius:5px; padding:2px 8px; font-size:12px; font-weight:700; }
+.lbl-blu { display:inline-block; background:#eff6ff; color:#2563eb; border:1.5px solid #bfdbfe; border-radius:5px; padding:2px 8px; font-size:12px; font-weight:700; }
+.lbl-grn { display:inline-block; background:var(--green); color:white; border-radius:5px; padding:2px 8px; font-size:12px; font-weight:700; }
+.lbl-sec { display:inline-block; background:#f3f4f6; color:#374151; border:1px solid #d1d5db; border-radius:5px; padding:2px 8px; font-size:12px; font-weight:700; }
+
+/* 権限表 */
+.perm-table { width:100%; border-collapse:collapse; font-size:13px; margin:10px 0 16px; }
+.perm-table th { background:#f5f3ff; padding:8px 10px; border:1px solid #ddd6fe; font-weight:700; color:#5b21b6; text-align:left; }
+.perm-table td { padding:8px 10px; border:1px solid #e2e8f0; }
+.perm-table td.yes { color:var(--green); font-weight:700; text-align:center; }
+
+/* ============================================================
+   スマホフレーム
+============================================================ */
+.phone-frame {
+  width: 300px; flex-shrink: 0;
+  background: #1a1a1a;
+  border-radius: 40px;
+  padding: 12px;
+  box-shadow: 0 14px 44px rgba(0,0,0,.32);
+}
+.phone-notch { width: 72px; height: 7px; background: #333; border-radius: 4px; margin: 0 auto 10px; }
+.phone-screen {
+  background: var(--green-light);
+  border-radius: 30px;
+  overflow-x: hidden;
+  overflow-y: auto;
+  height: 600px;
+  position: relative;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+.phone-screen::-webkit-scrollbar { display: none; }
+.tap-abs {
+  position: absolute;
+  background: var(--danger); color: white;
+  font-size: 10px; font-weight: 700;
+  border-radius: 11px; padding: 2px 8px;
+  box-shadow: 0 0 0 3px rgba(239,68,68,.25);
+  z-index: 20; pointer-events: none; white-space: nowrap;
+}
+
+/* ============================================================
+   アプリ UI 再現
+============================================================ */
+.app-hdr {
+  background: var(--green); color: white; height: 48px;
+  display: grid; grid-template-columns: 40px 1fr 40px; align-items: center; padding: 0 12px;
+}
+.app-hdr-title { font-size: 13px; font-weight: 700; text-align: center; }
+.app-hdr-icon  { width: 28px; height: 28px; border-radius: 50%; border: 1.5px solid rgba(255,255,255,.6); background: rgba(255,255,255,.2); display: flex; align-items: center; justify-content: center; font-size: 12px; color: white; font-weight: 700; }
+.app-hdr-avatar { width: 30px; height: 30px; border-radius: 50%; background: rgba(255,255,255,.25); border: 1.5px solid rgba(255,255,255,.6); display: flex; align-items: center; justify-content: center; font-size: 15px; justify-self: end; }
+.app-body { padding: 8px; display: flex; flex-direction: column; gap: 7px; }
+.app-card { background: white; border-radius: 12px; padding: 10px; box-shadow: 0 1px 4px rgba(0,0,0,.05); }
+.app-card-title { font-size: 12px; font-weight: 700; color: var(--green); padding-bottom: 7px; border-bottom: 2px solid var(--green-light); margin-bottom: 8px; display: flex; align-items: center; gap: 5px; }
+.back-bar { font-size:11px; font-weight:700; color:var(--green); padding:5px 0 2px; }
+/* シフト日ボタン */
+.sdb { display:flex; align-items:center; padding:9px 10px; background:white; border:1.5px solid var(--green); border-radius:10px; gap:8px; margin-bottom:5px; }
+.sdb-date { font-size:13px; font-weight:700; }
+.sdb-sub  { font-size:10px; color:#64748b; }
+.sdb-badge { margin-left:auto; background:#fef3c7; color:#92400e; font-size:10px; font-weight:700; padding:2px 6px; border-radius:999px; }
+/* 操作ボタン群 */
+.edit-actions { display:flex; gap:6px; flex-wrap:wrap; margin-bottom:8px; }
+.btn-small { font-size:11px; font-weight:700; padding:5px 10px; border-radius:7px; border:none; cursor:pointer; }
+.btn-cancel-input { background:#fee2e2; color:var(--danger-dark); }
+.btn-cancel-undo  { background:#ede9fe; color:#7c3aed; }
+.btn-memo-edit    { background:#fef9c3; color:#713f12; }
+.btn-edit-staff   { background:#eff6ff; color:#2563eb; border:1.5px solid #bfdbfe; font-size:11px; font-weight:700; padding:5px 10px; border-radius:7px; }
+/* 中止バナー */
+.cancel-banner { background:var(--danger-dark); color:white; padding:8px 10px; font-size:11px; font-weight:700; border-radius:6px; margin-bottom:6px; }
+/* メモボックス */
+.memo-box { background:#fefce8; border:1.5px solid #fde047; border-radius:8px; padding:8px 10px; margin-bottom:8px; }
+.memo-box-label { font-size:10px; font-weight:700; color:#713f12; display:block; margin-bottom:4px; }
+/* シフト表セル */
+.st-cell { border-radius:5px; padding:4px; font-size:10px; text-align:center; margin-bottom:2px; }
+.st-cell.empty  { background:#f1f5f9; color:#94a3b8; }
+.st-cell.staff  { background:#fde68a; color:#713f12; font-weight:700; }
+.st-cell.resp   { background:#fca5a5; color:#7f1d1d; font-weight:700; }
+.st-cell.cart   { background:#a5b4fc; color:#1e1b4b; font-weight:700; }
+/* ドロップダウン（スタッフ編集） */
+.staff-sel { width:100%; padding:4px 6px; border-radius:6px; border:1px solid #bfdbfe; font-size:10px; margin-bottom:3px; background:white; }
+/* 保存/キャンセルボタン */
+.btn-save-shift   { background:var(--green); color:white; border:none; border-radius:8px; padding:6px 14px; font-size:11px; font-weight:700; }
+.btn-cancel-shift { background:#f3f4f6; color:#374151; border:1px solid #e5e7eb; border-radius:8px; padding:6px 14px; font-size:11px; font-weight:700; }
+/* ダイアログ風 */
+.dialog-wrap { background:white; border-radius:12px; padding:14px; box-shadow:0 4px 20px rgba(0,0,0,.2); width:200px; margin:20px auto 0; text-align:center; }
+.dialog-title { font-size:12px; font-weight:700; color:var(--danger); margin-bottom:8px; }
+.dialog-msg { font-size:11px; color:#374151; margin-bottom:12px; line-height:1.5; }
+.dialog-input { width:100%; border:1px solid #d1d5db; border-radius:6px; padding:5px 7px; font-size:11px; margin-bottom:10px; font-family:inherit; }
+.dialog-btn-row { display:flex; gap:6px; }
+.dialog-btn-cancel { flex:1; padding:6px; background:#f3f4f6; border:none; border-radius:6px; font-size:11px; font-weight:700; color:#374151; }
+.dialog-btn-ok { flex:1; padding:6px; background:var(--danger); border:none; border-radius:6px; font-size:11px; font-weight:700; color:white; }
+
+@media (max-width: 760px) {
+  .step-row { flex-direction: column; align-items: stretch; }
+  .phone-frame { width: 100%; max-width: 300px; align-self: center; }
+  .toc ol { grid-template-columns: 1fr; }
+}
+.step-row { align-items: flex-start; }
+.step-text { padding-top: 4px; }
+</style>
+</head>
+<body>
+
+<header class="manual-hdr">
+  <h1>🗂 責任者向けマニュアル</h1>
+  <p>宇多津会衆PWアプリ — 責任者専用機能（中止・メモ・奉仕者編集）</p>
+</header>
+
+<nav class="toc">
+  <h2>目次</h2>
+  <ol>
+    <li><a href="#s-perm">① 対象者と表示条件</a></li>
+    <li><a href="#s-access">② シフト詳細画面へのアクセス</a></li>
+    <li><a href="#s-cancel">③ シフトを中止にする</a></li>
+    <li><a href="#s-undo">④ 中止を取り消す</a></li>
+    <li><a href="#s-memo">⑤ 責任者メモを編集する</a></li>
+    <li><a href="#s-staff">⑥ 奉仕者を編集する</a></li>
+  </ol>
+</nav>
+
+<main>
+
+<!-- ===== 1. 対象者と表示条件 ===== -->
+<section id="s-perm">
+  <h2>① 対象者と表示条件</h2>
+
+  <p>責任者向けの操作ボタンは、<strong>シフト表の詳細画面</strong>に表示されます。ただし、権限の種類によって表示されるボタンが異なります。</p>
+
+  <table class="perm-table">
+    <thead>
+      <tr>
+        <th>権限の種類</th>
+        <th>表示されるボタン</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><strong>その日の担当責任者</strong><br><small>（シフト表でその日の責任者として登録されているメンバー）</small></td>
+        <td>
+          <span class="lbl-red">中止入力</span>&nbsp;
+          <span class="lbl-pur">中止取り消し</span>&nbsp;
+          <span class="lbl-blu">奉仕者を編集</span>
+        </td>
+      </tr>
+      <tr>
+        <td><strong>責任者権限を持つメンバー</strong><br><small>（isResponsible として登録されているメンバー）</small></td>
+        <td>
+          <span class="lbl-yel">メモ編集</span>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div class="note">⚠️ 両方の条件を満たしている場合は、すべてのボタンが表示されます。</div>
+</section>
+
+<!-- ===== 2. シフト詳細画面へのアクセス ===== -->
+<section id="s-access">
+  <h2>② シフト詳細画面へのアクセス</h2>
+
+  <div class="step-row">
+    <div class="step-text">
+      <h3>アクセス手順</h3>
+      <ol>
+        <li>メイン画面の <strong>「📋 シフト表を見る」</strong> をタップします。</li>
+        <li>日付ボタンの一覧が表示されます。</li>
+        <li>担当する日付のボタンをタップします。</li>
+        <li>詳細シフト表が表示され、責任者向けのボタンが確認できます。</li>
+      </ol>
+      <div class="tip">💡 ボタンが表示されない場合は、その日の責任者として登録されていないか、権限がありません。</div>
+    </div>
+    <div class="phone-frame">
+      <div class="phone-notch"></div>
+      <div class="phone-screen">
+        <div class="app-hdr">
+          <div class="app-hdr-icon">?</div>
+          <div class="app-hdr-title">宇多津会衆PWアプリ</div>
+          <div class="app-hdr-avatar">👤</div>
+        </div>
+        <div class="app-body">
+          <div class="back-bar">‹ 戻る</div>
+          <div style="position:relative;">
+            <div class="sdb">
+              <div>
+                <div class="sdb-date">7月5日（土）</div>
+                <div class="sdb-sub">10:00〜16:00</div>
+              </div>
+              <div class="sdb-badge">担当日</div>
+            </div>
+            <span class="tap-abs" style="top:-10px;right:50px;">タップ</span>
+          </div>
+          <div class="sdb">
+            <div><div class="sdb-date">7月12日（土）</div><div class="sdb-sub">10:00〜16:00</div></div>
+          </div>
+          <!-- 責任者ボタン表示 -->
+          <div class="app-card">
+            <div class="app-card-title">7月5日（土）詳細</div>
+            <div class="edit-actions">
+              <button class="btn-small btn-cancel-input">中止入力</button>
+              <button class="btn-small btn-memo-edit">メモ編集</button>
+              <button class="btn-edit-staff">奉仕者を編集</button>
+            </div>
+            <div style="font-size:10px;color:#374151;">責任者：田中 太郎</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== 3. 中止入力 ===== -->
+<section id="s-cancel">
+  <h2>③ シフトを中止にする</h2>
+
+  <div class="step-row">
+    <div class="step-text">
+      <h3>中止入力の手順</h3>
+      <ol>
+        <li>対象日のシフト詳細画面を開きます。</li>
+        <li><span class="lbl-red">中止入力</span> をタップします。</li>
+        <li>「中止理由を入力してください（空白でも可）：」のダイアログが表示されます。理由を入力（省略可）して <strong>「OK」</strong> をタップします。</li>
+        <li>詳細画面に赤いバナー <strong>「⛔ 中止：[理由]」</strong> が表示されます。</li>
+        <li>奉仕者側の「次のシフト」カードも赤くなり、中止情報が反映されます。</li>
+      </ol>
+      <div class="note">⚠️ 中止後でも「中止取り消し」ボタンで元に戻せます。</div>
+    </div>
+    <div class="phone-frame">
+      <div class="phone-notch"></div>
+      <div class="phone-screen" style="display:flex;align-items:center;justify-content:center;background:rgba(0,0,0,.25);">
+        <!-- ダイアログ -->
+        <div class="dialog-wrap">
+          <div class="dialog-title">中止理由の入力</div>
+          <div class="dialog-msg">中止理由を入力してください<br>（空白でも可）</div>
+          <input class="dialog-input" type="text" placeholder="例：天候不良のため" value="天候不良のため">
+          <div class="dialog-btn-row">
+            <button class="dialog-btn-cancel">キャンセル</button>
+            <div style="position:relative;flex:1;">
+              <button class="dialog-btn-ok" style="width:100%;">OK</button>
+              <span class="tap-abs" style="top:-10px;right:-6px;">タップ</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 中止後の画面 -->
+  <div class="step-row">
+    <div class="step-text">
+      <h3>中止後の表示</h3>
+      <p>中止が登録されると、シフト詳細画面の上部に赤いバナーが表示されます。<br>ボタンは <span class="lbl-pur">中止取り消し</span> に切り替わります。</p>
+    </div>
+    <div class="phone-frame">
+      <div class="phone-notch"></div>
+      <div class="phone-screen">
+        <div class="app-hdr">
+          <div class="app-hdr-icon">?</div>
+          <div class="app-hdr-title">宇多津会衆PWアプリ</div>
+          <div class="app-hdr-avatar">👤</div>
+        </div>
+        <div class="app-body">
+          <div class="back-bar">‹ 戻る</div>
+          <div class="app-card">
+            <div class="app-card-title">7月5日（土）</div>
+            <div class="edit-actions">
+              <!-- 中止後はこのボタンに切り替わる -->
+              <button class="btn-small btn-cancel-undo">中止取り消し</button>
+              <button class="btn-small btn-memo-edit">メモ編集</button>
+              <button class="btn-edit-staff">奉仕者を編集</button>
+            </div>
+            <!-- 中止バナー -->
+            <div class="cancel-banner">⛔ 中止：天候不良のため</div>
+            <div style="font-size:10px;color:#374151;margin-bottom:6px;">責任者：田中 太郎</div>
+            <!-- 表 -->
+            <div style="background:#f8fafc;border-radius:6px;overflow:hidden;">
+              <table style="width:100%;border-collapse:collapse;font-size:10px;">
+                <tr style="background:#f1f5f9;">
+                  <th style="padding:4px;border:1px solid #e2e8f0;">時間</th>
+                  <th style="padding:4px;border:1px solid #e2e8f0;background:#dbeafe;">第1会場</th>
+                </tr>
+                <tr>
+                  <td style="padding:3px;border:1px solid #e2e8f0;text-align:center;font-size:9px;">10:00〜<br>12:00</td>
+                  <td style="padding:3px;border:1px solid #e2e8f0;">
+                    <div class="st-cell resp">田中 太郎</div>
+                    <div class="st-cell staff">山田 花子</div>
+                  </td>
+                </tr>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== 4. 中止取り消し ===== -->
+<section id="s-undo">
+  <h2>④ 中止を取り消す</h2>
+
+  <div class="step-row">
+    <div class="step-text">
+      <h3>中止取り消しの手順</h3>
+      <ol>
+        <li>中止済みのシフト詳細画面を開きます（赤いバナーが表示されている状態）。</li>
+        <li><span class="lbl-pur">中止取り消し</span> をタップします。</li>
+        <li>「この時間帯の中止を取り消しますか？」の確認ダイアログが表示されます。</li>
+        <li><strong>「OK」</strong> をタップすると中止バナーが消え、通常の状態に戻ります。</li>
+        <li>ボタンは再び <span class="lbl-red">中止入力</span> に切り替わります。</li>
+      </ol>
+    </div>
+    <div class="phone-frame">
+      <div class="phone-notch"></div>
+      <div class="phone-screen" style="display:flex;align-items:center;justify-content:center;background:rgba(0,0,0,.25);">
+        <!-- 確認ダイアログ -->
+        <div class="dialog-wrap">
+          <div class="dialog-title" style="color:#7c3aed;">中止取り消しの確認</div>
+          <div class="dialog-msg">この時間帯の中止を<br>取り消しますか？</div>
+          <div class="dialog-btn-row">
+            <button class="dialog-btn-cancel">キャンセル</button>
+            <div style="position:relative;flex:1;">
+              <button class="dialog-btn-ok" style="width:100%;background:#7c3aed;">OK</button>
+              <span class="tap-abs" style="top:-10px;right:-6px;">タップ</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== 5. 責任者メモ ===== -->
+<section id="s-memo">
+  <h2>⑤ 責任者メモを編集する</h2>
+
+  <div class="step-row">
+    <div class="step-text">
+      <h3>メモ編集の手順</h3>
+      <ol>
+        <li>シフト詳細画面の <span class="lbl-yel">メモ編集</span> をタップします。</li>
+        <li>「責任者メモを入力してください：」のダイアログが表示されます（現在のメモがあれば初期値として表示）。</li>
+        <li>メモ内容を入力して <strong>「OK」</strong> をタップします。空のまま「OK」にするとメモが削除されます。</li>
+        <li>詳細画面に黄色い「📝 責任者メモ」ボックスが表示されます。</li>
+      </ol>
+      <div class="tip">💡 責任者メモは責任者権限を持つメンバー全員に表示されます。連絡事項などに活用してください。</div>
+    </div>
+    <div class="phone-frame">
+      <div class="phone-notch"></div>
+      <div class="phone-screen">
+        <div class="app-hdr">
+          <div class="app-hdr-icon">?</div>
+          <div class="app-hdr-title">宇多津会衆PWアプリ</div>
+          <div class="app-hdr-avatar">👤</div>
+        </div>
+        <div class="app-body">
+          <div class="back-bar">‹ 戻る</div>
+          <div class="app-card">
+            <div class="app-card-title">7月5日（土）</div>
+            <div class="edit-actions">
+              <button class="btn-small btn-cancel-input">中止入力</button>
+              <div style="position:relative;">
+                <button class="btn-small btn-memo-edit">メモ編集</button>
+                <span class="tap-abs" style="top:-10px;right:-4px;">タップ</span>
+              </div>
+              <button class="btn-edit-staff">奉仕者を編集</button>
+            </div>
+            <!-- メモボックス（入力後表示） -->
+            <div class="memo-box">
+              <label class="memo-box-label">📝 責任者メモ</label>
+              <div style="font-size:11px;color:#1e293b;">集合場所は正門前。10分前集合でお願いします。</div>
+            </div>
+            <div style="font-size:10px;color:#374151;">責任者：田中 太郎</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- メモ入力ダイアログ -->
+  <div class="step-row">
+    <div class="step-text">
+      <h3>メモ入力ダイアログ</h3>
+      <p>「メモ編集」をタップするとダイアログが表示されます。既存のメモがある場合は入力欄に表示されます。</p>
+    </div>
+    <div class="phone-frame">
+      <div class="phone-notch"></div>
+      <div class="phone-screen" style="display:flex;align-items:center;justify-content:center;background:rgba(0,0,0,.25);">
+        <div class="dialog-wrap">
+          <div class="dialog-title" style="color:#713f12;">責任者メモを入力</div>
+          <div class="dialog-msg" style="font-size:10px;margin-bottom:8px;">責任者メモを入力してください：</div>
+          <input class="dialog-input" type="text" value="集合場所は正門前。10分前集合でお願いします。">
+          <div class="dialog-btn-row">
+            <button class="dialog-btn-cancel">キャンセル</button>
+            <div style="position:relative;flex:1;">
+              <button class="dialog-btn-ok" style="width:100%;background:#713f12;">OK</button>
+              <span class="tap-abs" style="top:-10px;right:-6px;">タップ</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== 6. 奉仕者編集 ===== -->
+<section id="s-staff">
+  <h2>⑥ 奉仕者を編集する</h2>
+
+  <div class="step-row">
+    <div class="step-text">
+      <h3>奉仕者編集の手順</h3>
+      <ol>
+        <li>シフト詳細画面の <span class="lbl-blu">奉仕者を編集</span> をタップします。</li>
+        <li>シフト表が編集モードに切り替わります。各スロット×場所のセルにドロップダウンが表示されます。</li>
+        <li>ドロップダウンから変更したい奉仕者を選択します（最大3名分のドロップダウンが表示されます）。</li>
+        <li>変更が完了したら <span class="lbl-grn">保存する</span> をタップして確定します。</li>
+        <li>変更をやめる場合は <span class="lbl-sec">キャンセル</span> をタップします。</li>
+      </ol>
+      <div class="note">⚠️ 保存した変更はすぐにすべての奉仕者に反映されます。内容をよく確認してから「保存する」をタップしてください。</div>
+    </div>
+    <div class="phone-frame">
+      <div class="phone-notch"></div>
+      <div class="phone-screen">
+        <div class="app-hdr">
+          <div class="app-hdr-icon">?</div>
+          <div class="app-hdr-title">宇多津会衆PWアプリ</div>
+          <div class="app-hdr-avatar">👤</div>
+        </div>
+        <div class="app-body">
+          <div class="back-bar">‹ 戻る</div>
+          <div class="app-card">
+            <div class="app-card-title">7月5日（土）</div>
+            <div class="edit-actions" style="margin-bottom:6px;">
+              <button class="btn-small btn-cancel-input">中止入力</button>
+              <button class="btn-small btn-memo-edit">メモ編集</button>
+              <div style="position:relative;">
+                <button class="btn-edit-staff">奉仕者を編集</button>
+                <span class="tap-abs" style="top:-10px;right:-4px;">タップ</span>
+              </div>
+            </div>
+            <div style="font-size:10px;color:#374151;margin-bottom:6px;">責任者：田中 太郎</div>
+            <!-- 表 -->
+            <div style="background:#f8fafc;border-radius:6px;overflow:hidden;">
+              <table style="width:100%;border-collapse:collapse;font-size:10px;">
+                <tr style="background:#f1f5f9;">
+                  <th style="padding:4px;border:1px solid #e2e8f0;">時間</th>
+                  <th style="padding:4px;border:1px solid #e2e8f0;background:#dbeafe;">第1会場</th>
+                </tr>
+                <tr>
+                  <td style="padding:3px;border:1px solid #e2e8f0;text-align:center;font-size:9px;">10:00〜<br>12:00</td>
+                  <td style="padding:3px;border:1px solid #e2e8f0;">
+                    <div class="st-cell resp">田中 太郎</div>
+                    <div class="st-cell staff">山田 花子</div>
+                  </td>
+                </tr>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 編集モード画面 -->
+  <div class="step-row">
+    <div class="step-text">
+      <h3>編集モードの画面</h3>
+      <p>「奉仕者を編集」をタップすると、各セルにドロップダウンが表示されます。</p>
+      <p style="margin-top:8px;">編集後、画面下の <span class="lbl-grn">保存する</span> をタップして保存します。</p>
+    </div>
+    <div class="phone-frame">
+      <div class="phone-notch"></div>
+      <div class="phone-screen">
+        <div class="app-hdr">
+          <div class="app-hdr-icon">?</div>
+          <div class="app-hdr-title">宇多津会衆PWアプリ</div>
+          <div class="app-hdr-avatar">👤</div>
+        </div>
+        <div class="app-body">
+          <div class="back-bar">‹ 戻る</div>
+          <div class="app-card">
+            <div class="app-card-title">7月5日（土）— 編集中</div>
+            <div style="font-size:10px;color:#2563eb;font-weight:700;margin-bottom:6px;background:#eff6ff;padding:4px 8px;border-radius:5px;">✏️ 編集モード：ドロップダウンで奉仕者を変更できます</div>
+            <!-- 表（編集モード） -->
+            <div style="background:#f8fafc;border-radius:6px;overflow:hidden;margin-bottom:7px;">
+              <table style="width:100%;border-collapse:collapse;font-size:10px;">
+                <tr style="background:#f1f5f9;">
+                  <th style="padding:4px;border:1px solid #e2e8f0;">時間</th>
+                  <th style="padding:4px;border:1px solid #e2e8f0;background:#dbeafe;">第1会場</th>
+                </tr>
+                <tr>
+                  <td style="padding:3px;border:1px solid #e2e8f0;text-align:center;font-size:9px;">10:00〜<br>12:00</td>
+                  <td style="padding:5px;border:1px solid #e2e8f0;">
+                    <select class="staff-sel">
+                      <option selected>田中 太郎</option>
+                      <option>鈴木 一郎</option>
+                    </select>
+                    <select class="staff-sel">
+                      <option selected>山田 花子</option>
+                      <option>佐藤 次郎</option>
+                    </select>
+                    <select class="staff-sel">
+                      <option value="">（なし）</option>
+                      <option>高橋 三郎</option>
+                    </select>
+                  </td>
+                </tr>
+              </table>
+            </div>
+            <!-- 保存/キャンセル -->
+            <div style="display:flex;gap:6px;">
+              <button class="btn-cancel-shift">キャンセル</button>
+              <div style="position:relative;flex:1;">
+                <button class="btn-save-shift" style="width:100%;">保存する</button>
+                <span class="tap-abs" style="top:-10px;right:-4px;">タップ</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<footer style="text-align:center;padding:16px;font-size:12px;color:#64748b;border-top:1px solid #e2e8f0;background:white;">
+  宇多津会衆PWアプリ 責任者向けマニュアル
+</footer>
+
+</body>
+</html>
