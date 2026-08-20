@@ -24,6 +24,34 @@ const hdrB = document.getElementById('hdr-back');
 
 const cache = {};
 
+// ---- 履歴の扱い ------------------------------------------
+// ステップを送るたびに履歴を積むと、一覧に戻ったあとブラウザの「戻る」で
+// さっきまで見ていたステップに逆戻りしてしまう。
+// そこで履歴を積むのは「一覧 → タスクを開く」の1回だけにし、
+// ステップの移動は URL の置き換えだけで済ませる。
+// 「← 一覧」はその1回ぶんを戻すので、履歴は積み上がらない。
+let pushedFromList = false;
+
+// ステップ間の移動。履歴を積まずに URL だけ差し替える
+// （replaceState では hashchange が飛ばないので、描画は自分で呼ぶ）
+function replaceTo(hash) {
+  history.replaceState(null, '', hash);
+  route();
+}
+
+// タスクを開く。ここだけ履歴を1つ積む
+function pushTo(hash) {
+  pushedFromList = true;
+  location.hash = hash;
+}
+
+// 一覧へ戻る。タスクを開いたときに積んだ1つを戻すので履歴が残らない。
+// URL を直接開いて入ってきた場合は戻り先が無いため、置き換えで一覧を出す
+function goList(aud) {
+  if (pushedFromList) { pushedFromList = false; history.back(); }
+  else replaceTo('#/' + aud);
+}
+
 // ---- 進捗（どこまで見たか）--------------------------------
 const posKey  = (a, t) => 'pwman.pos.'  + a + '.' + t;
 const doneKey = (a, t) => 'pwman.done.' + a + '.' + t;
@@ -93,7 +121,7 @@ function renderList(content) {
       b.appendChild(el('span', 'task-badge resume', '続きから'));
     }
 
-    b.onclick = () => { location.hash = '#/' + aud + '/' + task.id; };
+    b.onclick = () => { pushTo('#/' + aud + '/' + task.id); };
     wrap.appendChild(b);
   });
 
@@ -121,7 +149,7 @@ function renderStep(content, task, idx) {
 
   hdrT.textContent = task.title;
   hdrB.textContent = '← 一覧';
-  hdrB.onclick = () => { location.hash = '#/' + aud; };
+  hdrB.onclick = () => { goList(aud); };
   hdrB.hidden = false;
 
   const wrap = el('div', 'wrap');
@@ -191,7 +219,7 @@ function renderStep(content, task, idx) {
   nav.replaceChildren();
   const prev = el('button', 'prev', '← 戻る');
   prev.disabled = idx === 0;
-  prev.onclick = () => { location.hash = '#/' + aud + '/' + task.id + '/' + idx; };
+  prev.onclick = () => { replaceTo('#/' + aud + '/' + task.id + '/' + idx); };
 
   const next = el('button', 'next', idx === total - 1 ? 'できました 🎉' : '次へ →');
   next.onclick = () => {
@@ -199,7 +227,7 @@ function renderStep(content, task, idx) {
       markDone(aud, task.id);
       renderDone(content, task);
     } else {
-      location.hash = '#/' + aud + '/' + task.id + '/' + (idx + 2);
+      replaceTo('#/' + aud + '/' + task.id + '/' + (idx + 2));
     }
   };
   nav.appendChild(prev);
@@ -258,7 +286,7 @@ function renderDone(content, task) {
   bb.appendChild(el('div', 'pick-sub', content.title + 'の一覧に戻ります'));
   back.appendChild(bb);
   back.appendChild(el('span', 'pick-arr', '›'));
-  back.onclick = () => { location.hash = '#/' + aud; };
+  back.onclick = () => { goList(aud); };
 
   d.appendChild(back);
   wrap.appendChild(d);
@@ -295,7 +323,7 @@ async function route() {
   if (!parts[1]) { renderList(content); return; }
 
   const task = content.tasks.find((t) => t.id === parts[1]);
-  if (!task || !task.steps.length) { location.hash = '#/' + aud; return; }
+  if (!task || !task.steps.length) { replaceTo('#/' + aud); return; }
 
   // ステップ番号が無いときは、前回の続きから開く
   let idx;
