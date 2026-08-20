@@ -120,6 +120,244 @@
           }
         }
       ]
+    },
+    {
+      "id": "photo",
+      "title": "展示内容の写真を登録する",
+      "summary": "その月の展示をアプリに載せる",
+      "setup": {
+        "fakeNow": "2026-08-20"
+      },
+      "steps": [
+        {
+          "shot": "ad-pho-01",
+          "session": true,
+          "goto": "index.html",
+          "waitFor": "#app",
+          "settle": 4000,
+          "highlight": "button[onclick=\"openPhotoMgmtModal('exhibit')\"]",
+          "instruction": "道具箱から「写真」を開きます",
+          "note": {
+            "type": "info",
+            "text": "登録すると、奉仕者のホーム画面とシフト詳細に表示されます。"
+          }
+        },
+        {
+          "shot": "ad-pho-02",
+          "do": [
+            {
+              "click": "button[onclick=\"openPhotoMgmtModal('exhibit')\"]"
+            }
+          ],
+          "waitFor": "#m-photo-mgmt",
+          "settle": 2500,
+          "instruction": "登録済みの写真が並びます。ここから追加・削除ができます",
+          "note": {
+            "type": "warn",
+            "text": "人が写り込んでいないか確かめてから登録してください。"
+          }
+        }
+      ]
+    },
+    {
+      "id": "member",
+      "title": "メンバーを追加・編集する",
+      "summary": "会衆のメンバーを登録し、変更や無効化をする",
+      "setup": {
+        "fakeNow": "2026-08-20"
+      },
+      "steps": [
+        {
+          "shot": "ad-mem-01",
+          "session": true,
+          "goto": "index.html",
+          "waitFor": "#app",
+          "settle": 4000,
+          "highlight": "button[onclick=\"openMemberModal()\"]",
+          "instruction": "右下の道具箱から「メンバー」を開きます",
+          "note": {
+            "type": "info",
+            "text": "ここに登録した人がアプリにログインでき、シフトの配置候補になります。"
+          }
+        },
+        {
+          "shot": "ad-mem-02",
+          "do": [
+            {
+              "click": "button[onclick=\"openMemberModal()\"]"
+            }
+          ],
+          "waitFor": "#m-member",
+          "settle": 2000,
+          "instruction": "登録されているメンバーの一覧が出ます"
+        },
+        {
+          "shot": "ad-mem-03",
+          "highlight": "button[onclick=\"openMemberAddForm()\"]",
+          "instruction": "新しく加えるときは「＋ メンバー追加」を押します",
+          "note": {
+            "type": "info",
+            "text": "名前・かな・性別を入れて保存します。メールアドレスは本人が初回ログインしたときに自動でひも付きます。"
+          }
+        },
+        {
+          "noShot": true,
+          "instruction": "辞める方・長く休まれる方は、削除せず「無効にする」を使います",
+          "note": {
+            "type": "warn",
+            "text": "無効にするとシフトの配置候補から外れますが、過去の記録は残ります。戻ってこられたら「有効にする」で元に戻せます。"
+          }
+        }
+      ]
+    },
+    {
+      "id": "notice",
+      "title": "お知らせを出す",
+      "summary": "アプリのホーム画面に知らせを表示する",
+      "setup": {
+        "fakeNow": "2026-08-20"
+      },
+      "steps": [
+        {
+          "shot": "ad-not-01",
+          "session": true,
+          "goto": "index.html",
+          "waitFor": "#app",
+          "settle": 4000,
+          "highlight": "button[onclick=\"openNoticeModal()\"]",
+          "instruction": "道具箱から「お知らせ」を開きます"
+        },
+        {
+          "shot": "ad-not-02",
+          "do": [
+            {
+              "click": "button[onclick=\"openNoticeModal()\"]"
+            }
+          ],
+          "waitFor": "#m-notice",
+          "settle": 2000,
+          "instruction": "いま出ているお知らせの一覧です。ここから追加・編集・削除ができます",
+          "note": {
+            "type": "info",
+            "text": "表示する期間を決められます。期間をすぎると自動で消えるので、消し忘れの心配がありません。"
+          }
+        }
+      ]
+    },
+    {
+      "id": "proxy",
+      "title": "代理送信を設定する",
+      "summary": "本人の代わりに希望を出せる人を決める",
+      "setup": {
+        "fakeNow": "2026-08-20"
+      },
+      "steps": [
+        {
+          "shot": "ad-prx-01",
+          "session": true,
+          "goto": "index.html",
+          "waitFor": "#app",
+          "settle": 4000,
+          "highlight": "button[onclick=\"openProxyModal()\"]",
+          "instruction": "道具箱から「代理送信」を開きます",
+          "note": {
+            "type": "info",
+            "text": "アプリを使わない方のぶんを、ほかの人が代わりに出せるようにする仕組みです。"
+          }
+        },
+        {
+          "shot": "ad-prx-02",
+          "do": [
+            {
+              "click": "button[onclick=\"openProxyModal()\"]"
+            }
+          ],
+          "waitFor": "#m-proxy",
+          "settle": 2000,
+          "instruction": "「代理を行う人」と「希望を送られる人」の組を登録します",
+          "note": {
+            "type": "info",
+            "text": "夫婦を登録してあれば、そちらは自動で互いに代理できるようになっています。"
+          }
+        }
+      ]
+    },
+    {
+      "id": "inbox",
+      "title": "届いたものを確認する",
+      "summary": "要望・不具合・配布報告・ログイン救済",
+      "setup": {
+        "fakeNow": "2026-08-20"
+      },
+      "steps": [
+        {
+          "shot": "ad-ibx-01",
+          "session": true,
+          "goto": "index.html",
+          "waitFor": "#app",
+          "settle": 4000,
+          "highlight": [
+            "#ibx-recovery",
+            "#ibx-requests",
+            "#ibx-bugs",
+            "#ibx-distribution"
+          ],
+          "instruction": "右の「未対応」に、届いたものが並びます",
+          "note": {
+            "type": "info",
+            "text": "予定表の対応待ち・ログイン救済・要望・バグ報告・配布報告の5つがまとまっています。"
+          }
+        },
+        {
+          "shot": "ad-ibx-02",
+          "do": [
+            {
+              "click": "#ibx-requests"
+            }
+          ],
+          "waitFor": "#m-request",
+          "settle": 2000,
+          "instruction": "「要望」を開くと、奉仕者から届いた内容が並びます",
+          "note": {
+            "type": "info",
+            "text": "対応が済んだものは「対応済みにする」で片付けられます。片付けると未対応の数が減ります。"
+          }
+        }
+      ]
+    },
+    {
+      "id": "logs",
+      "title": "操作の記録を見る",
+      "summary": "いつ誰が何をしたかをさかのぼる",
+      "setup": {
+        "fakeNow": "2026-08-20"
+      },
+      "steps": [
+        {
+          "shot": "ad-log-01",
+          "session": true,
+          "goto": "index.html",
+          "waitFor": "#app",
+          "settle": 4000,
+          "highlight": "button[onclick=\"openLogModal()\"]",
+          "instruction": "道具箱から「ログ」を開きます"
+        },
+        {
+          "shot": "ad-log-02",
+          "do": [
+            {
+              "click": "button[onclick=\"openLogModal()\"]"
+            }
+          ],
+          "waitFor": "#m-logs",
+          "settle": 2500,
+          "instruction": "「管理者の操作」「希望提出」「ログイン」の3種類を切り替えて見られます",
+          "note": {
+            "type": "info",
+            "text": "「条件で絞り込む」で人や期間を指定できます。おかしな動きがあったときに、いつ何が起きたかをたどれます。"
+          }
+        }
+      ]
     }
   ]
 }
