@@ -7,7 +7,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="css/common.css?v=2">
+<link rel="stylesheet" href="css/common.css?v=3">
 </head>
 <body>
 
@@ -22,6 +22,8 @@
     画面の写真を見ながら、1つずつ進められます。
   </p>
 
+  <div id="picks">
+
   <a class="pick" href="walkthrough.html#/volunteer">
     <span class="pick-icon">🙋</span>
     <span class="pick-body">
@@ -31,7 +33,7 @@
     <span class="pick-arr">›</span>
   </a>
 
-  <a class="pick" href="walkthrough.html#/responsible">
+  <a class="pick" href="walkthrough.html#/responsible" data-need="isResponsible" hidden>
     <span class="pick-icon">📋</span>
     <span class="pick-body">
       <span class="pick-name">責任者の方</span>
@@ -40,7 +42,7 @@
     <span class="pick-arr">›</span>
   </a>
 
-  <a class="pick" href="walkthrough.html#/accountant">
+  <a class="pick" href="walkthrough.html#/accountant" data-need="isAccountant" hidden>
     <span class="pick-icon">📄</span>
     <span class="pick-body">
       <span class="pick-name">会計者の方</span>
@@ -49,7 +51,7 @@
     <span class="pick-arr">›</span>
   </a>
 
-  <a class="pick" href="walkthrough.html#/admin">
+  <a class="pick" href="walkthrough.html#/admin" data-need="isAdmin" hidden>
     <span class="pick-icon">⚙️</span>
     <span class="pick-body">
       <span class="pick-name">区域係の方</span>
@@ -57,6 +59,8 @@
     </span>
     <span class="pick-arr">›</span>
   </a>
+
+  </div><!-- /#picks -->
 
   <div class="sec-title">そのほか</div>
 
@@ -76,5 +80,6 @@
 
 </div>
 
+<script src="js/index.js?v=1"></script>
 </body>
 </html>

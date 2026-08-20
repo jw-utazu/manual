@@ -122,3 +122,8 @@ body {
 
 .lead { font-size: 15px; color: var(--sub); margin-bottom: 16px; }
 .sec-title { font-size: 15px; font-weight: 700; color: var(--green-dark); margin: 24px 0 10px; }
+
+/* 対象者カードは、見せてよいものが決まるまで出さない。
+   先に全部出してから消すと、一瞬だけ関係のない対象者が見えてしまう */
+#picks { visibility: hidden; }
+#picks.ready { visibility: visible; }
