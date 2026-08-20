@@ -1,0 +1,124 @@
+/* ============================================================
+   共通スタイル
+   色とタイポグラフィはアプリ本体（shift-form/css/app.css）に合わせている。
+   マニュアルを開いたときに「別のツールに来た」と感じさせないため。
+   ============================================================ */
+:root {
+  --green:       #16a34a;
+  --green-light: #d1fae5;
+  --green-mid:   #bbf7d0;
+  --green-dark:  #14532d;
+  --bg:          #d1fae5;
+  --card:        #ffffff;
+  --border:      #a7f3d0;
+  --text:        #1e293b;
+  --sub:         #475569;
+  --danger:      #ef4444;
+  --danger-dark: #dc2626;
+  --amber:       #fde68a;
+  --amber-dark:  #b45309;
+  --amber-bg:    #fffbeb;
+  --blue:        #2563eb;
+  --blue-bg:     #eff6ff;
+  --radius:      14px;
+  --shadow:      0 2px 12px rgba(0,0,0,.08);
+  --shadow-lg:   0 4px 24px rgba(0,0,0,.12);
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+html { -webkit-text-size-adjust: 100%; }
+
+body {
+  font-family: "Noto Sans JP", "Hiragino Sans", "Yu Gothic UI", sans-serif;
+  /* 操作に慣れていない人が読む前提。本文は大きめに取る */
+  font-size: 17px;
+  line-height: 1.7;
+  background: var(--bg);
+  color: var(--text);
+  min-height: 100vh;
+}
+
+.wrap { max-width: 640px; margin: 0 auto; padding: 0 16px; }
+
+/* ---- ヘッダ ---- */
+.hdr {
+  background: var(--green);
+  color: #fff;
+  padding: 14px 16px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  box-shadow: var(--shadow);
+}
+.hdr-title { font-size: 17px; font-weight: 700; flex: 1; }
+.hdr-back {
+  background: rgba(255,255,255,.2);
+  color: #fff;
+  border: none;
+  border-radius: 10px;
+  padding: 8px 12px;
+  font-size: 15px;
+  font-family: inherit;
+  cursor: pointer;
+}
+.hdr-back:hover { background: rgba(255,255,255,.32); }
+
+/* ---- カード ---- */
+.card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  padding: 16px;
+}
+
+/* ---- 一覧のリンクカード ---- */
+.pick {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  width: 100%;
+  text-align: left;
+  text-decoration: none;
+  color: inherit;
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  padding: 16px;
+  margin-bottom: 12px;
+  font-family: inherit;
+  font-size: 17px;
+  cursor: pointer;
+}
+.pick:hover { border-color: var(--green); }
+.pick-icon {
+  width: 46px; height: 46px;
+  flex: 0 0 46px;
+  display: grid;
+  place-items: center;
+  border-radius: 12px;
+  background: var(--green-light);
+  font-size: 24px;
+}
+.pick-body { flex: 1; min-width: 0; }
+.pick-name { font-weight: 700; }
+.pick-sub { font-size: 14px; color: var(--sub); line-height: 1.5; }
+.pick-arr { color: var(--green); font-size: 22px; }
+
+/* ---- 補足ボックス ---- */
+.note {
+  border-radius: 12px;
+  padding: 12px 14px;
+  font-size: 15px;
+  line-height: 1.65;
+  display: flex;
+  gap: 10px;
+}
+.note-info { background: var(--blue-bg);  border: 1px solid #bfdbfe; color: #1e3a8a; }
+.note-warn { background: var(--amber-bg); border: 1px solid var(--amber); color: #92400e; }
+.note-icon { flex: 0 0 auto; }
+
+.lead { font-size: 15px; color: var(--sub); margin-bottom: 16px; }
+.sec-title { font-size: 15px; font-weight: 700; color: var(--green-dark); margin: 24px 0 10px; }

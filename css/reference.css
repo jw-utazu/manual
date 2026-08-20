@@ -1,0 +1,50 @@
+/* ============================================================
+   リファレンス（色分け・用語・よくある質問）
+   ============================================================ */
+.legend-row {
+  display: flex;
+  gap: 12px;
+  align-items: flex-start;
+  padding: 10px 0;
+  border-bottom: 1px solid var(--border);
+}
+.legend-row:last-child { border-bottom: none; }
+.legend-chip {
+  flex: 0 0 44px;
+  width: 44px;
+  height: 38px;
+  display: grid;
+  place-items: center;
+  border-radius: 8px;
+  border: 1px solid rgba(0,0,0,.08);
+  font-size: 15px;
+  font-weight: 700;
+}
+.legend-body { flex: 1; min-width: 0; }
+.legend-label { font-weight: 700; font-size: 15px; }
+.legend-desc { font-size: 14px; color: var(--sub); line-height: 1.6; }
+
+.faq { border-bottom: 1px solid var(--border); }
+.faq:last-child { border-bottom: none; }
+.faq-q {
+  font-weight: 700;
+  font-size: 16px;
+  padding: 12px 0;
+  cursor: pointer;
+  list-style: none;
+  display: flex;
+  gap: 8px;
+}
+.faq-q::-webkit-details-marker { display: none; }
+.faq-q::before { content: 'Q'; color: var(--green); flex: 0 0 auto; }
+.faq-a {
+  font-size: 15px;
+  color: var(--sub);
+  line-height: 1.7;
+  padding: 0 0 14px 20px;
+}
+
+.term { padding: 10px 0; border-bottom: 1px solid var(--border); }
+.term:last-child { border-bottom: none; }
+.term-name { font-weight: 700; font-size: 15px; }
+.term-desc { font-size: 14px; color: var(--sub); line-height: 1.6; }

@@ -1,0 +1,197 @@
+/* ============================================================
+   ウォークスルー（1ステップ＝1画面）
+   利用者が自分のスマホ画面と見比べながら進めることを最優先にする。
+   画面画像はできるだけ大きく、指示は1文、次への導線は指の届く下部に固定する。
+   ============================================================ */
+
+/* 下部固定のナビに隠れないよう、本文の下に余白を確保する */
+body.wt { padding-bottom: 96px; }
+
+/* ---- 進捗 ---- */
+.prog-wrap { padding: 12px 16px 0; }
+.prog-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 14px;
+  color: var(--sub);
+  margin-bottom: 6px;
+}
+.prog-bar {
+  height: 8px;
+  background: #fff;
+  border: 1px solid var(--border);
+  border-radius: 99px;
+  overflow: hidden;
+}
+.prog-fill {
+  height: 100%;
+  background: var(--green);
+  border-radius: 99px;
+  transition: width .25s ease;
+}
+
+/* ---- 画面画像 ---- */
+.shot-wrap {
+  position: relative;
+  margin: 16px auto 0;
+  max-width: 390px;
+  border-radius: var(--radius);
+  overflow: hidden;
+  box-shadow: var(--shadow-lg);
+  background: #fff;
+  line-height: 0;
+}
+.shot-wrap img { width: 100%; height: auto; display: block; }
+
+/* タップする場所を示す枠。座標は撮影時に自動算出した相対値。
+   要素からの余白は viewer.js が px で足している（四辺で同じ太さにするため）。
+
+   枠のふちだけを ::after で描き、脈動は transform: scale() ではなく
+   上下左右を px でずらして表す。scale は寸法に比例して広がるため、
+   横長の要素では左右ばかり大きく開き、上下が詰まって見えてしまう */
+.hot {
+  position: absolute;
+  border-radius: 12px;
+  pointer-events: none;
+}
+/* 枠のふちだけで示す。
+   以前は box-shadow で周囲を暗くしていたが、枠が2つ以上あると
+   それぞれの暗幕が互いの枠の中まで暗くしてしまい、間に白い帯が出た。
+   代わりに赤枠の外へ白いふちを重ね、背景が明るくても浮くようにしている */
+.hot::after {
+  content: '';
+  position: absolute;
+  top: 0; right: 0; bottom: 0; left: 0;
+  border: 3px solid var(--danger);
+  border-radius: inherit;
+  box-shadow: 0 0 0 2px rgba(255,255,255,.95), 0 2px 8px rgba(0,0,0,.25);
+  animation: hot-pulse 1.6s ease-in-out infinite;
+}
+@keyframes hot-pulse {
+  0%, 100% { top: 0;    right: 0;    bottom: 0;    left: 0;    opacity: 1;  }
+  50%      { top: -4px; right: -4px; bottom: -4px; left: -4px; opacity: .7; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .hot::after { animation: none; }
+}
+
+/* 画面を持たないステップ（Googleのログイン画面など）の代替カード */
+.noshot {
+  margin: 16px auto 0;
+  max-width: 390px;
+  background: var(--card);
+  border: 2px dashed var(--border);
+  border-radius: var(--radius);
+  padding: 28px 20px;
+  text-align: center;
+  color: var(--sub);
+}
+.noshot-icon { font-size: 38px; line-height: 1; margin-bottom: 8px; }
+.noshot-cap { font-size: 14px; }
+
+/* ---- 指示文 ---- */
+.instr {
+  margin: 14px auto 0;
+  max-width: 480px;
+  font-size: 19px;
+  font-weight: 700;
+  line-height: 1.6;
+  display: flex;
+  gap: 12px;
+  align-items: flex-start;
+}
+.instr-no {
+  flex: 0 0 32px;
+  width: 32px; height: 32px;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  background: var(--green);
+  color: #fff;
+  font-size: 16px;
+  margin-top: 2px;
+}
+.instr-note { margin: 14px auto 0; max-width: 480px; }
+
+/* ---- 下部固定ナビ ---- */
+.nav {
+  position: fixed;
+  left: 0; right: 0; bottom: 0;
+  background: rgba(255,255,255,.96);
+  backdrop-filter: blur(6px);
+  border-top: 1px solid var(--border);
+  padding: 12px 16px calc(12px + env(safe-area-inset-bottom));
+  display: flex;
+  gap: 12px;
+  max-width: 640px;
+  margin: 0 auto;
+}
+.nav button {
+  flex: 1;
+  padding: 15px 12px;
+  border-radius: 12px;
+  border: none;
+  font-family: inherit;
+  font-size: 17px;
+  font-weight: 700;
+  cursor: pointer;
+}
+.nav .prev { flex: 0 0 34%; background: #fff; border: 1px solid var(--border); color: var(--sub); }
+.nav .next { background: var(--green); color: #fff; }
+.nav button:disabled { opacity: .4; cursor: default; }
+
+/* ---- タスク一覧 ---- */
+.task {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+  text-align: left;
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  padding: 14px 16px;
+  margin-bottom: 10px;
+  font-family: inherit;
+  font-size: 17px;
+  color: inherit;
+  cursor: pointer;
+}
+.task:hover { border-color: var(--green); }
+.task-no {
+  flex: 0 0 30px;
+  width: 30px; height: 30px;
+  display: grid; place-items: center;
+  border-radius: 50%;
+  background: var(--green-light);
+  color: var(--green-dark);
+  font-size: 14px;
+  font-weight: 700;
+}
+.task-body { flex: 1; min-width: 0; }
+.task-name { font-weight: 700; }
+.task-sub { font-size: 14px; color: var(--sub); line-height: 1.5; }
+.task-badge {
+  flex: 0 0 auto;
+  font-size: 12px;
+  font-weight: 700;
+  padding: 3px 8px;
+  border-radius: 99px;
+  background: var(--green-light);
+  color: var(--green-dark);
+}
+.task-badge.resume { background: var(--amber); color: #92400e; }
+
+/* ---- 完了画面 ---- */
+.done { text-align: center; padding: 30px 16px; }
+.done-icon { font-size: 56px; line-height: 1; }
+.done-title { font-size: 22px; font-weight: 700; margin: 10px 0 6px; }
+.done-sub { color: var(--sub); font-size: 15px; margin-bottom: 20px; }
+
+/* ---- 読み込み・エラー ---- */
+.msg { padding: 40px 16px; text-align: center; color: var(--sub); }
+
+/* PC で見る管理者向けの画面画像は横長なので、幅の上限を広げる */
+body.wt[data-device="desktop"] .shot-wrap { max-width: 100%; }

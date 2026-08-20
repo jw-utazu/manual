@@ -1,0 +1,498 @@
+{
+  "audience": "volunteer",
+  "title": "奉仕者向け",
+  "device": "mobile",
+  "tasks": [
+    {
+      "id": "login",
+      "title": "はじめてログインする",
+      "summary": "Googleアカウントでアプリに入り、自分の名前を登録するまで",
+      "steps": [
+        {
+          "shot": "shots/volunteer/login-01.webp",
+          "instruction": "「Googleでログイン」をタップします",
+          "note": {
+            "type": "info",
+            "text": "会衆に登録されているGoogleアカウントでのみログインできます。うまくいかないときは区域係にご連絡ください。"
+          },
+          "hotspots": [
+            {
+              "x": 0.141,
+              "y": 0.5419,
+              "w": 0.7179,
+              "h": 0.0486
+            }
+          ]
+        },
+        {
+          "instruction": "Googleの画面が出ます。ご自分のアカウントを選んでください",
+          "note": {
+            "type": "info",
+            "text": "ここから先はGoogleの画面です。パスワードを求められたら、ふだんGmailで使っているパスワードを入力してください。"
+          }
+        },
+        {
+          "shot": "shots/volunteer/login-02.webp",
+          "instruction": "はじめての方は「初回登録」の画面になります。枠をタップして自分の名前を選びます",
+          "note": {
+            "type": "warn",
+            "text": "自分の名前が見つからないときは、まだ登録されていません。区域係にご連絡ください。"
+          },
+          "hotspots": [
+            {
+              "x": 0.1538,
+              "y": 0.4984,
+              "w": 0.6923,
+              "h": 0.064
+            }
+          ]
+        },
+        {
+          "shot": "shots/volunteer/login-03.webp",
+          "instruction": "名前を選んだら「登録する」をタップします",
+          "note": {
+            "type": "info",
+            "text": "登録は最初の1回だけです。次からは自動でログインされます。"
+          },
+          "hotspots": [
+            {
+              "x": 0.1538,
+              "y": 0.5814,
+              "w": 0.6923,
+              "h": 0.0699
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "home",
+      "title": "ホーム画面の見方",
+      "summary": "ログインしたあと最初に出る画面の説明",
+      "steps": [
+        {
+          "shot": "shots/volunteer/home-01.webp",
+          "instruction": "ログインすると、この画面が開きます",
+          "note": {
+            "type": "info",
+            "text": "下に動かすと、まだ続きがあります。"
+          }
+        },
+        {
+          "shot": "shots/volunteer/home-02.webp",
+          "instruction": "いま希望を出せるかどうかが、ここに出ます",
+          "hotspots": [
+            {
+              "x": 0.0256,
+              "y": 0.2666,
+              "w": 0.9487,
+              "h": 0.1493
+            }
+          ]
+        },
+        {
+          "shot": "shots/volunteer/home-03.webp",
+          "instruction": "画面のいちばん下に、5つのボタンが並んでいます",
+          "note": {
+            "type": "info",
+            "text": "このボタンで画面を切り替えます。迷ったら「🏠 ホーム」を押せばこの画面に戻れます。"
+          },
+          "hotspots": [
+            {
+              "x": 0,
+              "y": 0.9396,
+              "w": 1,
+              "h": 0.0604
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "calendar",
+      "title": "カレンダーを見る",
+      "summary": "シフトの日や締切の日を確かめる",
+      "steps": [
+        {
+          "shot": "shots/volunteer/cal-01.webp",
+          "instruction": "ホーム画面を下に動かすと、カレンダーがあります",
+          "hotspots": [
+            {
+              "x": 0.0256,
+              "y": 0.3981,
+              "w": 0.9487,
+              "h": 0.6017
+            }
+          ]
+        },
+        {
+          "shot": "shots/volunteer/cal-02.webp",
+          "instruction": "色の付いた日が、大事な日です",
+          "note": {
+            "type": "info",
+            "text": "色の意味は「色や記号の意味」のページにまとめてあります。"
+          },
+          "hotspots": [
+            {
+              "x": 0.0564,
+              "y": 0.5071,
+              "w": 0.8872,
+              "h": 0.4204
+            }
+          ]
+        },
+        {
+          "shot": "shots/volunteer/cal-03.webp",
+          "instruction": "「前の月」「次の月」で、月を変えられます",
+          "hotspots": [
+            {
+              "x": 0.0564,
+              "y": 0.4633,
+              "w": 0.159,
+              "h": 0.0344
+            },
+            {
+              "x": 0.7846,
+              "y": 0.4633,
+              "w": 0.159,
+              "h": 0.0344
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "wish",
+      "title": "シフトの希望を出す",
+      "summary": "入れる時間帯を選んで送る",
+      "steps": [
+        {
+          "shot": "shots/volunteer/wish-01.webp",
+          "instruction": "画面の下の「📝 希望」をタップします",
+          "hotspots": [
+            {
+              "x": 0.2,
+              "y": 0.9408,
+              "w": 0.2,
+              "h": 0.0592
+            }
+          ]
+        },
+        {
+          "shot": "shots/volunteer/wish-02.webp",
+          "instruction": "PWが行われる時間帯が表示されます",
+          "hotspots": [
+            {
+              "x": 0.0564,
+              "y": 0.1386,
+              "w": 0.8872,
+              "h": 0.2725
+            }
+          ]
+        },
+        {
+          "shot": "shots/volunteer/wish-03.webp",
+          "instruction": "入れる時間帯をタップして選びます",
+          "note": {
+            "type": "info",
+            "text": "いくつでも選べます。もう一度タップすると選び直せます。"
+          },
+          "hotspots": [
+            {
+              "x": 0.0564,
+              "y": 0.1979,
+              "w": 0.8872,
+              "h": 0.2654
+            }
+          ]
+        },
+        {
+          "shot": "shots/volunteer/wish-04.webp",
+          "instruction": "選び終わったら「送信する」をタップします",
+          "note": {
+            "type": "warn",
+            "text": "締切をすぎると送れません。締切の日はホーム画面で確かめられます。"
+          },
+          "hotspots": [
+            {
+              "x": 0.0564,
+              "y": 0.6694,
+              "w": 0.8872,
+              "h": 0.0699
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "shift",
+      "title": "シフト表を見る",
+      "summary": "自分がいつ入るのかを確かめる",
+      "steps": [
+        {
+          "shot": "shots/volunteer/shift-01.webp",
+          "instruction": "画面の下の「📋 シフト表」をタップします",
+          "hotspots": [
+            {
+              "x": 0.4,
+              "y": 0.9408,
+              "w": 0.2,
+              "h": 0.0592
+            }
+          ]
+        },
+        {
+          "shot": "shots/volunteer/shift-02.webp",
+          "instruction": "シフトのある日が並びます。見たい日をタップします",
+          "hotspots": [
+            {
+              "x": 0.0256,
+              "y": 0.109,
+              "w": 0.9487,
+              "h": 0.1765
+            }
+          ]
+        },
+        {
+          "shot": "shots/volunteer/shift-03.webp",
+          "instruction": "その日の詳しい表が出ます",
+          "note": {
+            "type": "info",
+            "text": "自分の名前があるところが、自分の担当です。変更があるときは責任者に直接ご連絡ください。"
+          }
+        }
+      ]
+    },
+    {
+      "id": "wish-edit",
+      "title": "出した希望を直す",
+      "summary": "締切前なら送り直せます",
+      "steps": [
+        {
+          "shot": "shots/volunteer/we-01.webp",
+          "instruction": "ホーム画面に、送った希望が出ています",
+          "hotspots": [
+            {
+              "x": 0.0256,
+              "y": 0.4277,
+              "w": 0.9487,
+              "h": 0.2145
+            }
+          ]
+        },
+        {
+          "shot": "shots/volunteer/we-02.webp",
+          "instruction": "「シフト希望を編集する」をタップします",
+          "note": {
+            "type": "info",
+            "text": "締切をすぎると直せません。"
+          },
+          "hotspots": [
+            {
+              "x": 0.0564,
+              "y": 0.5746,
+              "w": 0.8872,
+              "h": 0.0509
+            }
+          ]
+        },
+        {
+          "shot": "shots/volunteer/we-03.webp",
+          "instruction": "前に送った内容のまま開きます。選び直します",
+          "hotspots": [
+            {
+              "x": 0.0564,
+              "y": 0.1979,
+              "w": 0.8872,
+              "h": 0.0687
+            }
+          ]
+        },
+        {
+          "shot": "shots/volunteer/we-04.webp",
+          "instruction": "もう一度「送信する」をタップすると、上書きされます",
+          "hotspots": [
+            {
+              "x": 0.0564,
+              "y": 0.4727,
+              "w": 0.8872,
+              "h": 0.0699
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "road",
+      "title": "道路使用許可書を見る",
+      "summary": "奉仕のときに必要な許可書",
+      "steps": [
+        {
+          "shot": "shots/volunteer/rd-01.webp",
+          "instruction": "画面の下の「📦 報告」をタップします",
+          "hotspots": [
+            {
+              "x": 0.6,
+              "y": 0.9408,
+              "w": 0.2,
+              "h": 0.0592
+            }
+          ]
+        },
+        {
+          "shot": "shots/volunteer/rd-02.webp",
+          "instruction": "「道路使用許可書」をタップします",
+          "hotspots": [
+            {
+              "x": 0.0282,
+              "y": 0.2187,
+              "w": 0.9436,
+              "h": 0.0718
+            }
+          ]
+        },
+        {
+          "shot": "shots/volunteer/rd-03.webp",
+          "instruction": "許可書が開きます",
+          "note": {
+            "type": "info",
+            "text": "奉仕のときに提示を求められることがあります。すぐ出せるようにしておきましょう。"
+          }
+        }
+      ]
+    },
+    {
+      "id": "contact",
+      "title": "要望や不具合を知らせる",
+      "summary": "困ったこと・気づいたことを送る",
+      "steps": [
+        {
+          "shot": "shots/volunteer/ct-01.webp",
+          "instruction": "「報告」の中に、2つの窓口があります",
+          "note": {
+            "type": "info",
+            "text": "要望＝こうしてほしい、不具合＝うまく動かない、で使い分けます。どちらか迷ったらどちらでも構いません。"
+          },
+          "hotspots": [
+            {
+              "x": 0.0282,
+              "y": 0.4803,
+              "w": 0.9436,
+              "h": 0.0718
+            },
+            {
+              "x": 0.0282,
+              "y": 0.5521,
+              "w": 0.9436,
+              "h": 0.0706
+            }
+          ]
+        },
+        {
+          "shot": "shots/volunteer/ct-02.webp",
+          "instruction": "書いて「送信する」をタップすれば、区域係に届きます"
+        }
+      ]
+    },
+    {
+      "id": "profile",
+      "title": "自分のアイコンを変える",
+      "summary": "シフト表に出る自分の写真を変える",
+      "steps": [
+        {
+          "shot": "shots/volunteer/pf-01.webp",
+          "instruction": "画面の下の「⚙️ 設定」をタップします",
+          "hotspots": [
+            {
+              "x": 0.8,
+              "y": 0.9408,
+              "w": 0.2,
+              "h": 0.0592
+            }
+          ]
+        },
+        {
+          "shot": "shots/volunteer/pf-02.webp",
+          "instruction": "丸い写真をタップすると、変えられます",
+          "hotspots": [
+            {
+              "x": 0.0615,
+              "y": 0.1072,
+              "w": 0.1179,
+              "h": 0.0545
+            }
+          ]
+        },
+        {
+          "shot": "shots/volunteer/pf-03.webp",
+          "instruction": "名前とメールアドレスはここに出ます",
+          "note": {
+            "type": "info",
+            "text": "名前が違うときは区域係にご連絡ください。ご自分では直せません。"
+          },
+          "hotspots": [
+            {
+              "x": 0.2103,
+              "y": 0.09,
+              "w": 0.7282,
+              "h": 0.0284
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "install",
+      "title": "アプリとして入れる",
+      "summary": "ホーム画面から開けるようにする",
+      "steps": [
+        {
+          "shot": "shots/volunteer/in-01.webp",
+          "instruction": "設定の中の「アプリとして追加」をタップします",
+          "note": {
+            "type": "info",
+            "text": "入れておくと、毎回ブラウザから開かなくてもホーム画面から開けます。"
+          },
+          "hotspots": [
+            {
+              "x": 0.0282,
+              "y": 0.7763,
+              "w": 0.9436,
+              "h": 0.0718
+            }
+          ]
+        },
+        {
+          "instruction": "あとは画面の案内どおりに進めば終わりです",
+          "note": {
+            "type": "info",
+            "text": "ここから先はスマホ本体の画面です。iPhone と Android で少し違います。"
+          }
+        }
+      ]
+    },
+    {
+      "id": "logout",
+      "title": "ログアウトする",
+      "summary": "別の人のスマホで使ったときなど",
+      "steps": [
+        {
+          "shot": "shots/volunteer/lo-01.webp",
+          "instruction": "設定のいちばん下の「ログアウト」をタップします",
+          "note": {
+            "type": "warn",
+            "text": "ふだんはログアウトしなくて構いません。次に開くときは、またログインが必要になります。"
+          },
+          "hotspots": [
+            {
+              "x": 0.0282,
+              "y": 0.8481,
+              "w": 0.9436,
+              "h": 0.064
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,16 @@
+{
+  "name": "pw-manual-capture",
+  "private": true,
+  "type": "module",
+  "description": "マニュアル用スクリーンショットの自動撮影",
+  "scripts": {
+    "login": "node capture.mjs --login volunteer",
+    "volunteer": "node capture.mjs volunteer",
+    "responsible": "node capture.mjs responsible",
+    "pdf": "node capture.mjs pdf",
+    "admin": "node capture.mjs admin"
+  },
+  "dependencies": {
+    "playwright": "^1.62.1"
+  }
+}

@@ -1,0 +1,552 @@
+{
+  "audience": "volunteer",
+  "title": "奉仕者向け",
+  "device": "mobile",
+  "baseUrl": "https://jw-utazu.github.io/shift-form/",
+  "_メモ": [
+    "説明文の原本はこのファイル。content/volunteer.json は生成物なので直接編集しない。",
+    "setup.fakeNow で撮りたい時期を作る（申込受付中・締切後・シフト公開後など）。",
+    "setup.simulateRegister で初回登録画面を呼び出せる（テストアカウント専用の仕組み）。",
+    "highlight にはセレクタを書く。枠の座標は撮影時に自動算出される。",
+    "hide: この対象者の画面に出てはいけない要素を隠す。撮影アカウントは全権限を持つため。",
+    "show: 条件がそろわないと出ない要素を撮るために表示させる（アプリとして追加など）。",
+    "text: アプリがJSで書き込む文字（ログイン中のメールなど）を撮影用に差し替える。サーバーのデモモードを通らないため。"
+  ],
+  "tasks": [
+    {
+      "id": "login",
+      "title": "はじめてログインする",
+      "summary": "Googleアカウントでアプリに入り、自分の名前を登録するまで",
+      "setup": {
+        "fakeNow": "2026-09-05",
+        "simulateRegister": true
+      },
+      "steps": [
+        {
+          "shot": "login-01",
+          "clearSession": true,
+          "session": false,
+          "goto": "login.html",
+          "waitFor": "#sec-signin",
+          "settle": 2500,
+          "highlight": "#g-btn > div",
+          "adjust": {
+            "top": -1,
+            "bottom": -4
+          },
+          "instruction": "「Googleでログイン」をタップします",
+          "note": {
+            "type": "info",
+            "text": "会衆に登録されているGoogleアカウントでのみログインできます。うまくいかないときは区域係にご連絡ください。"
+          }
+        },
+        {
+          "noShot": true,
+          "instruction": "Googleの画面が出ます。ご自分のアカウントを選んでください",
+          "note": {
+            "type": "info",
+            "text": "ここから先はGoogleの画面です。パスワードを求められたら、ふだんGmailで使っているパスワードを入力してください。"
+          }
+        },
+        {
+          "shot": "login-02",
+          "session": true,
+          "goto": "index.html",
+          "waitFor": "#screen-register",
+          "highlight": "#sel-register-name",
+          "instruction": "はじめての方は「初回登録」の画面になります。枠をタップして自分の名前を選びます",
+          "note": {
+            "type": "warn",
+            "text": "自分の名前が見つからないときは、まだ登録されていません。区域係にご連絡ください。"
+          }
+        },
+        {
+          "shot": "login-03",
+          "highlight": "#btn-register",
+          "instruction": "名前を選んだら「登録する」をタップします",
+          "note": {
+            "type": "info",
+            "text": "登録は最初の1回だけです。次からは自動でログインされます。"
+          }
+        }
+      ]
+    },
+    {
+      "id": "home",
+      "title": "ホーム画面の見方",
+      "summary": "ログインしたあと最初に出る画面の説明",
+      "setup": {
+        "fakeNow": "2026-08-20"
+      },
+      "steps": [
+        {
+          "shot": "home-01",
+          "session": true,
+          "goto": "index.html",
+          "waitFor": "#screen-main",
+          "settle": 1800,
+          "instruction": "ログインすると、この画面が開きます",
+          "note": {
+            "type": "info",
+            "text": "下に動かすと、まだ続きがあります。"
+          }
+        },
+        {
+          "shot": "home-02",
+          "highlight": "#reception-status-card",
+          "instruction": "いま希望を出せるかどうかが、ここに出ます"
+        },
+        {
+          "shot": "home-03",
+          "highlight": "#tabbar",
+          "instruction": "画面のいちばん下に、5つのボタンが並んでいます",
+          "note": {
+            "type": "info",
+            "text": "このボタンで画面を切り替えます。迷ったら「🏠 ホーム」を押せばこの画面に戻れます。"
+          }
+        }
+      ]
+    },
+    {
+      "id": "calendar",
+      "title": "カレンダーを見る",
+      "summary": "シフトの日や締切の日を確かめる",
+      "setup": {
+        "fakeNow": "2026-08-20"
+      },
+      "steps": [
+        {
+          "shot": "cal-01",
+          "session": true,
+          "goto": "index.html",
+          "waitFor": "#cal-card",
+          "settle": 1800,
+          "highlight": "#cal-card",
+          "instruction": "ホーム画面を下に動かすと、カレンダーがあります"
+        },
+        {
+          "shot": "cal-02",
+          "highlight": "#cal-grid",
+          "instruction": "色の付いた日が、大事な日です",
+          "note": {
+            "type": "info",
+            "text": "色の意味は「色や記号の意味」のページにまとめてあります。"
+          }
+        },
+        {
+          "shot": "cal-03",
+          "highlight": [
+            "#cal-prev-btn",
+            "#cal-next-btn"
+          ],
+          "instruction": "「前の月」「次の月」で、月を変えられます"
+        }
+      ]
+    },
+    {
+      "id": "wish",
+      "title": "シフトの希望を出す",
+      "summary": "入れる時間帯を選んで送る",
+      "setup": {
+        "fakeNow": "2026-08-20"
+      },
+      "steps": [
+        {
+          "shot": "wish-01",
+          "session": true,
+          "goto": "index.html",
+          "waitFor": "#tabbar",
+          "settle": 1800,
+          "highlight": "#tab-form",
+          "instruction": "画面の下の「📝 希望」をタップします"
+        },
+        {
+          "shot": "wish-02",
+          "do": [
+            {
+              "click": "#tab-form"
+            }
+          ],
+          "waitFor": "#slots-container",
+          "settle": 1500,
+          "highlight": "#slots-container",
+          "instruction": "PWが行われる時間帯が表示されます"
+        },
+        {
+          "shot": "wish-03",
+          "do": [
+            {
+              "click": ".slot-row"
+            }
+          ],
+          "settle": 700,
+          "highlight": ".slot-row",
+          "instruction": "入れる時間帯をタップして選びます",
+          "note": {
+            "type": "info",
+            "text": "いくつでも選べます。もう一度タップすると選び直せます。"
+          }
+        },
+        {
+          "shot": "wish-04",
+          "highlight": "#btn-submit",
+          "instruction": "選び終わったら「送信する」をタップします",
+          "note": {
+            "type": "warn",
+            "text": "締切をすぎると送れません。締切の日はホーム画面で確かめられます。"
+          }
+        }
+      ]
+    },
+    {
+      "id": "shift",
+      "title": "シフト表を見る",
+      "summary": "自分がいつ入るのかを確かめる",
+      "setup": {
+        "fakeNow": "2026-08-20"
+      },
+      "steps": [
+        {
+          "shot": "shift-01",
+          "session": true,
+          "goto": "index.html",
+          "waitFor": "#tabbar",
+          "settle": 1800,
+          "highlight": "#tab-shift",
+          "instruction": "画面の下の「📋 シフト表」をタップします"
+        },
+        {
+          "shot": "shift-02",
+          "do": [
+            {
+              "click": "#tab-shift"
+            }
+          ],
+          "waitFor": "#shift-dates-container",
+          "settle": 1500,
+          "highlight": ".shift-date-btn",
+          "instruction": "シフトのある日が並びます。見たい日をタップします"
+        },
+        {
+          "shot": "shift-03",
+          "do": [
+            {
+              "click": ".shift-date-btn"
+            }
+          ],
+          "settle": 1200,
+          "instruction": "その日の詳しい表が出ます",
+          "waitFor": "#shift-detail-view",
+          "note": {
+            "type": "info",
+            "text": "自分の名前があるところが、自分の担当です。変更があるときは責任者に直接ご連絡ください。"
+          }
+        }
+      ]
+    },
+    {
+      "id": "wish-edit",
+      "title": "出した希望を直す",
+      "summary": "締切前なら送り直せます",
+      "setup": {
+        "fakeNow": "2026-08-20"
+      },
+      "steps": [
+        {
+          "shot": "we-01",
+          "session": true,
+          "goto": "index.html",
+          "waitFor": "#wish-list-card",
+          "settle": 1800,
+          "highlight": "#wish-list-card",
+          "instruction": "ホーム画面に、送った希望が出ています"
+        },
+        {
+          "shot": "we-02",
+          "highlight": "#wish-list-card button[onclick^=\"openFormForUid\"]",
+          "instruction": "「シフト希望を編集する」をタップします",
+          "note": {
+            "type": "info",
+            "text": "締切をすぎると直せません。"
+          }
+        },
+        {
+          "shot": "we-03",
+          "do": [
+            {
+              "click": "#wish-list-card button[onclick^=\"openFormForUid\"]"
+            }
+          ],
+          "waitFor": "#slots-container",
+          "settle": 1500,
+          "highlight": ".slot-row",
+          "instruction": "前に送った内容のまま開きます。選び直します"
+        },
+        {
+          "shot": "we-04",
+          "highlight": "#btn-submit",
+          "instruction": "もう一度「送信する」をタップすると、上書きされます"
+        }
+      ]
+    },
+    {
+      "id": "road",
+      "title": "道路使用許可書を見る",
+      "summary": "奉仕のときに必要な許可書",
+      "setup": {
+        "fakeNow": "2026-08-20"
+      },
+      "steps": [
+        {
+          "shot": "rd-01",
+          "session": true,
+          "goto": "index.html",
+          "waitFor": "#tabbar",
+          "settle": 1800,
+          "highlight": "#tab-report",
+          "instruction": "画面の下の「📦 報告」をタップします"
+        },
+        {
+          "shot": "rd-02",
+          "do": [
+            {
+              "click": "#tab-report"
+            }
+          ],
+          "waitFor": "#btn-road-permit",
+          "settle": 1200,
+          "highlight": "#btn-road-permit",
+          "instruction": "「道路使用許可書」をタップします"
+        },
+        {
+          "shot": "rd-03",
+          "do": [
+            {
+              "click": "#btn-road-permit"
+            }
+          ],
+          "settle": 2000,
+          "instruction": "許可書が開きます",
+          "note": {
+            "type": "info",
+            "text": "奉仕のときに提示を求められることがあります。すぐ出せるようにしておきましょう。"
+          }
+        }
+      ]
+    },
+    {
+      "id": "contact",
+      "title": "要望や不具合を知らせる",
+      "summary": "困ったこと・気づいたことを送る",
+      "setup": {
+        "fakeNow": "2026-08-20"
+      },
+      "steps": [
+        {
+          "shot": "ct-01",
+          "session": true,
+          "goto": "index.html",
+          "waitFor": "#btn-request",
+          "settle": 1200,
+          "do": [
+            {
+              "wait": 1800
+            },
+            {
+              "click": "#tab-report"
+            }
+          ],
+          "highlight": [
+            "#btn-request",
+            "#btn-bug"
+          ],
+          "instruction": "「報告」の中に、2つの窓口があります",
+          "note": {
+            "type": "info",
+            "text": "要望＝こうしてほしい、不具合＝うまく動かない、で使い分けます。どちらか迷ったらどちらでも構いません。"
+          }
+        },
+        {
+          "shot": "ct-02",
+          "do": [
+            {
+              "click": "#btn-request"
+            }
+          ],
+          "waitFor": "#screen-request",
+          "settle": 1200,
+          "instruction": "書いて「送信する」をタップすれば、区域係に届きます"
+        }
+      ]
+    },
+    {
+      "id": "profile",
+      "title": "自分のアイコンを変える",
+      "summary": "シフト表に出る自分の写真を変える",
+      "setup": {
+        "fakeNow": "2026-08-20"
+      },
+      "steps": [
+        {
+          "shot": "pf-01",
+          "session": true,
+          "goto": "index.html",
+          "waitFor": "#tabbar",
+          "settle": 1800,
+          "highlight": "#tab-more",
+          "instruction": "画面の下の「⚙️ 設定」をタップします"
+        },
+        {
+          "shot": "pf-02",
+          "do": [
+            {
+              "click": "#tab-more"
+            }
+          ],
+          "waitFor": "#set-avatar-btn",
+          "settle": 1200,
+          "highlight": "#set-avatar-btn",
+          "instruction": "丸い写真をタップすると、変えられます"
+        },
+        {
+          "shot": "pf-03",
+          "highlight": "#set-name",
+          "instruction": "名前とメールアドレスはここに出ます",
+          "note": {
+            "type": "info",
+            "text": "名前が違うときは区域係にご連絡ください。ご自分では直せません。"
+          }
+        }
+      ]
+    },
+    {
+      "id": "install",
+      "title": "アプリとして入れる",
+      "summary": "ホーム画面から開けるようにする",
+      "setup": {
+        "fakeNow": "2026-08-20"
+      },
+      "steps": [
+        {
+          "shot": "in-01",
+          "session": true,
+          "goto": "index.html",
+          "waitFor": "#btn-install",
+          "settle": 1200,
+          "do": [
+            {
+              "wait": 1800
+            },
+            {
+              "click": "#tab-more"
+            }
+          ],
+          "highlight": "#btn-install",
+          "instruction": "設定の中の「アプリとして追加」をタップします",
+          "note": {
+            "type": "info",
+            "text": "入れておくと、毎回ブラウザから開かなくてもホーム画面から開けます。"
+          }
+        },
+        {
+          "noShot": true,
+          "instruction": "あとは画面の案内どおりに進めば終わりです",
+          "note": {
+            "type": "info",
+            "text": "ここから先はスマホ本体の画面です。iPhone と Android で少し違います。"
+          }
+        }
+      ]
+    },
+    {
+      "id": "logout",
+      "title": "ログアウトする",
+      "summary": "別の人のスマホで使ったときなど",
+      "setup": {
+        "fakeNow": "2026-08-20"
+      },
+      "steps": [
+        {
+          "shot": "lo-01",
+          "session": true,
+          "goto": "index.html",
+          "waitFor": "#screen-more",
+          "settle": 1200,
+          "do": [
+            {
+              "wait": 1800
+            },
+            {
+              "click": "#tab-more"
+            }
+          ],
+          "highlight": "#screen-more button.setrow.danger",
+          "instruction": "設定のいちばん下の「ログアウト」をタップします",
+          "note": {
+            "type": "warn",
+            "text": "ふだんはログアウトしなくて構いません。次に開くときは、またログインが必要になります。"
+          }
+        }
+      ]
+    }
+  ],
+  "hide": [
+    ".btn-cancel-input",
+    ".btn-memo-edit",
+    ".btn-edit-staff-mode",
+    ".badge-resp",
+    ".badge-cart",
+    ".badge-admin",
+    ".badge-acct",
+    ".badge-owner"
+  ],
+  "show": [
+    "#btn-install"
+  ],
+  "_保留中のタスク": {
+    "理由": "中止された日の画面を撮るには、公開中のシフト表に中止された日が必要。中止データは7/10と7/17にあるが、7月のシフトカレンダーはロールオーバー済みで参照できない。実際に中止が発生したときに fakeNow をその日に合わせて撮ること。",
+    "tasks": [
+      {
+        "id": "cancel",
+        "title": "中止になった日を確かめる",
+        "summary": "雨などで中止になったときの見え方",
+        "setup": {
+          "fakeNow": "2026-08-20"
+        },
+        "steps": [
+          {
+            "shot": "cx-01",
+            "session": true,
+            "goto": "index.html",
+            "waitFor": "#shift-dates-container",
+            "settle": 1500,
+            "do": [
+              {
+                "wait": 1800
+              },
+              {
+                "click": "#tab-shift"
+              }
+            ],
+            "highlight": ".sdb-badge.cancelled",
+            "instruction": "中止になった日には「中止」と付きます"
+          },
+          {
+            "shot": "cx-02",
+            "do": [
+              {
+                "click": ".shift-date-btn:has(.sdb-badge.cancelled)"
+              }
+            ],
+            "settle": 1500,
+            "instruction": "タップすると、中止の理由が出ます"
+          }
+        ]
+      }
+    ]
+  },
+  "text": {
+    "#set-email": "example@gmail.com",
+    "#pp-email": "example@gmail.com"
+  }
+}
