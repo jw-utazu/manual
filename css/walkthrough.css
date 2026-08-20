@@ -140,6 +140,11 @@ body.wt { padding-bottom: 96px; }
 .nav .prev { flex: 0 0 34%; background: #fff; border: 1px solid var(--border); color: var(--sub); }
 .nav .next { background: var(--green); color: #fff; }
 .nav button:disabled { opacity: .4; cursor: default; }
+/* hidden 属性を効かせる。
+   .nav に display:flex を指定しているため、そのままだと作者スタイルが
+   hidden（UA の display:none）を上書きしてしまい、一覧や完了画面に戻っても
+   「戻る／次へ」が残り続ける */
+.nav[hidden] { display: none; }
 
 /* ---- タスク一覧 ---- */
 .task {
