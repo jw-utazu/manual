@@ -1,0 +1,125 @@
+{
+  "audience": "admin",
+  "title": "区域係向け",
+  "device": "desktop",
+  "baseUrl": "https://jw-utazu.github.io/admin/",
+  "_メモ": [
+    "区域係は主にPCで使うため desktop（1440x900）で撮る。",
+    "重要な作業（月の準備・シフト作成）だけウォークスルーにし、",
+    "道具箱の個別機能はリファレンスで扱う。",
+    "本番の予定表を操作するため、承認・公開・保存・リセットのボタンは絶対に押さない。"
+  ],
+  "hide": [
+    "#pw-type-bar",
+    "#pw-tabs"
+  ],
+  "text": {},
+  "show": [],
+  "tasks": [
+    {
+      "id": "month",
+      "title": "月の準備をする",
+      "summary": "日程を決めて、承認し、予定表を公開するまで",
+      "setup": {
+        "fakeNow": "2026-08-20"
+      },
+      "steps": [
+        {
+          "shot": "ad-month-01",
+          "session": true,
+          "goto": "index.html",
+          "waitFor": "#app",
+          "settle": 4000,
+          "instruction": "管理アプリを開くと、この画面から始まります",
+          "note": {
+            "type": "info",
+            "text": "左がカレンダー、右が作業の入口です。月の切り替えは左上の年月から行います。"
+          }
+        },
+        {
+          "shot": "ad-month-02",
+          "highlight": "#prog-steps",
+          "instruction": "上の帯で、いまどの段階かが分かります",
+          "note": {
+            "type": "info",
+            "text": "日程設定 → 設定完了 → 承認 → 予定表公開 → 受付 → シフト作成 → 確認 → シフト公開、の順に進みます。"
+          }
+        },
+        {
+          "shot": "ad-month-03",
+          "highlight": "#info-dates-card",
+          "instruction": "はじめに、申込開始・締切・シフト公開の日を決めます"
+        },
+        {
+          "shot": "ad-month-04",
+          "highlight": "#info-slots-card",
+          "instruction": "次に、その月にPWを行う日と時間帯を決めます"
+        },
+        {
+          "shot": "ad-month-05",
+          "highlight": "#cal-approve-mini",
+          "instruction": "決め終わったら承認します",
+          "note": {
+            "type": "warn",
+            "text": "承認すると、申込開始日になった時点で予定表が自動で公開されます。承認前は公開されません。"
+          }
+        }
+      ]
+    },
+    {
+      "id": "shift",
+      "title": "シフトを作って公開する",
+      "summary": "希望を見て割り当て、公開するまで",
+      "setup": {
+        "fakeNow": "2026-08-20"
+      },
+      "steps": [
+        {
+          "shot": "ad-shift-01",
+          "session": true,
+          "goto": "index.html",
+          "waitFor": "#btn-shift-create",
+          "settle": 4000,
+          "highlight": "#btn-shift-create",
+          "instruction": "右の「シフト管理アプリ」を開きます"
+        },
+        {
+          "shot": "ad-shift-02",
+          "goto": "shift-create.html",
+          "waitFor": "#mtab-wish",
+          "settle": 5000,
+          "highlight": "#mtab-wish",
+          "instruction": "「希望確認」で、誰がどの時間帯に出せるかを見ます",
+          "note": {
+            "type": "info",
+            "text": "申込がまだ無い月では表が空になります。締切をすぎてから割り当てを始めます。"
+          }
+        },
+        {
+          "shot": "ad-shift-03",
+          "do": [
+            {
+              "click": "#mtab-create"
+            }
+          ],
+          "settle": 3500,
+          "highlight": "#mtab-create",
+          "instruction": "「シフト作成」に切り替えて、割り当てを作ります",
+          "note": {
+            "type": "info",
+            "text": "この画面はまだ誰も割り当てていない状態です。締切をすぎたら、希望を見ながらここに人を入れていきます。入れた人はドラッグで動かせます（人の上に落とすと入れ替わります）。"
+          }
+        },
+        {
+          "shot": "ad-shift-04",
+          "highlight": "#publish-btn",
+          "instruction": "できあがったら「シフト作成完了」で公開に進みます",
+          "note": {
+            "type": "warn",
+            "text": "公開すると全員に通知が届きます。内容を確かめてから押してください。"
+          }
+        }
+      ]
+    }
+  ]
+}

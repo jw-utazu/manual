@@ -198,5 +198,50 @@ body.wt { padding-bottom: 96px; }
 /* ---- 読み込み・エラー ---- */
 .msg { padding: 40px 16px; text-align: center; color: var(--sub); }
 
-/* PC で見る管理者向けの画面画像は横長なので、幅の上限を広げる */
+/* PC で見る区域係向けの画面画像は横長なので、幅の上限を広げる。
+   本文の幅も広げないと、大きな画面の写真が小さく収まってしまう */
 body.wt[data-device="desktop"] .shot-wrap { max-width: 100%; }
+body.wt[data-device="desktop"] .wrap  { max-width: 1100px; }
+body.wt[data-device="desktop"] .instr,
+body.wt[data-device="desktop"] .instr-note { max-width: 1100px; }
+
+/* 画像をタップすると全画面で大きく見られるようにする。
+   PCの画面をスマホで見ると文字がつぶれて読めないため。
+   全画面なので、外側のスクロールを奪う入れ子スクロールにはならない */
+.shot-wrap.zoomable { cursor: zoom-in; }
+.zoom-hint {
+  margin: 6px auto 0;
+  max-width: 1100px;
+  font-size: 13px;
+  color: var(--sub);
+  text-align: center;
+}
+.lightbox {
+  position: fixed;
+  inset: 0;
+  z-index: 9000;
+  background: rgba(15,23,42,.92);
+  overflow: auto;
+  -webkit-overflow-scrolling: touch;
+  padding: 56px 8px 24px;
+}
+.lightbox[hidden] { display: none; }
+.lightbox img {
+  display: block;
+  margin: 0 auto;
+  max-width: none;   /* 原寸で出して、スクロールとピンチで見てもらう */
+  height: auto;
+}
+.lightbox-close {
+  position: fixed;
+  top: 10px; right: 10px;
+  z-index: 9001;
+  background: rgba(255,255,255,.95);
+  border: none;
+  border-radius: 10px;
+  padding: 10px 16px;
+  font-family: inherit;
+  font-size: 15px;
+  font-weight: 700;
+  cursor: pointer;
+}

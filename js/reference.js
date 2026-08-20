@@ -51,6 +51,24 @@ function renderTerms(items) {
   return list;
 }
 
+// need を持つセクションは、その権限のある人にだけ見せる。
+// 入口（js/index.js）と同じ仕組みで、アプリのログイン状態から権限を問い合わせる。
+// これは表示の出し分けであってアクセス制御ではない
+const API_URL  = 'https://nqtswiynoxawccldqcwi.supabase.co/functions/v1/api';
+const ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im5xdHN3aXlub3hhd2NjbGRxY3dpIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODI3MzQxNjIsImV4cCI6MjA5ODMxMDE2Mn0.M-AnCBnXBI1FIyouoa5ttF6mb8PF2YqHfv180PqQWQU';
+
+async function myRoles() {
+  try {
+    const s = JSON.parse(localStorage.getItem('pwgws_session') || 'null');
+    if (!s || !s.email) return {};
+    const res = await fetch(API_URL + '?action=getMyRoles&email=' + encodeURIComponent(s.email),
+      { headers: { 'Authorization': 'Bearer ' + ANON_KEY, 'apikey': ANON_KEY } });
+    if (!res.ok) return {};
+    const r = await res.json();
+    return (r && r.ok) ? r : {};
+  } catch (_) { return {}; }
+}
+
 async function main() {
   const wrap = el('div', 'wrap');
   wrap.style.paddingTop = '16px';
@@ -67,7 +85,9 @@ async function main() {
     return;
   }
 
-  data.sections.forEach((sec) => {
+  const roles = await myRoles();
+
+  data.sections.filter((sec) => !sec.need || roles[sec.need]).forEach((sec) => {
     wrap.appendChild(el('div', 'sec-title', sec.title));
     const card = el('div', 'card');
     if (sec.type === 'legend')      card.appendChild(renderLegend(sec.items));

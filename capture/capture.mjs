@@ -30,6 +30,9 @@ const API_HOST = 'nqtswiynoxawccldqcwi.supabase.co'
 // 撮影に使う動作確認専用アカウント（supabase/functions/api/handlers_auth.ts の TEST_EMAIL）
 const TEST_EMAIL = 'jw.utazu.test@gmail.com'
 
+// ログイン状態を書き込むために開くページ。3アプリ共通のログイン画面
+const SESSION_ORIGIN_PAGE = 'https://jw-utazu.github.io/shift-form/login.html'
+
 // テストアカウントにだけ見えていて、ふつうの奉仕者の画面には出ないもの。
 // これが写ったマニュアルは「自分の画面と違う」となって混乱のもとになるので、
 // 撮影中は隠して一般の利用者と同じ見え方にそろえる。
@@ -141,9 +144,13 @@ async function hotspotsOf(page, highlight, viewport, adjust) {
 // したがってセッションを置けば、テストアカウントとして正しい権限が返る。
 // ログイン画面そのものを撮るときは on=false で外す
 async function ensureSession(page, baseUrl, on) {
-  // localStorage を触るには同一オリジンにいる必要がある
-  if (!page.url().startsWith(baseUrl)) {
-    await page.goto(new URL('login.html', baseUrl).toString(), { waitUntil: 'domcontentloaded' })
+  // localStorage を触るには同一オリジンにいる必要がある。
+  // 3つのアプリは同じ jw-utazu.github.io にあり localStorage を共有しているので、
+  // 共通ログイン画面を開いて書けば admin でも shift-form でも有効になる
+  // （admin 自体を先に開くと、セッションが無い状態で起動してログイン画面へ飛ばされる）
+  const origin = new URL(baseUrl).origin
+  if (!page.url().startsWith(origin)) {
+    await page.goto(SESSION_ORIGIN_PAGE, { waitUntil: 'domcontentloaded' })
   }
   await page.evaluate(({ on, email }) => {
     try {
@@ -315,7 +322,9 @@ async function capture(audience, onlyTask, headless) {
   log('\n生成: ' + path.relative(ROOT, contentPath))
 
   // PNG を WebP へ変換して容量を落とす（Pillow を使う）
-  const r = spawnSync('python', [path.join(HERE, 'to_webp.py'), shotDir], { stdio: 'inherit' })
+  // PCの画面はそのまま 750px に縮めると文字が読めなくなるので、幅を広く取る
+  const outW = device === 'desktop' ? 1200 : 750
+  const r = spawnSync('python', [path.join(HERE, 'to_webp.py'), shotDir, String(outW)], { stdio: 'inherit' })
   if (r.status !== 0) {
     log('! WebP 変換に失敗しました。PNG のまま残っています。')
     log('  python と Pillow が使えるか確認してください（python -c "import PIL"）')

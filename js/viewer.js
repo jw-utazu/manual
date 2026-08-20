@@ -158,6 +158,9 @@ function renderStep(content, task, idx) {
     const img = el('img');
     img.src = step.shot;
     img.alt = step.instruction || ('ステップ' + (idx + 1) + 'の画面');
+    // PCの画面はスマホ幅に収めると文字が読めないので、タップで拡大できるようにする
+    sw.classList.add('zoomable');
+    sw.onclick = () => openZoom(step.shot, img.alt);
     sw.appendChild(img);
     // 枠は要素より一回り大きく描く。
     // 余白を % で足すと横は画像の幅・縦は高さが基準になり、
@@ -174,6 +177,7 @@ function renderStep(content, task, idx) {
       sw.appendChild(hot);
     });
     wrap.appendChild(sw);
+    wrap.appendChild(el('div', 'zoom-hint', '画面をタップすると大きく見られます'));
   } else {
     const ns = el('div', 'noshot');
     ns.appendChild(el('div', 'noshot-icon', '📱'));
@@ -205,6 +209,35 @@ function renderStep(content, task, idx) {
   savePos(aud, task.id, idx + 1);
   window.scrollTo(0, 0);
 }
+
+// ---- 画像の拡大表示 ----------------------------------------
+// 画像は原寸で出し、スクロールとピンチで見てもらう。
+// 全画面に覆いかぶさるので、外側のスクロールを奪う入れ子スクロールにはならない
+function openZoom(src, alt) {
+  let box = document.getElementById('lightbox');
+  if (!box) {
+    box = el('div', 'lightbox');
+    box.id = 'lightbox';
+    const close = el('button', 'lightbox-close', '✕ 閉じる');
+    close.onclick = closeZoom;
+    box.appendChild(close);
+    box.appendChild(el('img'));
+    box.addEventListener('click', (e) => { if (e.target === box) closeZoom(); });
+    document.body.appendChild(box);
+  }
+  const img = box.querySelector('img');
+  img.src = src;
+  img.alt = alt || '';
+  box.hidden = false;
+  box.scrollTop = 0;
+  document.body.style.overflow = 'hidden';
+}
+function closeZoom() {
+  const box = document.getElementById('lightbox');
+  if (box) box.hidden = true;
+  document.body.style.overflow = '';
+}
+window.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeZoom(); });
 
 // ---- 画面：完了 --------------------------------------------
 function renderDone(content, task) {
