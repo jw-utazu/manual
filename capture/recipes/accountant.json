@@ -1,0 +1,140 @@
+{
+  "audience": "accountant",
+  "title": "会計者向け",
+  "device": "mobile",
+  "baseUrl": "https://jw-utazu.github.io/shift-form/",
+  "_メモ": [
+    "会計者は道路使用許可書PDFの登録・差し替えを担当する。",
+    "「PDF管理」への入口（#btn-road-permit-update）は会計者にだけ表示される。",
+    "本番環境を操作するため、アップロード・保存・削除のボタンは絶対に押さない。"
+  ],
+  "hide": [
+    ".badge-resp",
+    ".badge-cart",
+    ".badge-admin",
+    ".btn-cancel-input",
+    ".btn-memo-edit",
+    ".btn-edit-staff-mode"
+  ],
+  "text": {
+    "#set-email": "example@gmail.com",
+    "#pp-email": "example@gmail.com"
+  },
+  "show": [],
+  "tasks": [
+    {
+      "id": "view",
+      "title": "道路使用許可書を見る",
+      "summary": "いま登録されている許可書を確かめる",
+      "setup": {
+        "fakeNow": "2026-08-20"
+      },
+      "steps": [
+        {
+          "shot": "ac-view-01",
+          "session": true,
+          "goto": "index.html",
+          "waitFor": "#btn-road-permit",
+          "settle": 1200,
+          "do": [
+            {
+              "wait": 600
+            },
+            {
+              "click": "#tab-report"
+            }
+          ],
+          "highlight": "#btn-road-permit",
+          "instruction": "「📦 報告」の中の「道路使用許可書」をタップします"
+        },
+        {
+          "shot": "ac-view-02",
+          "do": [
+            {
+              "click": "#btn-road-permit"
+            }
+          ],
+          "settle": 2500,
+          "instruction": "いま登録されている許可書が開きます",
+          "note": {
+            "type": "info",
+            "text": "奉仕者もこの画面から許可書を見られます。"
+          }
+        }
+      ]
+    },
+    {
+      "id": "manage",
+      "title": "許可書を登録・差し替える",
+      "summary": "新しい許可書のPDFを入れる",
+      "setup": {
+        "fakeNow": "2026-08-20"
+      },
+      "steps": [
+        {
+          "shot": "ac-mng-01",
+          "session": true,
+          "goto": "index.html",
+          "waitFor": "#btn-road-permit-update",
+          "settle": 1200,
+          "do": [
+            {
+              "wait": 600
+            },
+            {
+              "click": "#tab-report"
+            }
+          ],
+          "highlight": "#btn-road-permit-update",
+          "instruction": "「報告」の中の「道路使用許可書PDF管理」をタップします",
+          "note": {
+            "type": "info",
+            "text": "この項目は会計者にだけ表示されます。ほかの奉仕者には出ません。"
+          }
+        },
+        {
+          "shot": "ac-mng-02",
+          "do": [
+            {
+              "click": "#btn-road-permit-update"
+            }
+          ],
+          "waitFor": "#road-permit-display-name",
+          "settle": 1500,
+          "highlight": "#road-permit-display-name",
+          "instruction": "まず「PDF名」を入れます",
+          "note": {
+            "type": "info",
+            "text": "あとで見分けやすい名前にします（例：道路使用許可書7月）。"
+          }
+        },
+        {
+          "shot": "ac-mng-03",
+          "highlight": [
+            "#road-permit-start-date",
+            "#road-permit-end-date"
+          ],
+          "instruction": "許可書の有効期間を入れます",
+          "note": {
+            "type": "warn",
+            "text": "期間が過ぎた許可書は奉仕者の画面に出なくなります。日付は許可書のとおりに入れてください。"
+          }
+        },
+        {
+          "shot": "ac-mng-04",
+          "highlight": "label:has(#road-permit-file-input)",
+          "instruction": "「📂 PDFを選択してアップロード」をタップして、PDFを選びます",
+          "note": {
+            "type": "info",
+            "text": "選ぶとすぐアップロードが始まります。終わるまで画面を閉じないでください。"
+          }
+        },
+        {
+          "shot": "ac-mng-05",
+          "highlight": "#road-permit-list-card",
+          "instruction": "登録済みの許可書はこの一覧に並びます。ここから直したり消したりできます"
+        }
+      ]
+    }
+  ]
+}

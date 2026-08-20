@@ -1,0 +1,199 @@
+{
+  "audience": "responsible",
+  "title": "責任者向け",
+  "device": "mobile",
+  "baseUrl": "https://jw-utazu.github.io/shift-form/",
+  "_メモ": [
+    "責任者にだけ見えるボタン（中止入力・メモ編集・奉仕者を編集）が説明の対象なので、",
+    "奉仕者向けレシピと違って hide に入れないこと。",
+    "中止入力とメモ編集はブラウザの prompt を使っており、画面に写らない。",
+    "そこは noShot の説明カードで補っている。",
+    "本番環境を操作するため、保存・送信のボタンは絶対に押さない。"
+  ],
+  "hide": [
+    ".badge-admin",
+    ".badge-acct"
+  ],
+  "text": {
+    "#set-email": "example@gmail.com",
+    "#pp-email": "example@gmail.com"
+  },
+  "show": [],
+  "tasks": [
+    {
+      "id": "detail",
+      "title": "シフトの詳しい表を開く",
+      "summary": "担当の割り当てを確かめる",
+      "setup": {
+        "fakeNow": "2026-08-20"
+      },
+      "steps": [
+        {
+          "shot": "rs-detail-01",
+          "session": true,
+          "goto": "index.html",
+          "waitFor": "#tabbar",
+          "settle": 1800,
+          "highlight": "#tab-shift",
+          "instruction": "画面の下の「📋 シフト表」をタップします"
+        },
+        {
+          "shot": "rs-detail-02",
+          "do": [
+            {
+              "click": "#tab-shift"
+            }
+          ],
+          "waitFor": ".shift-date-btn",
+          "settle": 1500,
+          "highlight": ".shift-date-btn",
+          "instruction": "担当する日をタップします"
+        },
+        {
+          "shot": "rs-detail-03",
+          "do": [
+            {
+              "click": ".shift-date-btn"
+            }
+          ],
+          "waitFor": "#shift-detail-view",
+          "settle": 1500,
+          "instruction": "その日の割り当てが表示されます",
+          "note": {
+            "type": "info",
+            "text": "責任者には、この画面に「中止入力」「メモ編集」「奉仕者を編集」の3つのボタンが出ます。ほかの奉仕者には出ません。"
+          }
+        }
+      ]
+    },
+    {
+      "id": "cancel",
+      "title": "シフトを中止にする",
+      "summary": "雨などで実施できないとき",
+      "setup": {
+        "fakeNow": "2026-08-20"
+      },
+      "steps": [
+        {
+          "shot": "rs-cancel-01",
+          "session": true,
+          "goto": "index.html",
+          "waitFor": "#shift-detail-view",
+          "settle": 1500,
+          "do": [
+            {
+              "wait": 600
+            },
+            {
+              "click": "#tab-shift"
+            },
+            {
+              "wait": 1500
+            },
+            {
+              "click": ".shift-date-btn"
+            }
+          ],
+          "highlight": ".btn-cancel-input",
+          "instruction": "中止にする日を開き、「中止入力」をタップします"
+        },
+        {
+          "noShot": true,
+          "instruction": "中止の理由を入力する画面が出ます。入力して「OK」を押すと中止になります",
+          "note": {
+            "type": "warn",
+            "text": "理由は空のままでも構いません。中止にすると、その時間帯の奉仕者全員に通知が届きます。取り消したいときは同じ画面から戻せます。"
+          }
+        }
+      ]
+    },
+    {
+      "id": "memo",
+      "title": "責任者メモを書く",
+      "summary": "その日の申し送りを残す",
+      "setup": {
+        "fakeNow": "2026-08-20"
+      },
+      "steps": [
+        {
+          "shot": "rs-memo-01",
+          "session": true,
+          "goto": "index.html",
+          "waitFor": "#shift-detail-view",
+          "settle": 1500,
+          "do": [
+            {
+              "wait": 600
+            },
+            {
+              "click": "#tab-shift"
+            },
+            {
+              "wait": 1500
+            },
+            {
+              "click": ".shift-date-btn"
+            }
+          ],
+          "highlight": ".btn-memo-edit",
+          "instruction": "「メモ編集」をタップします"
+        },
+        {
+          "noShot": true,
+          "instruction": "メモを入力する画面が出ます。入力して「OK」を押すと保存されます",
+          "note": {
+            "type": "info",
+            "text": "書いたメモは、その日のシフト表を見た人全員に表示されます。"
+          }
+        }
+      ]
+    },
+    {
+      "id": "staff",
+      "title": "奉仕者を入れ替える",
+      "summary": "急な変更があったとき",
+      "setup": {
+        "fakeNow": "2026-08-20"
+      },
+      "steps": [
+        {
+          "shot": "rs-staff-01",
+          "session": true,
+          "goto": "index.html",
+          "waitFor": "#shift-detail-view",
+          "settle": 1500,
+          "do": [
+            {
+              "wait": 600
+            },
+            {
+              "click": "#tab-shift"
+            },
+            {
+              "wait": 1500
+            },
+            {
+              "click": ".shift-date-btn"
+            }
+          ],
+          "highlight": ".btn-edit-staff-mode",
+          "instruction": "「奉仕者を編集」をタップします"
+        },
+        {
+          "shot": "rs-staff-02",
+          "do": [
+            {
+              "click": ".btn-edit-staff-mode"
+            }
+          ],
+          "settle": 2500,
+          "instruction": "編集できる状態になります。変えたいところをタップして選び直します",
+          "note": {
+            "type": "warn",
+            "text": "入れ替えた内容はすぐ全員に反映されます。事前に本人へ連絡してから変更してください。"
+          }
+        }
+      ]
+    }
+  ]
+}

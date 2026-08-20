@@ -13,7 +13,7 @@
 const AUD = {
   volunteer:   { icon: '🙋', name: '奉仕者向け' },
   responsible: { icon: '📋', name: '責任者向け' },
-  pdf:         { icon: '📄', name: '道路使用許可書 担当者向け' },
+  accountant:  { icon: '📄', name: '会計者向け' },
   admin:       { icon: '⚙️', name: '区域係向け' },
 };
 

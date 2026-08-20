@@ -1,0 +1,123 @@
+{
+  "audience": "accountant",
+  "title": "会計者向け",
+  "device": "mobile",
+  "tasks": [
+    {
+      "id": "view",
+      "title": "道路使用許可書を見る",
+      "summary": "いま登録されている許可書を確かめる",
+      "steps": [
+        {
+          "shot": "shots/accountant/ac-view-01.webp",
+          "instruction": "「📦 報告」の中の「道路使用許可書」をタップします",
+          "hotspots": [
+            {
+              "x": 0.0282,
+              "y": 0.2187,
+              "w": 0.9436,
+              "h": 0.0718
+            }
+          ]
+        },
+        {
+          "shot": "shots/accountant/ac-view-02.webp",
+          "instruction": "いま登録されている許可書が開きます",
+          "note": {
+            "type": "info",
+            "text": "奉仕者もこの画面から許可書を見られます。"
+          }
+        }
+      ]
+    },
+    {
+      "id": "manage",
+      "title": "許可書を登録・差し替える",
+      "summary": "新しい許可書のPDFを入れる",
+      "steps": [
+        {
+          "shot": "shots/accountant/ac-mng-01.webp",
+          "instruction": "「報告」の中の「道路使用許可書PDF管理」をタップします",
+          "note": {
+            "type": "info",
+            "text": "この項目は会計者にだけ表示されます。ほかの奉仕者には出ません。"
+          },
+          "hotspots": [
+            {
+              "x": 0.0282,
+              "y": 0.3623,
+              "w": 0.9436,
+              "h": 0.0706
+            }
+          ]
+        },
+        {
+          "shot": "shots/accountant/ac-mng-02.webp",
+          "instruction": "まず「PDF名」を入れます",
+          "note": {
+            "type": "info",
+            "text": "あとで見分けやすい名前にします（例：道路使用許可書7月）。"
+          },
+          "hotspots": [
+            {
+              "x": 0.0564,
+              "y": 0.2239,
+              "w": 0.8872,
+              "h": 0.0569
+            }
+          ]
+        },
+        {
+          "shot": "shots/accountant/ac-mng-03.webp",
+          "instruction": "許可書の有効期間を入れます",
+          "note": {
+            "type": "warn",
+            "text": "期間が過ぎた許可書は奉仕者の画面に出なくなります。日付は許可書のとおりに入れてください。"
+          },
+          "hotspots": [
+            {
+              "x": 0.0564,
+              "y": 0.3235,
+              "w": 0.4205,
+              "h": 0.0533
+            },
+            {
+              "x": 0.5538,
+              "y": 0.3235,
+              "w": 0.4205,
+              "h": 0.0533
+            }
+          ]
+        },
+        {
+          "shot": "shots/accountant/ac-mng-04.webp",
+          "instruction": "「📂 PDFを選択してアップロード」をタップして、PDFを選びます",
+          "note": {
+            "type": "info",
+            "text": "選ぶとすぐアップロードが始まります。終わるまで画面を閉じないでください。"
+          },
+          "hotspots": [
+            {
+              "x": 0.0564,
+              "y": 0.3957,
+              "w": 0.6617,
+              "h": 0.0581
+            }
+          ]
+        },
+        {
+          "shot": "shots/accountant/ac-mng-05.webp",
+          "instruction": "登録済みの許可書はこの一覧に並びます。ここから直したり消したりできます",
+          "hotspots": [
+            {
+              "x": 0.0256,
+              "y": 0.4822,
+              "w": 0.9487,
+              "h": 0.3614
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
