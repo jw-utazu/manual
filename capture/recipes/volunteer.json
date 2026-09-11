@@ -15,6 +15,7 @@
   "tasks": [
     {
       "id": "login",
+      "impact": ["shift-form.login"],
       "title": "はじめてログインする",
       "summary": "Googleアカウントでアプリに入り、自分の名前を登録するまで",
       "setup": {
@@ -24,6 +25,7 @@
       "steps": [
         {
           "shot": "login-01",
+          "id": "login-01",
           "clearSession": true,
           "session": false,
           "goto": "login.html",
@@ -42,6 +44,7 @@
         },
         {
           "noShot": true,
+          "id": "login-google-account",
           "instruction": "Googleの画面が出ます。ご自分のアカウントを選んでください",
           "note": {
             "type": "info",
@@ -50,6 +53,7 @@
         },
         {
           "shot": "login-02",
+          "id": "login-02",
           "session": true,
           "goto": "index.html",
           "waitFor": "#screen-register",
@@ -62,6 +66,7 @@
         },
         {
           "shot": "login-03",
+          "id": "login-03",
           "highlight": "#btn-register",
           "instruction": "名前を選んだら「登録する」をタップします",
           "note": {
@@ -73,6 +78,7 @@
     },
     {
       "id": "home",
+      "impact": ["shift-form.home"],
       "title": "ホーム画面の見方",
       "summary": "ログインしたあと最初に出る画面の説明",
       "setup": {
@@ -81,6 +87,7 @@
       "steps": [
         {
           "shot": "home-01",
+          "id": "home-overview",
           "session": true,
           "goto": "index.html",
           "waitFor": "#screen-main",
@@ -93,11 +100,15 @@
         },
         {
           "shot": "home-02",
+          "id": "home-status",
+          "impact": ["shift-form.home.reception"],
           "highlight": "#reception-status-card",
           "instruction": "いま希望を出せるかどうかが、ここに出ます"
         },
         {
           "shot": "home-03",
+          "id": "home-navigation",
+          "impact": ["shift-form.home.navigation"],
           "highlight": "#tabbar",
           "instruction": "画面のいちばん下に、5つのボタンが並んでいます",
           "note": {
@@ -109,6 +120,7 @@
     },
     {
       "id": "calendar",
+      "impact": ["shift-form.calendar"],
       "title": "カレンダーを見る",
       "summary": "シフトの日や締切の日を確かめる",
       "setup": {
@@ -117,6 +129,7 @@
       "steps": [
         {
           "shot": "cal-01",
+          "id": "cal-01",
           "session": true,
           "goto": "index.html",
           "waitFor": "#cal-card",
@@ -126,6 +139,7 @@
         },
         {
           "shot": "cal-02",
+          "id": "cal-02",
           "highlight": "#cal-grid",
           "instruction": "色の付いた日が、大事な日です",
           "note": {
@@ -135,6 +149,7 @@
         },
         {
           "shot": "cal-03",
+          "id": "cal-03",
           "highlight": [
             "#cal-prev-btn",
             "#cal-next-btn"
@@ -145,6 +160,7 @@
     },
     {
       "id": "wish",
+      "impact": ["shift-form.wish"],
       "title": "シフトの希望を出す",
       "summary": "入れる時間帯を選んで送る",
       "setup": {
@@ -153,6 +169,7 @@
       "steps": [
         {
           "shot": "wish-01",
+          "id": "wish-01",
           "session": true,
           "goto": "index.html",
           "waitFor": "#tabbar",
@@ -162,6 +179,7 @@
         },
         {
           "shot": "wish-02",
+          "id": "wish-02",
           "do": [
             {
               "click": "#tab-form"
@@ -174,6 +192,7 @@
         },
         {
           "shot": "wish-03",
+          "id": "wish-03",
           "do": [
             {
               "click": ".slot-row"
@@ -189,6 +208,7 @@
         },
         {
           "shot": "wish-04",
+          "id": "wish-04",
           "highlight": "#btn-submit",
           "instruction": "選び終わったら「送信する」をタップします",
           "note": {
@@ -200,6 +220,7 @@
     },
     {
       "id": "shift",
+      "impact": ["shift-form.shift"],
       "title": "シフト表を見る",
       "summary": "自分がいつ入るのかを確かめる",
       "setup": {
@@ -208,6 +229,7 @@
       "steps": [
         {
           "shot": "shift-01",
+          "id": "shift-01",
           "session": true,
           "goto": "index.html",
           "waitFor": "#tabbar",
@@ -217,6 +239,7 @@
         },
         {
           "shot": "shift-02",
+          "id": "shift-02",
           "do": [
             {
               "click": "#tab-shift"
@@ -229,6 +252,7 @@
         },
         {
           "shot": "shift-03",
+          "id": "shift-03",
           "do": [
             {
               "click": ".shift-date-btn"
@@ -246,6 +270,7 @@
     },
     {
       "id": "wish-edit",
+      "impact": ["shift-form.wish"],
       "title": "出した希望を直す",
       "summary": "締切前なら送り直せます",
       "setup": {
@@ -254,6 +279,7 @@
       "steps": [
         {
           "shot": "we-01",
+          "id": "we-01",
           "session": true,
           "goto": "index.html",
           "waitFor": "#wish-list-card",
@@ -263,6 +289,7 @@
         },
         {
           "shot": "we-02",
+          "id": "we-02",
           "highlight": "#wish-list-card button[onclick^=\"openFormForUid\"]",
           "instruction": "「シフト希望を編集する」をタップします",
           "note": {
@@ -272,6 +299,7 @@
         },
         {
           "shot": "we-03",
+          "id": "we-03",
           "do": [
             {
               "click": "#wish-list-card button[onclick^=\"openFormForUid\"]"
@@ -284,6 +312,7 @@
         },
         {
           "shot": "we-04",
+          "id": "we-04",
           "highlight": "#btn-submit",
           "instruction": "もう一度「送信する」をタップすると、上書きされます"
         }
@@ -291,6 +320,7 @@
     },
     {
       "id": "road",
+      "impact": ["shift-form.road-permit"],
       "title": "道路使用許可書を見る",
       "summary": "奉仕のときに必要な許可書",
       "setup": {
@@ -299,6 +329,7 @@
       "steps": [
         {
           "shot": "rd-01",
+          "id": "rd-01",
           "session": true,
           "goto": "index.html",
           "waitFor": "#tabbar",
@@ -308,6 +339,7 @@
         },
         {
           "shot": "rd-02",
+          "id": "rd-02",
           "do": [
             {
               "click": "#tab-report"
@@ -320,6 +352,7 @@
         },
         {
           "shot": "rd-03",
+          "id": "rd-03",
           "do": [
             {
               "click": "#btn-road-permit"
@@ -336,6 +369,7 @@
     },
     {
       "id": "contact",
+      "impact": ["shift-form.report"],
       "title": "要望や不具合を知らせる",
       "summary": "困ったこと・気づいたことを送る",
       "setup": {
@@ -344,6 +378,7 @@
       "steps": [
         {
           "shot": "ct-01",
+          "id": "ct-01",
           "session": true,
           "goto": "index.html",
           "waitFor": "#btn-request",
@@ -368,6 +403,7 @@
         },
         {
           "shot": "ct-02",
+          "id": "ct-02",
           "do": [
             {
               "click": "#btn-request"
@@ -381,6 +417,7 @@
     },
     {
       "id": "profile",
+      "impact": ["shift-form.profile"],
       "title": "自分のアイコンを変える",
       "summary": "シフト表に出る自分の写真を変える",
       "setup": {
@@ -389,6 +426,7 @@
       "steps": [
         {
           "shot": "pf-01",
+          "id": "pf-01",
           "session": true,
           "goto": "index.html",
           "waitFor": "#tabbar",
@@ -398,6 +436,7 @@
         },
         {
           "shot": "pf-02",
+          "id": "pf-02",
           "do": [
             {
               "click": "#tab-more"
@@ -410,6 +449,7 @@
         },
         {
           "shot": "pf-03",
+          "id": "pf-03",
           "highlight": "#set-name",
           "instruction": "名前とメールアドレスはここに出ます",
           "note": {
@@ -421,6 +461,7 @@
     },
     {
       "id": "install",
+      "impact": ["shift-form.profile"],
       "title": "アプリとして入れる",
       "summary": "ホーム画面から開けるようにする",
       "setup": {
@@ -429,6 +470,7 @@
       "steps": [
         {
           "shot": "in-01",
+          "id": "in-01",
           "session": true,
           "goto": "index.html",
           "waitFor": "#btn-install",
@@ -450,6 +492,7 @@
         },
         {
           "noShot": true,
+          "id": "install-device",
           "instruction": "あとは画面の案内どおりに進めば終わりです",
           "note": {
             "type": "info",
@@ -460,6 +503,7 @@
     },
     {
       "id": "logout",
+      "impact": ["shift-form.profile"],
       "title": "ログアウトする",
       "summary": "別の人のスマホで使ったときなど",
       "setup": {
@@ -468,6 +512,7 @@
       "steps": [
         {
           "shot": "lo-01",
+          "id": "lo-01",
           "session": true,
           "goto": "index.html",
           "waitFor": "#screen-more",

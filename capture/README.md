@@ -54,6 +54,38 @@ node capture.mjs volunteer --headed # ブラウザを見ながら（デバッグ
 
 撮り終わると PNG は自動で WebP（幅750px）に変換され、PNG は消える。
 
+## 変更時の差分撮影
+
+アプリを変更したら、まず変更箇所に対応する影響フラグを調べる。影響マップは
+[`impact-map.json`](impact-map.json)、変更記録は [`changes/`](changes/) が原本になる。
+
+```bash
+npm run impact:validate
+node manual-impact.mjs suggest --files js/app.js,css/app.css
+node manual-impact.mjs targets --change 2026-09-11-operation-guide
+```
+
+既存画面の一部を撮り直すときは、`changes/<id>.json` に `mode: "diff-capture"` と
+影響フラグを登録してから、次のように実行する。
+
+```bash
+node capture.mjs --change 2026-09-11-home-navigation
+node capture.mjs volunteer --change 2026-09-11-home-navigation
+```
+
+影響フラグがタスク全体を指す場合は、そのタスクの全ステップを撮る。ステップを指す
+フラグの場合は、その画像だけを撮り直す。対象外のステップも前後の画面を再現するため
+操作は実行するので、複数の対象画像が同じタスクにあっても1回のページ操作で済む。
+対象外の画像とcontentのステップは保持される。
+
+完全に新しい操作を追加するときは、レシピに新しいタスクと固定ID付きステップを追加し、
+`mode: "new-task"` の変更記録を作る。新タスクは差分ではなく全ステップを撮る。
+説明文だけの変更は `mode: "text-only"` として記録する。
+
+撮影後に全画像を目視確認したら、変更記録の `status` を `verified` にする。アプリ側の
+PR本文には変更記録IDと影響フラグを含む `pwgws-manual-change` マーカーを入れる。
+admin／shift-form のUI変更PRは、verifiedの変更記録がないとCIで止まる。
+
 ## ⚠ 撮影後に必ずやること
 
 **全画像を目視で確認し、実名・実メールアドレスが写っていないか確かめる。**
@@ -84,8 +116,10 @@ owner の正規セッションを撮影用の合成利用者として扱う。�
   "setup": { "fakeNow": "2026-09-05", "simulateRegister": true },
   "steps": [
     {
-      "shot": "login-01",          // 画像のファイル名
-      "goto": "login.html",        // baseUrl からの相対パス
+      "id": "home-status",       // レシピ内で変わらないステップID
+      "shot": "home-02",          // 画像のファイル名
+      "impact": ["shift-form.home.reception"], // 画面変更との対応
+      "goto": "index.html",        // baseUrl からの相対パス
       "do": [{ "click": "#btn" }], // 操作（click / fill / select / press / eval / wait）
       "waitFor": "#screen-main",   // この要素が出るまで待つ
       "highlight": "#g-btn",       // 枠で示す要素。座標は自動算出される

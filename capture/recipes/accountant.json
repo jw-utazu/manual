@@ -24,6 +24,7 @@
   "tasks": [
     {
       "id": "view",
+      "impact": ["shift-form.road-permit"],
       "title": "道路使用許可書を見る",
       "summary": "いま登録されている許可書を確かめる",
       "setup": {
@@ -32,6 +33,7 @@
       "steps": [
         {
           "shot": "ac-view-01",
+          "id": "ac-view-01",
           "session": true,
           "goto": "index.html",
           "waitFor": "#btn-road-permit",
@@ -49,6 +51,7 @@
         },
         {
           "shot": "ac-view-02",
+          "id": "ac-view-02",
           "do": [
             {
               "click": "#btn-road-permit"
@@ -65,6 +68,7 @@
     },
     {
       "id": "manage",
+      "impact": ["shift-form.road-permit"],
       "title": "許可書を登録・差し替える",
       "summary": "新しい許可書のPDFを入れる",
       "setup": {
@@ -73,6 +77,7 @@
       "steps": [
         {
           "shot": "ac-mng-01",
+          "id": "ac-mng-01",
           "session": true,
           "goto": "index.html",
           "waitFor": "#btn-road-permit-update",
@@ -94,6 +99,7 @@
         },
         {
           "shot": "ac-mng-02",
+          "id": "ac-mng-02",
           "do": [
             {
               "click": "#btn-road-permit-update"
@@ -110,6 +116,7 @@
         },
         {
           "shot": "ac-mng-03",
+          "id": "ac-mng-03",
           "highlight": [
             "#road-permit-start-date",
             "#road-permit-end-date"
@@ -122,6 +129,7 @@
         },
         {
           "shot": "ac-mng-04",
+          "id": "ac-mng-04",
           "highlight": "label:has(#road-permit-file-input)",
           "instruction": "「📂 PDFを選択してアップロード」をタップして、PDFを選びます",
           "note": {
@@ -131,6 +139,7 @@
         },
         {
           "shot": "ac-mng-05",
+          "id": "ac-mng-05",
           "highlight": "#road-permit-list-card",
           "instruction": "登録済みの許可書はこの一覧に並びます。ここから直したり消したりできます"
         }

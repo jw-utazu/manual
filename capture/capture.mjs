@@ -19,6 +19,12 @@ import { spawn, spawnSync } from 'node:child_process'
 import path from 'node:path'
 import fs from 'node:fs/promises'
 import { fileURLToPath } from 'node:url'
+import {
+  loadImpactConfig,
+  loadChangeRecord,
+  resolveChangeTargets,
+  recipeStepId,
+} from './manual-impact.mjs'
 
 const HERE = path.dirname(fileURLToPath(import.meta.url))
 const ROOT = path.resolve(HERE, '..')
@@ -208,7 +214,30 @@ async function ensureSession(page, baseUrl, on) {
 // ------------------------------------------------------------
 // 撮影本体
 // ------------------------------------------------------------
-async function capture(audience, onlyTask, headless) {
+function mergeCapturedTask(existing, generated, recipeTask, fullTask) {
+  if (fullTask || !existing) return generated
+  const oldSteps = existing.steps || []
+  const byId = new Map(oldSteps.filter((step) => step.id).map((step) => [step.id, step]))
+  const byShot = new Map(oldSteps.filter((step) => step.shot).map((step) => [path.basename(step.shot, '.webp'), step]))
+  const captured = new Map(generated.steps.map((step) => [step.id, step]))
+  const steps = recipeTask.steps.map((recipeStep, index) => {
+    const id = recipeStepId(recipeTask, recipeStep, index)
+    const replacement = captured.get(id)
+    if (replacement) return replacement
+    const old = byId.get(id) || (recipeStep.shot && byShot.get(recipeStep.shot)) || oldSteps[index]
+    if (old) {
+      const oldShot = old.shot ? path.basename(old.shot, '.webp') : null
+      const expectedShot = recipeStep.shot || null
+      if (oldShot !== expectedShot || (!expectedShot && old.instruction !== recipeStep.instruction)) {
+        throw new Error(`既存contentのステップ順がレシピと一致しません: ${recipeTask.id}/${id}。対象タスクを全撮影してください`)
+      }
+    }
+    return old ? { ...old, id } : null
+  }).filter(Boolean)
+  return { id: generated.id, title: generated.title, summary: generated.summary, steps }
+}
+
+async function capture(audience, onlyTask, headless, changeTargets = null) {
   const recipe = JSON.parse(await fs.readFile(path.join(HERE, 'recipes', audience + '.json'), 'utf8'))
   const device = recipe.device || 'mobile'
   const viewport = DEVICES[device].viewport
@@ -245,12 +274,18 @@ async function capture(audience, onlyTask, headless) {
     else put()
   }, { sels: hides, shows: recipe.show || [] })
 
-  const tasks = recipe.tasks.filter((t) => !onlyTask || t.id === onlyTask)
+  const tasks = recipe.tasks.filter((t) => {
+    if (onlyTask && t.id !== onlyTask) return false
+    return !changeTargets || Boolean(changeTargets.tasks?.[t.id])
+  })
   if (!tasks.length) throw new Error('該当するタスクがありません: ' + onlyTask)
 
   const outTasks = []
   let page = null
   for (const task of tasks) {
+    const targetTask = changeTargets?.tasks?.[task.id] || { all: true, steps: [] }
+    const fullTask = !changeTargets || targetTask.all
+    const targetSteps = new Set(targetTask.steps || [])
     log('\n■ ' + task.id + ' — ' + task.title)
 
     // タスクごとにページを作り直す。
@@ -281,15 +316,20 @@ async function capture(audience, onlyTask, headless) {
     for (const [i, step] of task.steps.entries()) {
       const no = String(i + 1).padStart(2, '0')
       const shotName = step.shot || (task.id + '-' + no)
+      const stepId = recipeStepId(task, step, i)
+      const selected = fullTask || targetSteps.has(stepId)
       log('  ' + no + ' ' + (step.noShot ? '(画面なし)' : shotName))
 
       // 画面を持たないステップ（Google のログイン画面など、こちらで撮れないもの）。
       // 手順の流れを切らさないために、説明だけのカードとして残す
       if (step.noShot) {
-        steps.push({
-          instruction: step.instruction || '',
-          ...(step.note ? { note: step.note } : {}),
-        })
+        if (selected) {
+          steps.push({
+            id: stepId,
+            instruction: step.instruction || '',
+            ...(step.note ? { note: step.note } : {}),
+          })
+        }
         continue
       }
 
@@ -314,6 +354,10 @@ async function capture(audience, onlyTask, headless) {
       // 画面遷移のアニメーションやオーバーレイの解除を待つ
       await page.waitForTimeout(step.settle ?? 600)
 
+      // 差分撮影では対象外の画像を更新しない。ただし、対象stepの前後を
+      // 正しく再現するため、ここまでの操作・待機は通常どおり実行する。
+      if (!selected) continue
+
       // 画面の文字を撮影用に差し替える。
       // アプリが JS で書き込む値（ログイン中のメールアドレスなど）は
       // サーバー側のデモモードを通らないため、ここで置き換える。
@@ -336,13 +380,14 @@ async function capture(audience, onlyTask, headless) {
       await page.screenshot({ path: png, animations: 'disabled', timeout: 60000 })
 
       steps.push({
+        id: stepId,
         shot: 'shots/' + audience + '/' + shotName + '.webp',
         instruction: step.instruction || '',
         ...(step.note ? { note: step.note } : {}),
         ...(hotspots.length ? { hotspots } : {}),
       })
     }
-    outTasks.push({ id: task.id, title: task.title, summary: task.summary || '', steps })
+    outTasks.push({ id: task.id, title: task.title, summary: task.summary || '', steps, fullTask })
   }
 
   await ctx.close()
@@ -359,8 +404,11 @@ async function capture(audience, onlyTask, headless) {
 
   for (const t of outTasks) {
     const at = content.tasks.findIndex((x) => x.id === t.id)
-    if (at >= 0) content.tasks[at] = t
-    else content.tasks.push(t)
+    const recipeTask = recipe.tasks.find((item) => item.id === t.id)
+    const generated = { id: t.id, title: t.title, summary: t.summary, steps: t.steps }
+    const merged = mergeCapturedTask(at >= 0 ? content.tasks[at] : null, generated, recipeTask, t.fullTask)
+    if (at >= 0) content.tasks[at] = merged
+    else content.tasks.push(merged)
   }
   // レシピの並び順に揃える（撮り直しで順序が崩れないように）
   const order = recipe.tasks.map((t) => t.id)
@@ -389,14 +437,40 @@ async function capture(audience, onlyTask, headless) {
 // ------------------------------------------------------------
 const args = process.argv.slice(2)
 const headless = !args.includes('--headed')
-const rest = args.filter((a) => !a.startsWith('--'))
+const positionals = []
+let changePath = null
+let login = false
+for (let i = 0; i < args.length; i++) {
+  const arg = args[i]
+  if (arg === '--headed') continue
+  if (arg === '--login') { login = true; continue }
+  if (arg === '--change') { changePath = args[++i]; continue }
+  if (arg.startsWith('--change=')) { changePath = arg.slice('--change='.length); continue }
+  if (arg === '--help') {
+    console.log('使い方: node capture.mjs <audience> [task] [--headed]')
+    console.log('差分撮影: node capture.mjs [audience] --change <change-id>')
+    process.exit(0)
+  }
+  if (arg.startsWith('--')) throw new Error('未知のオプション: ' + arg)
+  positionals.push(arg)
+}
 
-if (args.includes('--login')) {
-  const recipe = JSON.parse(await fs.readFile(path.join(HERE, 'recipes', rest[0] || 'volunteer') + '.json', 'utf8'))
+if (login) {
+  const recipe = JSON.parse(await fs.readFile(path.join(HERE, 'recipes', positionals[0] || 'volunteer') + '.json', 'utf8'))
   await loginMode(recipe.baseUrl)
-} else if (!rest.length) {
+} else if (changePath) {
+  const { change } = await loadChangeRecord(changePath)
+  const config = await loadImpactConfig()
+  const resolved = await resolveChangeTargets(change, config)
+  const audiences = positionals[0] ? [positionals[0]] : Object.keys(resolved.audiences)
+  if (!audiences.length) throw new Error('change recordから撮影対象を解決できません')
+  for (const audience of audiences) {
+    if (!resolved.audiences[audience]) throw new Error(`change recordに対象者がありません: ${audience}`)
+    await capture(audience, positionals[1], headless, resolved.audiences[audience])
+  }
+} else if (!positionals.length) {
   console.error('対象者を指定してください。例: node capture.mjs volunteer')
   process.exit(1)
 } else {
-  await capture(rest[0], rest[1], headless)
+  await capture(positionals[0], positionals[1], headless)
 }

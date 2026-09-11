@@ -18,6 +18,7 @@
   "tasks": [
     {
       "id": "month",
+      "impact": ["admin.month"],
       "title": "月の準備をする",
       "summary": "日程を決めて、承認し、予定表を公開するまで",
       "setup": {
@@ -26,6 +27,7 @@
       "steps": [
         {
           "shot": "ad-month-01",
+          "id": "ad-month-01",
           "session": true,
           "goto": "index.html",
           "waitFor": "#app",
@@ -38,6 +40,7 @@
         },
         {
           "shot": "ad-month-02",
+          "id": "ad-month-02",
           "highlight": "#prog-steps",
           "instruction": "上の帯で、いまどの段階かが分かります",
           "note": {
@@ -47,16 +50,19 @@
         },
         {
           "shot": "ad-month-03",
+          "id": "ad-month-03",
           "highlight": "#info-dates-card",
           "instruction": "はじめに、申込開始・締切・シフト公開の日を決めます"
         },
         {
           "shot": "ad-month-04",
+          "id": "ad-month-04",
           "highlight": "#info-slots-card",
           "instruction": "次に、その月にPWを行う日と時間帯を決めます"
         },
         {
           "shot": "ad-month-05",
+          "id": "ad-month-05",
           "highlight": "#cal-approve-mini",
           "instruction": "決め終わったら承認します",
           "note": {
@@ -68,6 +74,7 @@
     },
     {
       "id": "shift",
+      "impact": ["admin.shift"],
       "title": "シフトを作って公開する",
       "summary": "希望を見て割り当て、公開するまで",
       "setup": {
@@ -76,6 +83,7 @@
       "steps": [
         {
           "shot": "ad-shift-01",
+          "id": "ad-shift-01",
           "session": true,
           "goto": "index.html",
           "waitFor": "#btn-shift-create",
@@ -85,6 +93,7 @@
         },
         {
           "shot": "ad-shift-02",
+          "id": "ad-shift-02",
           "goto": "shift-create.html",
           "waitFor": "#mtab-wish",
           "settle": 5000,
@@ -97,6 +106,7 @@
         },
         {
           "shot": "ad-shift-03",
+          "id": "ad-shift-03",
           "do": [
             {
               "click": "#mtab-create"
@@ -112,6 +122,7 @@
         },
         {
           "shot": "ad-shift-04",
+          "id": "ad-shift-04",
           "highlight": "#publish-btn",
           "instruction": "できあがったら「シフト作成完了」で公開に進みます",
           "note": {
@@ -123,6 +134,7 @@
     },
     {
       "id": "photo",
+      "impact": ["admin.photo"],
       "title": "展示内容の写真を登録する",
       "summary": "その月の展示をアプリに載せる",
       "setup": {
@@ -131,6 +143,7 @@
       "steps": [
         {
           "shot": "ad-pho-01",
+          "id": "ad-pho-01",
           "session": true,
           "goto": "index.html",
           "waitFor": "#app",
@@ -144,6 +157,7 @@
         },
         {
           "shot": "ad-pho-02",
+          "id": "ad-pho-02",
           "do": [
             {
               "click": "button[onclick=\"openPhotoMgmtModal('exhibit')\"]"
@@ -161,6 +175,7 @@
     },
     {
       "id": "member",
+      "impact": ["admin.member"],
       "title": "メンバーを追加・編集する",
       "summary": "会衆のメンバーを登録し、変更や無効化をする",
       "setup": {
@@ -169,6 +184,7 @@
       "steps": [
         {
           "shot": "ad-mem-01",
+          "id": "ad-mem-01",
           "session": true,
           "goto": "index.html",
           "waitFor": "#app",
@@ -182,6 +198,7 @@
         },
         {
           "shot": "ad-mem-02",
+          "id": "ad-mem-02",
           "do": [
             {
               "click": "button[onclick=\"openMemberModal()\"]"
@@ -193,6 +210,7 @@
         },
         {
           "shot": "ad-mem-03",
+          "id": "ad-mem-03",
           "highlight": "button[onclick=\"openMemberAddForm()\"]",
           "instruction": "新しく加えるときは「＋ メンバー追加」を押します",
           "note": {
@@ -202,6 +220,7 @@
         },
         {
           "noShot": true,
+          "id": "member-disable",
           "instruction": "辞める方・長く休まれる方は、削除せず「無効にする」を使います",
           "note": {
             "type": "warn",
@@ -212,6 +231,7 @@
     },
     {
       "id": "notice",
+      "impact": ["admin.notice"],
       "title": "お知らせを出す",
       "summary": "アプリのホーム画面に知らせを表示する",
       "setup": {
@@ -220,6 +240,7 @@
       "steps": [
         {
           "shot": "ad-not-01",
+          "id": "ad-not-01",
           "session": true,
           "goto": "index.html",
           "waitFor": "#app",
@@ -229,6 +250,7 @@
         },
         {
           "shot": "ad-not-02",
+          "id": "ad-not-02",
           "do": [
             {
               "click": "button[onclick=\"openNoticeModal()\"]"
@@ -246,6 +268,7 @@
     },
     {
       "id": "proxy",
+      "impact": ["admin.proxy"],
       "title": "代理送信を設定する",
       "summary": "本人の代わりに希望を出せる人を決める",
       "setup": {
@@ -254,6 +277,7 @@
       "steps": [
         {
           "shot": "ad-prx-01",
+          "id": "ad-prx-01",
           "session": true,
           "goto": "index.html",
           "waitFor": "#app",
@@ -267,6 +291,7 @@
         },
         {
           "shot": "ad-prx-02",
+          "id": "ad-prx-02",
           "do": [
             {
               "click": "button[onclick=\"openProxyModal()\"]"
@@ -284,6 +309,7 @@
     },
     {
       "id": "inbox",
+      "impact": ["admin.inbox"],
       "title": "届いたものを確認する",
       "summary": "要望・不具合・配布報告・ログイン救済",
       "setup": {
@@ -292,6 +318,7 @@
       "steps": [
         {
           "shot": "ad-ibx-01",
+          "id": "ad-ibx-01",
           "session": true,
           "goto": "index.html",
           "waitFor": "#app",
@@ -310,6 +337,7 @@
         },
         {
           "shot": "ad-ibx-02",
+          "id": "ad-ibx-02",
           "do": [
             {
               "click": "#ibx-requests"
@@ -327,6 +355,7 @@
     },
     {
       "id": "logs",
+      "impact": ["admin.logs"],
       "title": "操作の記録を見る",
       "summary": "いつ誰が何をしたかをさかのぼる",
       "setup": {
@@ -335,6 +364,7 @@
       "steps": [
         {
           "shot": "ad-log-01",
+          "id": "ad-log-01",
           "session": true,
           "goto": "index.html",
           "waitFor": "#app",
@@ -344,6 +374,7 @@
         },
         {
           "shot": "ad-log-02",
+          "id": "ad-log-02",
           "do": [
             {
               "click": "button[onclick=\"openLogModal()\"]"

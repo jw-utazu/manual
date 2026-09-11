@@ -1,0 +1,159 @@
+{
+  "version": 1,
+  "description": "アプリの変更箇所とマニュアル撮影対象の対応表。画面に影響する変更はここへ影響フラグを追加する。",
+  "audiences": {
+    "volunteer": { "sourceRepo": "shift-form", "recipe": "recipes/volunteer.json" },
+    "responsible": { "sourceRepo": "shift-form", "recipe": "recipes/responsible.json" },
+    "accountant": { "sourceRepo": "shift-form", "recipe": "recipes/accountant.json" },
+    "admin": { "sourceRepo": "admin", "recipe": "recipes/admin.json" }
+  },
+  "flags": [
+    {
+      "id": "shift-form.login",
+      "label": "ログイン・初回登録",
+      "requiresManual": true,
+      "sources": [{ "path": "login.html" }, { "path": "js/login.js" }, { "path": "js/session.js" }],
+      "targets": [{ "audience": "volunteer", "task": "login" }]
+    },
+    {
+      "id": "shift-form.home",
+      "label": "奉仕者ホーム",
+      "requiresManual": true,
+      "sources": [{ "path": "index.html", "anchors": ["screen-main"] }, { "path": "js/app.js", "anchors": ["screen-main"] }, { "path": "css/app.css", "anchors": ["tabbar"] }],
+      "targets": [{ "audience": "volunteer", "task": "home" }]
+    },
+    {
+      "id": "shift-form.home.reception",
+      "label": "希望受付状態",
+      "requiresManual": true,
+      "sources": [{ "path": "js/app.js", "anchors": ["reception-status-card"] }],
+      "targets": [{ "audience": "volunteer", "task": "home", "step": "home-status" }]
+    },
+    {
+      "id": "shift-form.home.navigation",
+      "label": "下部ナビゲーション",
+      "requiresManual": true,
+      "sources": [{ "path": "js/app.js", "anchors": ["tabbar"] }, { "path": "css/app.css", "anchors": ["tabbar"] }],
+      "targets": [{ "audience": "volunteer", "task": "home", "step": "home-navigation" }]
+    },
+    {
+      "id": "shift-form.calendar",
+      "label": "カレンダー",
+      "requiresManual": true,
+      "sources": [{ "path": "js/app.js", "anchors": ["cal-card", "cal-grid"] }, { "path": "css/app.css", "anchors": ["cal-card"] }],
+      "targets": [{ "audience": "volunteer", "task": "calendar" }]
+    },
+    {
+      "id": "shift-form.wish",
+      "label": "シフト希望",
+      "requiresManual": true,
+      "sources": [{ "path": "js/app.js", "anchors": ["slots-container", "btn-submit", "tab-form"] }, { "path": "css/app.css", "anchors": ["slot-row"] }],
+      "targets": [{ "audience": "volunteer", "task": "wish" }, { "audience": "volunteer", "task": "wish-edit" }]
+    },
+    {
+      "id": "shift-form.shift",
+      "label": "シフト表",
+      "requiresManual": true,
+      "sources": [{ "path": "js/app.js", "anchors": ["shift-dates-container", "shift-detail-view"] }, { "path": "css/app.css", "anchors": ["shift-date-btn"] }],
+      "targets": [{ "audience": "volunteer", "task": "shift" }, { "audience": "responsible", "task": "detail" }]
+    },
+    {
+      "id": "shift-form.responsible.cancel",
+      "label": "シフト中止",
+      "requiresManual": true,
+      "sources": [{ "path": "js/app.js", "anchors": ["btn-cancel-input"] }],
+      "targets": [{ "audience": "responsible", "task": "cancel" }]
+    },
+    {
+      "id": "shift-form.responsible.memo",
+      "label": "責任者メモ",
+      "requiresManual": true,
+      "sources": [{ "path": "js/app.js", "anchors": ["btn-memo-edit"] }],
+      "targets": [{ "audience": "responsible", "task": "memo" }]
+    },
+    {
+      "id": "shift-form.responsible.staff",
+      "label": "奉仕者の入れ替え",
+      "requiresManual": true,
+      "sources": [{ "path": "js/app.js", "anchors": ["btn-edit-staff-mode"] }],
+      "targets": [{ "audience": "responsible", "task": "staff" }]
+    },
+    {
+      "id": "shift-form.road-permit",
+      "label": "道路使用許可書",
+      "requiresManual": true,
+      "sources": [{ "path": "js/app.js", "anchors": ["road-permit"] }, { "path": "index.html", "anchors": ["road-permit"] }],
+      "targets": [{ "audience": "volunteer", "task": "road" }, { "audience": "accountant", "task": "view" }, { "audience": "accountant", "task": "manage" }]
+    },
+    {
+      "id": "shift-form.report",
+      "label": "要望・不具合報告",
+      "requiresManual": true,
+      "sources": [{ "path": "js/app.js", "anchors": ["btn-request", "btn-bug"] }],
+      "targets": [{ "audience": "volunteer", "task": "contact" }]
+    },
+    {
+      "id": "shift-form.profile",
+      "label": "プロフィール・設定",
+      "requiresManual": true,
+      "sources": [{ "path": "js/app.js", "anchors": ["set-avatar-btn", "set-name"] }, { "path": "css/app.css", "anchors": ["set-avatar-btn"] }],
+      "targets": [{ "audience": "volunteer", "task": "profile" }, { "audience": "volunteer", "task": "install" }, { "audience": "volunteer", "task": "logout" }]
+    },
+    {
+      "id": "admin.month",
+      "label": "月の準備",
+      "requiresManual": true,
+      "sources": [{ "path": "index.html", "anchors": ["prog-steps", "info-dates-card"] }, { "path": "js/index.js", "anchors": ["info-dates-card"] }, { "path": "css/index.css", "anchors": ["prog-steps"] }],
+      "targets": [{ "audience": "admin", "task": "month" }]
+    },
+    {
+      "id": "admin.shift",
+      "label": "シフト作成・公開",
+      "requiresManual": true,
+      "sources": [{ "path": "shift-create.html", "anchors": ["mtab-wish", "mtab-create"] }, { "path": "js/shift-create.js", "anchors": ["mtab-wish", "mtab-create", "publish-btn"] }, { "path": "js/shift-score.js", "anchors": ["score"] }, { "path": "css/shift-create.css", "anchors": ["publish-btn"] }],
+      "targets": [{ "audience": "admin", "task": "shift" }]
+    },
+    {
+      "id": "admin.photo",
+      "label": "展示写真",
+      "requiresManual": true,
+      "sources": [{ "path": "js/index.js", "anchors": ["openPhotoMgmtModal"] }],
+      "targets": [{ "audience": "admin", "task": "photo" }]
+    },
+    {
+      "id": "admin.member",
+      "label": "メンバー管理",
+      "requiresManual": true,
+      "sources": [{ "path": "js/index.js", "anchors": ["openMemberModal", "openMemberAddForm"] }],
+      "targets": [{ "audience": "admin", "task": "member" }]
+    },
+    {
+      "id": "admin.notice",
+      "label": "お知らせ",
+      "requiresManual": true,
+      "sources": [{ "path": "js/index.js", "anchors": ["openNoticeModal"] }],
+      "targets": [{ "audience": "admin", "task": "notice" }]
+    },
+    {
+      "id": "admin.proxy",
+      "label": "代理送信",
+      "requiresManual": true,
+      "sources": [{ "path": "js/index.js", "anchors": ["openProxyModal"] }],
+      "targets": [{ "audience": "admin", "task": "proxy" }]
+    },
+    {
+      "id": "admin.inbox",
+      "label": "未対応・受信箱",
+      "requiresManual": true,
+      "sources": [{ "path": "js/index.js", "anchors": ["ibx-recovery", "ibx-requests", "ibx-bugs"] }],
+      "targets": [{ "audience": "admin", "task": "inbox" }]
+    },
+    {
+      "id": "admin.logs",
+      "label": "操作ログ",
+      "requiresManual": true,
+      "sources": [{ "path": "js/index.js", "anchors": ["openLogModal"] }],
+      "targets": [{ "audience": "admin", "task": "logs" }]
+    }
+  ]
+}

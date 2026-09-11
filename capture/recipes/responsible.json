@@ -22,6 +22,7 @@
   "tasks": [
     {
       "id": "detail",
+      "impact": ["shift-form.shift"],
       "title": "シフトの詳しい表を開く",
       "summary": "担当の割り当てを確かめる",
       "setup": {
@@ -30,6 +31,7 @@
       "steps": [
         {
           "shot": "rs-detail-01",
+          "id": "rs-detail-01",
           "session": true,
           "goto": "index.html",
           "waitFor": "#tabbar",
@@ -39,6 +41,7 @@
         },
         {
           "shot": "rs-detail-02",
+          "id": "rs-detail-02",
           "do": [
             {
               "click": "#tab-shift"
@@ -51,6 +54,7 @@
         },
         {
           "shot": "rs-detail-03",
+          "id": "rs-detail-03",
           "do": [
             {
               "click": ".shift-date-btn"
@@ -68,6 +72,7 @@
     },
     {
       "id": "cancel",
+      "impact": ["shift-form.responsible.cancel"],
       "title": "シフトを中止にする",
       "summary": "雨などで実施できないとき",
       "setup": {
@@ -76,6 +81,7 @@
       "steps": [
         {
           "shot": "rs-cancel-01",
+          "id": "rs-cancel-01",
           "session": true,
           "goto": "index.html",
           "waitFor": "#shift-detail-view",
@@ -99,6 +105,7 @@
         },
         {
           "noShot": true,
+          "id": "cancel-reason",
           "instruction": "中止の理由を入力する画面が出ます。入力して「OK」を押すと中止になります",
           "note": {
             "type": "warn",
@@ -109,6 +116,7 @@
     },
     {
       "id": "memo",
+      "impact": ["shift-form.responsible.memo"],
       "title": "責任者メモを書く",
       "summary": "その日の申し送りを残す",
       "setup": {
@@ -117,6 +125,7 @@
       "steps": [
         {
           "shot": "rs-memo-01",
+          "id": "rs-memo-01",
           "session": true,
           "goto": "index.html",
           "waitFor": "#shift-detail-view",
@@ -140,6 +149,7 @@
         },
         {
           "noShot": true,
+          "id": "memo-input",
           "instruction": "メモを入力する画面が出ます。入力して「OK」を押すと保存されます",
           "note": {
             "type": "info",
@@ -150,6 +160,7 @@
     },
     {
       "id": "staff",
+      "impact": ["shift-form.responsible.staff"],
       "title": "奉仕者を入れ替える",
       "summary": "急な変更があったとき",
       "setup": {
@@ -158,6 +169,7 @@
       "steps": [
         {
           "shot": "rs-staff-01",
+          "id": "rs-staff-01",
           "session": true,
           "goto": "index.html",
           "waitFor": "#shift-detail-view",
@@ -181,6 +193,7 @@
         },
         {
           "shot": "rs-staff-02",
+          "id": "rs-staff-02",
           "do": [
             {
               "click": ".btn-edit-staff-mode"

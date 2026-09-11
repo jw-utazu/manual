@@ -8,7 +8,11 @@
     "volunteer": "node capture.mjs volunteer",
     "responsible": "node capture.mjs responsible",
     "accountant": "node capture.mjs accountant",
-    "admin": "node capture.mjs admin"
+    "admin": "node capture.mjs admin",
+    "impact:list": "node manual-impact.mjs suggest",
+    "impact:check": "node manual-impact.mjs check",
+    "impact:validate": "node manual-impact.mjs validate",
+    "capture:impact": "node capture.mjs"
   },
   "dependencies": {
     "playwright": "^1.62.1"
