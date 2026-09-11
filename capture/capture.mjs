@@ -265,6 +265,7 @@ async function capture(audience, onlyTask, headless) {
     const setup = task.setup || {}
     await page.addInitScript((s) => {
       try {
+        sessionStorage.setItem('__pwgws_capture_mode', '1')
         if (s.fakeNow) {
           localStorage.setItem('debugFakeNow', s.fakeNow)
           sessionStorage.setItem('debugFakeNowKeepOnce', '1')
