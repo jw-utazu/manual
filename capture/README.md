@@ -26,7 +26,7 @@ npx playwright install chromium
 
 ## ログイン（初回と、ログインが切れたとき）
 
-撮影にはテストアカウント `jw.utazu.test@gmail.com` を使う。
+撮影には owner アカウント `jw.utazu@gmail.com` を使う。
 **Googleへのログインは人が手で行う**（自動化しない）。ログイン後に発行されるアプリsession tokenが
 `.profile/` 内のアカウント情報に残るため、通常は以降不要。tokenが失効した場合は同じ手順で再ログインする。
 
@@ -34,7 +34,15 @@ npx playwright install chromium
 npm run login
 ```
 
-ブラウザが開くのでテストアカウントでログインし、終わったらブラウザを閉じる。
+Googleのログイン拒否を避けるため、このコマンドは通常の Chrome を撮影用プロファイルで起動する。
+ブラウザが開くので owner アカウントでログインし、終わったら Chrome を閉じる。
+Linuxで `google-chrome` が別の名前の場合は、ブラウザのコマンドを指定する。
+
+```bash
+PWGWS_LOGIN_BROWSER=google-chrome-stable npm run login
+```
+
+`xvfb-run` や Playwright の自動操作ブラウザでは、Google のログインを完了できないことがある。
 
 ## 撮影
 
@@ -50,12 +58,14 @@ node capture.mjs volunteer --headed # ブラウザを見ながら（デバッグ
 
 **全画像を目視で確認し、実名・実メールアドレスが写っていないか確かめる。**
 
-撮影中は全API呼び出しに `demo=1` が付き、サーバー側（`supabase/functions/api/_demo.ts`）が
+撮影中は Supabase API への全リクエストに `demo=1&capture=1` が付き、サーバー側が
+owner の正規セッションを撮影用の合成利用者として扱う。サーバー側（`supabase/functions/api/_demo.ts`）が
 実在メンバーの氏名・ふりがな・メールアドレスをダミーへ置き換える。
+通常の owner 利用では、この撮影用の疑似日付・限定PWテストは有効にならない。
 ただしマニュアルは **PUBLIC な GitHub Pages で全世界に公開される**ため、
 自動置換だけを信用してはいけない。人の目で最終確認する。
 
-## テストアカウントで使える仕込み
+## 撮影用アカウントで使える仕込み
 
 | 仕掛け | レシピでの書き方 | 何ができるか |
 |---|---|---|

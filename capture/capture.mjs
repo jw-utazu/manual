@@ -15,7 +15,7 @@
 // 直接編集しない。文言を直したいときも recipes/*.json を直して撮り直す。
 // ============================================================
 import { chromium } from 'playwright'
-import { spawnSync } from 'node:child_process'
+import { spawn, spawnSync } from 'node:child_process'
 import path from 'node:path'
 import fs from 'node:fs/promises'
 import { fileURLToPath } from 'node:url'
@@ -24,16 +24,16 @@ const HERE = path.dirname(fileURLToPath(import.meta.url))
 const ROOT = path.resolve(HERE, '..')
 const PROFILE = path.join(HERE, '.profile')
 
-// 本番の Edge Function。ここを通る全リクエストに demo=1 を差し込む
+// 本番の Edge Function。ここを通る全リクエストに demo=1&capture=1 を差し込む
 const API_HOST = 'nqtswiynoxawccldqcwi.supabase.co'
 
-// 撮影に使う動作確認専用アカウント（supabase/functions/api/handlers_auth.ts の TEST_EMAIL）
-const TEST_EMAIL = 'jw.utazu.test@gmail.com'
+// 撮影に使う owner アカウント（通常 owner の権限はサーバー側で維持する）
+const CAPTURE_EMAIL = 'jw.utazu@gmail.com'
 
 // ログイン状態を書き込むために開くページ。3アプリ共通のログイン画面
 const SESSION_ORIGIN_PAGE = 'https://jw-utazu.github.io/shift-form/login.html'
 
-// テストアカウントにだけ見えていて、ふつうの奉仕者の画面には出ないもの。
+// 撮影用アカウントにだけ見えていて、ふつうの奉仕者の画面には出ないもの。
 // これが写ったマニュアルは「自分の画面と違う」となって混乱のもとになるので、
 // 撮影中は隠して一般の利用者と同じ見え方にそろえる。
 // レシピ側で hide を書けば、対象を足せる
@@ -54,7 +54,7 @@ const log = (...a) => console.log(...a)
 
 // ------------------------------------------------------------
 // ブラウザ起動：永続プロファイルを使う。
-// テストアカウントへの Google ログインは人が一度手で済ませれば、以降ここに残る
+// 撮影用 owner への Google ログインは人が一度手で済ませれば、以降ここに残る
 // ------------------------------------------------------------
 async function launch(device, headless) {
   return await chromium.launchPersistentContext(PROFILE, {
@@ -65,15 +65,25 @@ async function launch(device, headless) {
   })
 }
 
-// ログイン用にブラウザを開いて待つだけのモード
+// ログイン用に通常のブラウザを開いて待つだけのモード。
+// Google は Playwright の自動操作ブラウザを拒否することがあるため、
+// ログインだけは通常 Chrome で行い、同じプロファイルへ session token を保存する。
 async function loginMode(baseUrl) {
-  const ctx = await launch('mobile', false)
-  const page = ctx.pages()[0] || await ctx.newPage()
-  await page.goto(baseUrl)
-  log('\nブラウザを開きました。テストアカウントでログインしてください。')
-  log('ログインが終わったらブラウザを閉じてください。ログイン状態はプロファイルに残ります。')
+  const command = process.env.PWGWS_LOGIN_BROWSER || 'google-chrome'
+  const args = ['--user-data-dir=' + PROFILE, '--new-window', baseUrl]
+  log('\n通常の Chrome を開きます。撮影用 owner アカウントでログインしてください。')
+  log('ログインが終わったら Chrome を閉じてください。ログイン状態はプロファイルに残ります。')
   log('  プロファイル: ' + PROFILE + '\n')
-  await ctx.waitForEvent('close', { timeout: 0 })
+  await new Promise((resolve, reject) => {
+    const child = spawn(command, args, { stdio: 'inherit' })
+    child.once('error', reject)
+    child.once('exit', (code, signal) => resolve({ code, signal }))
+  }).catch((error) => {
+    throw new Error(
+      '通常の Chrome を起動できませんでした。' +
+      'PWGWS_LOGIN_BROWSER でブラウザのコマンドを指定してください: ' + error.message,
+    )
+  })
 }
 
 // ------------------------------------------------------------
@@ -135,11 +145,11 @@ async function hotspotsOf(page, highlight, viewport, adjust) {
   return out
 }
 
-// テストアカウントのログイン状態を置く／外す。
+// 撮影用 owner のログイン状態を置く／外す。
 //
 // Google は自動化ブラウザからのログインを弾くため、Googleの画面は通れない。
 // Googleログイン後に発行されたアプリsession tokenもアカウントごとに保存される。
-// 撮影時は .profile に残っているテストアカウントのtokenを選び直して使う。
+// 撮影時は .profile に残っている owner のtokenを選び直して使う。
 // メールアドレスだけを合成すると認証を迂回することになるため禁止する。
 // ログイン画面そのものを撮るときは on=false で外す
 async function ensureSession(page, baseUrl, on) {
@@ -162,10 +172,22 @@ async function ensureSession(page, baseUrl, on) {
           ? current
           : accounts.find(a => a && a.email === email && a.token)
         if (!acc || !acc.token) return { ok: false, reason: 'missing_token' }
+        // 撮影画像へ owner の Google 写真が出ないよう、共有セッションと
+        // 各アプリの表示用キャッシュからだけ写真を外す。認証tokenは保持する。
+        acc.picture = ''
         acc.savedAt = Date.now()
         localStorage.setItem('pwgws_session', JSON.stringify(acc))
         const rest = accounts.filter(a => a && a.email !== email)
         localStorage.setItem('pwgws_accounts', JSON.stringify([acc, ...rest]))
+        for (const key of ['adminUser', 'shiftapp_session']) {
+          try {
+            const cached = JSON.parse(localStorage.getItem(key) || 'null')
+            if (cached && cached.email === email) {
+              cached.picture = ''
+              localStorage.setItem(key, JSON.stringify(cached))
+            }
+          } catch (_) {}
+        }
         localStorage.removeItem('pwgws_recovery_session')
         localStorage.setItem('pwgws_relogin_done_1', '1')
       } else {
@@ -177,9 +199,9 @@ async function ensureSession(page, baseUrl, on) {
       return { ok: true }
     } catch (_) {}
     return { ok: false, reason: 'storage_error' }
-  }, { on, email: TEST_EMAIL })
+  }, { on, email: CAPTURE_EMAIL })
   if (!state.ok) {
-    throw new Error('撮影用の認証tokenがありません。npm run login でテストアカウントへ再ログインしてください。')
+    throw new Error('撮影用 owner の認証tokenがありません。npm run login で owner アカウントへログインしてください。')
   }
 }
 
@@ -195,11 +217,12 @@ async function capture(audience, onlyTask, headless) {
 
   const ctx = await launch(device, headless)
 
-  // すべての API 呼び出しに demo=1 を付ける。
+  // すべての API 呼び出しに demo=1&capture=1 を付ける。
   // これが無いと実在メンバーの氏名が画面に出て、そのまま公開マニュアルに載ってしまう
   await ctx.route('**://' + API_HOST + '/**', (route) => {
     const u = new URL(route.request().url())
     u.searchParams.set('demo', '1')
+    u.searchParams.set('capture', '1')
     route.continue({ url: u.toString() })
   })
 
