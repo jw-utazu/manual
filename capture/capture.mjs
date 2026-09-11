@@ -265,8 +265,13 @@ async function capture(audience, onlyTask, headless) {
     const setup = task.setup || {}
     await page.addInitScript((s) => {
       try {
-        if (s.fakeNow) localStorage.setItem('debugFakeNow', s.fakeNow)
-        else localStorage.removeItem('debugFakeNow')
+        if (s.fakeNow) {
+          localStorage.setItem('debugFakeNow', s.fakeNow)
+          sessionStorage.setItem('debugFakeNowKeepOnce', '1')
+        } else {
+          localStorage.removeItem('debugFakeNow')
+          sessionStorage.removeItem('debugFakeNowKeepOnce')
+        }
         if (s.simulateRegister) sessionStorage.setItem('debugSimulateRegisterOnce', '1')
       } catch (_) {}
     }, setup)
