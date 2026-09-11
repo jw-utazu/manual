@@ -138,10 +138,9 @@ async function hotspotsOf(page, highlight, viewport, adjust) {
 // テストアカウントのログイン状態を置く／外す。
 //
 // Google は自動化ブラウザからのログインを弾くため、Googleの画面は通れない。
-// だがこのアプリが localStorage に持つのは「誰でログインしたか」だけで、権限は
-// 起動のたびにサーバー（action=auth）へ問い合わせる作りになっている
-// （shift-form/js/session.js の冒頭コメントのとおり）。
-// したがってセッションを置けば、テストアカウントとして正しい権限が返る。
+// Googleログイン後に発行されたアプリsession tokenもアカウントごとに保存される。
+// 撮影時は .profile に残っているテストアカウントのtokenを選び直して使う。
+// メールアドレスだけを合成すると認証を迂回することになるため禁止する。
 // ログイン画面そのものを撮るときは on=false で外す
 async function ensureSession(page, baseUrl, on) {
   // localStorage を触るには同一オリジンにいる必要がある。
@@ -152,21 +151,36 @@ async function ensureSession(page, baseUrl, on) {
   if (!page.url().startsWith(origin)) {
     await page.goto(SESSION_ORIGIN_PAGE, { waitUntil: 'domcontentloaded' })
   }
-  await page.evaluate(({ on, email }) => {
+  const state = await page.evaluate(({ on, email }) => {
     try {
       if (on) {
-        const acc = { email, name: 'テストアカウント', picture: '', savedAt: Date.now() }
+        let accounts = []
+        try { accounts = JSON.parse(localStorage.getItem('pwgws_accounts') || '[]') } catch (_) {}
+        let current = null
+        try { current = JSON.parse(localStorage.getItem('pwgws_session') || 'null') } catch (_) {}
+        const acc = current && current.email === email && current.token
+          ? current
+          : accounts.find(a => a && a.email === email && a.token)
+        if (!acc || !acc.token) return { ok: false, reason: 'missing_token' }
+        acc.savedAt = Date.now()
         localStorage.setItem('pwgws_session', JSON.stringify(acc))
-        localStorage.setItem('pwgws_accounts', JSON.stringify([acc]))
+        const rest = accounts.filter(a => a && a.email !== email)
+        localStorage.setItem('pwgws_accounts', JSON.stringify([acc, ...rest]))
+        localStorage.removeItem('pwgws_recovery_session')
         localStorage.setItem('pwgws_relogin_done_1', '1')
       } else {
         localStorage.removeItem('pwgws_session')
-        localStorage.removeItem('pwgws_accounts')
+        localStorage.removeItem('pwgws_recovery_session')
         localStorage.removeItem('adminUser')
         localStorage.removeItem('shiftapp_session')
       }
+      return { ok: true }
     } catch (_) {}
+    return { ok: false, reason: 'storage_error' }
   }, { on, email: TEST_EMAIL })
+  if (!state.ok) {
+    throw new Error('撮影用の認証tokenがありません。npm run login でテストアカウントへ再ログインしてください。')
+  }
 }
 
 // ------------------------------------------------------------
@@ -253,7 +267,13 @@ async function capture(audience, onlyTask, headless) {
       // アプリ側のログイン状態だけを捨てる（Google の Cookie は残すので再ログインは不要）。
       // ログイン画面そのものを撮るために使う
       if (step.clearSession) {
-        await page.evaluate(() => { try { localStorage.clear(); sessionStorage.clear() } catch (_) {} })
+        await page.evaluate(() => {
+          try {
+            ;['pwgws_session', 'pwgws_recovery_session', 'adminUser', 'shiftapp_session']
+              .forEach(k => localStorage.removeItem(k))
+            sessionStorage.clear()
+          } catch (_) {}
+        })
       }
       if (step.session !== undefined) await ensureSession(page, recipe.baseUrl, step.session)
       if (step.goto) {
@@ -324,10 +344,10 @@ async function capture(audience, onlyTask, headless) {
   // PNG を WebP へ変換して容量を落とす（Pillow を使う）
   // PCの画面はそのまま 750px に縮めると文字が読めなくなるので、幅を広く取る
   const outW = device === 'desktop' ? 1200 : 750
-  const r = spawnSync('python', [path.join(HERE, 'to_webp.py'), shotDir, String(outW)], { stdio: 'inherit' })
+  const r = spawnSync('python3', [path.join(HERE, 'to_webp.py'), shotDir, String(outW)], { stdio: 'inherit' })
   if (r.status !== 0) {
     log('! WebP 変換に失敗しました。PNG のまま残っています。')
-    log('  python と Pillow が使えるか確認してください（python -c "import PIL"）')
+    log('  python3 と Pillow が使えるか確認してください（python3 -c "import PIL"）')
   }
 
   log('\n--------------------------------------------------------')

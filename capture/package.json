@@ -7,7 +7,7 @@
     "login": "node capture.mjs --login volunteer",
     "volunteer": "node capture.mjs volunteer",
     "responsible": "node capture.mjs responsible",
-    "pdf": "node capture.mjs pdf",
+    "accountant": "node capture.mjs accountant",
     "admin": "node capture.mjs admin"
   },
   "dependencies": {

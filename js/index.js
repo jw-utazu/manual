@@ -20,17 +20,23 @@ const ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsI
 // アプリと共通のセッションキー（shift-form/js/session.js と同じ）
 const PWGWS_SESSION_KEY = 'pwgws_session';
 
-function currentEmail() {
+function currentSession() {
   try {
     const s = JSON.parse(localStorage.getItem(PWGWS_SESSION_KEY) || 'null');
-    return (s && s.email) ? String(s.email) : '';
-  } catch (_) { return ''; }
+    return (s && s.email && s.token) ? s : null;
+  } catch (_) { return null; }
 }
 
-async function fetchRoles(email) {
-  const url = API_URL + '?action=getMyRoles&email=' + encodeURIComponent(email);
-  const res = await fetch(url, {
-    headers: { 'Authorization': 'Bearer ' + ANON_KEY, 'apikey': ANON_KEY },
+async function fetchRoles(session) {
+  const res = await fetch(API_URL, {
+    method: 'POST',
+    headers: {
+      'Authorization': 'Bearer ' + ANON_KEY,
+      'apikey': ANON_KEY,
+      'Content-Type': 'application/json',
+      'X-PWGWS-Session': session.token,
+    },
+    body: JSON.stringify({ action: 'getMyRoles' }),
   });
   if (!res.ok) throw new Error('failed');
   return await res.json();
@@ -46,10 +52,10 @@ function show(roles) {
 }
 
 (async () => {
-  const email = currentEmail();
-  if (!email) { show({}); return; }
+  const session = currentSession();
+  if (!session) { show({}); return; }
   try {
-    const r = await fetchRoles(email);
+    const r = await fetchRoles(session);
     show(r && r.ok ? r : {});
   } catch (_) {
     // 通信できないときは奉仕者向けだけ。

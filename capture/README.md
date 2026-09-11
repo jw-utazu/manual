@@ -27,7 +27,8 @@ npx playwright install chromium
 ## ログイン（初回と、ログインが切れたとき）
 
 撮影にはテストアカウント `jw.utazu.test@gmail.com` を使う。
-**Googleへのログインは人が手で行う**（自動化しない）。一度ログインすれば `.profile/` に残り、以降は不要。
+**Googleへのログインは人が手で行う**（自動化しない）。ログイン後に発行されるアプリsession tokenが
+`.profile/` 内のアカウント情報に残るため、通常は以降不要。tokenが失効した場合は同じ手順で再ログインする。
 
 ```bash
 npm run login
