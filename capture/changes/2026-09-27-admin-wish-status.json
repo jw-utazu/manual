@@ -1,0 +1,8 @@
+{
+  "id": "2026-09-27-admin-wish-status",
+  "sourceRepo": "admin",
+  "mode": "diff-capture",
+  "flags": ["admin.shift.wish-status"],
+  "status": "planned",
+  "summary": "希望確認表の割当済み・希望なし表示をマニュアルの該当画面へ反映する"
+}

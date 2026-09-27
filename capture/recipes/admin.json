@@ -94,6 +94,7 @@
         {
           "shot": "ad-shift-02",
           "id": "ad-shift-02",
+          "impact": ["admin.shift.wish-status"],
           "goto": "shift-create.html",
           "waitFor": "#mtab-wish",
           "settle": 5000,

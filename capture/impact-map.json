@@ -114,6 +114,13 @@
       "targets": [{ "audience": "admin", "task": "shift" }]
     },
     {
+      "id": "admin.shift.wish-status",
+      "label": "希望確認表の割当状態",
+      "requiresManual": true,
+      "sources": [{ "path": "js/shift-create.js", "anchors": ["wishCellClass", "wishCellInner", "buildWishTable"] }, { "path": "css/shift-create.css", "anchors": ["cell-assigned-no-wish", "wish-cell-legend"] }],
+      "targets": [{ "audience": "admin", "task": "shift", "step": "ad-shift-02" }]
+    },
+    {
       "id": "admin.photo",
       "label": "展示写真",
       "requiresManual": true,
